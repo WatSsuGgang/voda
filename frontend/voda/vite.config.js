@@ -10,7 +10,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
-        name: "Voice Diary, VODA",
+        name: "VODA",
         short_name: "VODA",
         theme_color: "#ffffff",
         icons: [
