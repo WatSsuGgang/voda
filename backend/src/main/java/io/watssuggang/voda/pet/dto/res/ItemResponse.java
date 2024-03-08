@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class ItemResponse {
 
-    private final Long itemId;
+    private final Integer itemId;
     private final String imgURl;
     private final String name;
 }
