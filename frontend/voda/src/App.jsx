@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react"; // eslint-disable-line no-unused-vars
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 // 로그인된 사용자가 볼 수 있는 페이지
@@ -13,7 +13,15 @@ import NavBar from "./components/common/NavBar";
 // 비로그인 상태에서는 서비스 소개 및 로그인 화면만 볼 수 있음.
 import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
+import styled from "styled-components";
 const isLogin = true;
+
+const Wrapper = styled.div`
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+`;
 
 function App() {
   if (isLogin) {
@@ -24,11 +32,13 @@ function App() {
           <Route path="/diary" element={<DiaryList />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
           <Route path="/mypage" element={<MypPage />}></Route>
-          <Route path="/voicediary" element={<VoiceDiary />}></Route>
-          <Route path="/record" element={<Record />}></Route>
-          <Route path="/checkchat" element={<CheckChat />}></Route>
+          <Route path="/voice" element={<VoiceDiary />}></Route>
+          <Route path="/voice/record" element={<Record />}></Route>
+          <Route path="/voice/check" element={<CheckChat />}></Route>
         </Routes>
-        <NavBar />
+        <Wrapper>
+          <NavBar />
+        </Wrapper>
       </div>
     );
   } else {
