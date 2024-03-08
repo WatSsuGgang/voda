@@ -1,21 +1,12 @@
 package io.watssuggang.voda.pet.domain;
 
+import io.watssuggang.voda.common.converter.EmotionConverter;
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.Emotion;
 import io.watssuggang.voda.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -30,35 +21,30 @@ public class Pet extends BaseEntity {
     private String petName;
 
     @Column(columnDefinition = "tinyint")
-    private Byte petStage;
+    private Byte petStage = 1;
 
     @Column(columnDefinition = "tinyint")
-    private Byte petLevel;
+    private Byte petLevel = 1;
 
     @Column(columnDefinition = "tinyint")
-    private Byte petExp;
+    private Byte petExp = 0;
 
+    @Convert(converter = EmotionConverter.class)
     @Column(columnDefinition = "char(2)")
-    private Emotion petEmotion;
+    private Emotion petEmotion = Emotion.JOY;
 
-    private String petDiaryUrl;
-
-    private LocalDateTime petLastFeed;
+    private LocalDateTime petLastFeed = LocalDateTime.now();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Builder
-    public Pet(String petName, Byte petStage, Byte petLevel, Byte petExp, Emotion petEmotion,
-        String petDiaryUrl, LocalDateTime petLastFeed, Member member) {
-        this.petName = petName;
-        this.petStage = petStage;
-        this.petLevel = petLevel;
-        this.petExp = petExp;
-        this.petEmotion = petEmotion;
-        this.petDiaryUrl = petDiaryUrl;
-        this.petLastFeed = petLastFeed;
+    public void addPet(Member member) {
         this.member = member;
+    }
+
+    @Builder
+    public Pet(String petName) {
+        this.petName = petName;
     }
 }
