@@ -9,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 public class PetHomeResponse {
 
     private final PetResponse pet;
-    private final List<ItemResponse> owned;
+    private final List<OwnResponse> owned;
 }
