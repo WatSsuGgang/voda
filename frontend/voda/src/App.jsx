@@ -13,7 +13,7 @@ import NavBar from "./components/common/NavBar";
 // 비로그인 상태에서는 서비스 소개 및 로그인 화면만 볼 수 있음.
 import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
-const isLogin = true;
+const isLogin = false;
 
 function App() {
   if (isLogin) {

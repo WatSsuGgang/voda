@@ -15,7 +15,10 @@ export default defineConfig({
       manifest: {
         name: "VODA",
         short_name: "VODA",
+        display: "standalone",
+        orientation: "portrait",
         theme_color: "#ffffff",
+        background_color: "#FFFAE1",
         icons: [
           {
             src: "pwa-64x64.png",
