@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<PointLog> pointLogs = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.PERSIST)
     private Pet pet;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
