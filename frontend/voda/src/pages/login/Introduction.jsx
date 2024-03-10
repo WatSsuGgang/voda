@@ -7,12 +7,8 @@ const Introduction = () => {
     <div
       style={
         {
-          // backgroundColor: "#FFFAE1",
-          // height: "100vh",
-          // display: "flex",
-          // flexDirection: "column",
-          // justifyContent: "center",
-          // alignItems: "center",
+          width: '85%',
+          margin: 'auto',
         }
       }
     >

@@ -1,25 +1,34 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+const Description = styled.p({
+  textAlign: "center",
+  margin: 0,
+  fontWeight: "bold",
+})
 
 export default function IntroductionCarousel() {
   const items = [
     {
       url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Zzz.png",
       alt: "Zzz",
-      description: "잠들기 전에 하루를 기록하는 습관을 들여 보세요.",
+      line1: "잠들기 전에 하루를 기록하는",
+      line2: "습관을 들여 보세요.",
     },
     {
       url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People%20with%20activities/Deaf%20Man%20Light%20Skin%20Tone.png",
       alt: "Deaf Man with Light Skin Tone",
-      description: "VODA AI가 듣고, 기록하고 멋있는 그림도 만들어 줄 거예요.",
+      line1: "VODA AI가 듣고, 기록하고",
+      line2: "멋있는 그림도 만들어 줄 거예요.",
     },
     {
       url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Hatching%20Chick.png",
       alt: "Hatching Chick",
-      description:
-        "일기에 기반한 감정에 따라 달라지는 귀여운 펫도 성장시켜 보세요.",
+      line1: "일기에 기반한 감정에 따라",
+      line2: "달라지는 귀여운 펫도 성장시켜 보세요.",
     },
   ];
 
@@ -40,7 +49,9 @@ export default function IntroductionCarousel() {
   };
 
   return (
-    <div>
+    <div style={{
+      marginTop: "10vh",
+    }}>
       <Slider {...settings}>
         {items.map((item, index) => (
           <div key={index}>
@@ -49,7 +60,13 @@ export default function IntroductionCarousel() {
               alt={item.alt}
               style={{ width: "100%", height: "100%" }}
             />
-            <p>{item.description}</p>
+            <div style={{
+              marginTop: "2vh",
+              marginBottom: "2vh",
+            }}>
+              <Description>{item.line1}</Description>
+              <Description>{item.line2}</Description>
+            </div>
           </div>
         ))}
       </Slider>
