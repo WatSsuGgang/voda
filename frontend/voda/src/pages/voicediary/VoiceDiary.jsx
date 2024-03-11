@@ -43,7 +43,7 @@ const VoiceDiary = () => {
         </Contents>
         <Contents>
           <img src="src/assets/voicediary/Amnesia.png" alt="" />
-          <Text>일기는 기억력을 향상시키는데 도움을 줘요</Text>
+          <Text>일기는 기억력을 향상시키는 데 효과적이에요</Text>
         </Contents>
         <Contents>
           <img src="src/assets/voicediary/Target.png" alt="" />
@@ -51,7 +51,7 @@ const VoiceDiary = () => {
         </Contents>
         <Contents>
           <img src="src/assets/voicediary/CreativeThinking.png" alt="" />
-          <Text>일기는 창의성을 촉진하는 데 도움을 줘요</Text>
+          <Text>일기를 꾸준히 작성하면 창의성을 성장시킬 수 있어요</Text>
         </Contents>
         <Contents>
           <img src="src/assets/voicediary/Microphone.png" alt="" />
@@ -60,14 +60,15 @@ const VoiceDiary = () => {
       </ContentBox>
       <div style={{ margin: "8%" }}>
         <Finish>
-          일기 작성을 종료하시려면, <strong>오늘 일기 끝</strong>이라고
+          일기 작성을 종료하시려면, <br />
+          <strong style={{ fontSize: "1.2rem" }}>오늘 일기 끝</strong>이라고
           말해주세요
         </Finish>
       </div>
-      <div style={{ marginTop: "6%", borderColor: "#" }}>
+      <div style={{ marginTop: "6%" }}>
         <EditAllow />
       </div>
-      <div style={{ marginTop: "3%", textAlign: "center" }}>
+      <div style={{ margin: "5%", textAlign: "center" }}>
         <StartRecord />
       </div>
     </div>
