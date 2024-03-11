@@ -47,7 +47,7 @@ public class PetService {
         }
 
         Random random = new Random();
-        int rand = random.nextInt(count);
+        int rand = random.nextInt(petStatuses.size());
 
         PetStatus petStatus = petStatuses.get(rand);
         List<PetTalk> status = petTalkRepository.findAllByPetStatus(petStatus);
