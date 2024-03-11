@@ -1,19 +1,10 @@
 package io.watssuggang.voda.diary.domain;
 
+import io.watssuggang.voda.common.converter.EmotionConverter;
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.Emotion;
 import io.watssuggang.voda.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -36,7 +27,7 @@ public class Diary extends BaseEntity {
     @Column(columnDefinition = "text")
     private String diarySummary;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = EmotionConverter.class)
     @Column(columnDefinition = "char(2)", length = 2)
     private Emotion diaryEmotion;
 
@@ -49,6 +40,12 @@ public class Diary extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     Member member;
+
+
+    public void addMember(Member member) {
+        member.getDiaries().add(this);
+        this.member = member;
+    }
 
     public void addDiaryFiles(DiaryFile diaryFile) {
         this.diaryFiles.add(diaryFile);

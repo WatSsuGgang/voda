@@ -1,7 +1,9 @@
 package io.watssuggang.voda.pet.controller;
 
+import io.watssuggang.voda.pet.domain.PetTalk;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
 import io.watssuggang.voda.pet.dto.res.PetHomeResponse;
+import io.watssuggang.voda.pet.dto.res.PetTalkResponse;
 import io.watssuggang.voda.pet.service.PetService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -24,10 +26,10 @@ public class PetController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/talk")
-    public ResponseEntity<?> getPetTalk() {
-        petService.getTalk();
-        return ResponseEntity.ok().build();
+    @GetMapping("/talk/{pet-id}")
+    public ResponseEntity<?> getPetTalk(@PathVariable("pet-id") Integer petId) {
+        PetTalkResponse talk = petService.getTalk(petId);
+        return ResponseEntity.ok(talk);
     }
 
     @PostMapping("/talk")
