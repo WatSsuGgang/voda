@@ -5,6 +5,7 @@ import vodaLogoLetter from "/logo_letter.svg";
 import btn_google from "/login_btn/btn_google.svg";
 import btn_naver from "/login_btn/btn_naver.svg";
 import btn_kakao from "/login_btn/btn_kakao.svg";
+import axios from "axios";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -25,7 +26,16 @@ const ButtonContainer = styled.div({
 });
 
 const Login = () => {
-  function handleClickHandler() {
+  const handleLogin = async (data) => {
+    return await axios.post(process.env.REACT_APP_SPRING_URL, {
+      // email: data.email,
+      // password: data.password,
+    });
+  };
+
+  function handleClickHandler(e) {
+    e.preventDefault();
+
     window.location.href = "/nickname";
   }
   return (
