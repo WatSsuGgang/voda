@@ -6,7 +6,6 @@ import btn_google from "/login_btn/btn_google.svg";
 import btn_naver from "/login_btn/btn_naver.svg";
 import btn_kakao from "/login_btn/btn_kakao.svg";
 
-
 const ImageContainer = styled.div({
   display: "flex",
   flexDirection: "column",
@@ -14,8 +13,7 @@ const ImageContainer = styled.div({
   alignItems: "center",
   // height: "100vh",
   width: "100vw",
-})
-
+});
 
 const ButtonContainer = styled.div({
   display: "flex",
@@ -23,30 +21,36 @@ const ButtonContainer = styled.div({
   justifyContent: "center",
   alignItems: "center",
   gap: "1rem",
-  marginTop: "3rem"
-})
-
+  marginTop: "3rem",
+});
 
 const Login = () => {
-
   return (
-  <div>
-    <ImageContainer>
-      <img src={vodaLogo} alt="" style={{
-        marginTop: "2.5rem",
-        height: "85%",
-        width: "85%",
-      }}/>
-      <img src={vodaLogoLetter} alt="" style={{
-        marginTop: "1.5rem"
-      }}/>
-    </ImageContainer>
-    <ButtonContainer>
-      <img src={btn_google} alt="" />
-      <img src={btn_kakao} alt="" />
-      <img src={btn_naver} alt="" />
-    </ButtonContainer>
-  </div>
+    <div>
+      <ImageContainer>
+        <img
+          src={vodaLogo}
+          alt=""
+          style={{
+            marginTop: "2.5rem",
+            height: "85%",
+            width: "85%",
+          }}
+        />
+        <img
+          src={vodaLogoLetter}
+          alt=""
+          style={{
+            marginTop: "1.5rem",
+          }}
+        />
+      </ImageContainer>
+      <ButtonContainer>
+        <img src={btn_google} alt="" />
+        <img src={btn_kakao} alt="" />
+        <img src={btn_naver} alt="" />
+      </ButtonContainer>
+    </div>
   );
 };
 

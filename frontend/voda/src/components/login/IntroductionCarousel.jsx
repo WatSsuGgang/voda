@@ -8,9 +8,10 @@ const Description = styled.p({
   textAlign: "center",
   margin: 0,
   fontWeight: "bold",
-})
+});
 
 export default function IntroductionCarousel() {
+  // line1, line2로 나눈 이유: 줄바꿈 escape sequence(\n)가 안먹네요
   const items = [
     {
       url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Zzz.png",
@@ -49,9 +50,11 @@ export default function IntroductionCarousel() {
   };
 
   return (
-    <div style={{
-      marginTop: "10vh",
-    }}>
+    <div
+      style={{
+        marginTop: "10vh",
+      }}
+    >
       <Slider {...settings}>
         {items.map((item, index) => (
           <div key={index}>
@@ -60,10 +63,12 @@ export default function IntroductionCarousel() {
               alt={item.alt}
               style={{ width: "100%", height: "100%" }}
             />
-            <div style={{
-              marginTop: "2vh",
-              marginBottom: "2vh",
-            }}>
+            <div
+              style={{
+                marginTop: "2vh",
+                marginBottom: "2vh",
+              }}
+            >
               <Description>{item.line1}</Description>
               <Description>{item.line2}</Description>
             </div>
