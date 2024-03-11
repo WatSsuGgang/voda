@@ -3,6 +3,9 @@ import { useState } from "react";
 import styled from "styled-components";
 import vodaLogo from "/logo.svg";
 import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import ClearIcon from "@mui/icons-material/Clear";
+import SignupButton from "../../components/login/SignupButton";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -35,6 +38,10 @@ export default function Nickname() {
     setNickname(e.target.value);
   }
 
+  function onClickClearHandler() {
+    setNickname("");
+  }
+
   return (
     <>
       <ImageContainer>
@@ -51,16 +58,23 @@ export default function Nickname() {
       <Description>사용할 닉네임을 입력해주세요</Description>
       <InputContainer>
         <TextField
-          id="nickname"
+          id="nickname-input"
           label="닉네임"
           variant="standard"
           onChange={onChangeHandler}
+          value={nickname}
           style={{
             width: "65%",
           }}
-        >
-          {nickname}
-        </TextField>
+          InputProps={{
+            endAdornment: (
+              <IconButton onClick={onClickClearHandler}>
+                {nickname && <ClearIcon />}
+              </IconButton>
+            ),
+          }}
+        ></TextField>
+        <SignupButton />
       </InputContainer>
     </>
   );

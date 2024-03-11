@@ -14,10 +14,13 @@ import NavBar from "./components/common/NavBar";
 import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
 import Nickname from "./pages/login/Nickname";
-const isLogin = false;
+import useStore from "./store/store";
+
+// const isLogin = false;
 
 function App() {
-  if (isLogin) {
+  const { isLoggedIn } = useStore();
+  if (isLoggedIn) {
     return (
       <div>
         <Routes>

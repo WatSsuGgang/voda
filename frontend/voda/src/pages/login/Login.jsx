@@ -25,6 +25,9 @@ const ButtonContainer = styled.div({
 });
 
 const Login = () => {
+  function handleClickHandler() {
+    window.location.href = "/nickname";
+  }
   return (
     <div>
       <ImageContainer>
@@ -46,9 +49,9 @@ const Login = () => {
         />
       </ImageContainer>
       <ButtonContainer>
-        <img src={btn_google} alt="" />
-        <img src={btn_kakao} alt="" />
-        <img src={btn_naver} alt="" />
+        <img src={btn_google} alt="" onClick={handleClickHandler} />
+        <img src={btn_kakao} alt="" onClick={handleClickHandler} />
+        <img src={btn_naver} alt="" onClick={handleClickHandler} />
       </ButtonContainer>
     </div>
   );
