@@ -18,18 +18,22 @@ const opacity = {
 
 const Nav = styled.nav`
   background-color: #fffae1;
-  height: 80px;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 0;
+  border-radius: 20px 20px 0 0;
 `;
 
 const Icons = styled.div`
-  margin: 0 20px;
+  margin: 0 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
+`;
+
+const Menus = styled.div`
+  font-size: 12px;
 `;
 
 const NavLink = styled(Link)`
@@ -62,7 +66,7 @@ const NavBar = () => {
             <div>
               <img src={petIcon} alt="" />
             </div>
-            <div>펫 키우기</div>
+            <Menus>펫 키우기</Menus>
           </Icons>
         </NavLink>
         <NavLink to="/diary">
@@ -70,7 +74,7 @@ const NavBar = () => {
             <div>
               <img src={diaryListIcon} alt="" />
             </div>
-            <div>일기 목록</div>
+            <Menus>일기 목록</Menus>
           </Icons>
         </NavLink>
         <NavLink to="/voice">
@@ -78,7 +82,7 @@ const NavBar = () => {
             <div>
               <img src={voiceDiaryIcon} alt="" />
             </div>
-            <div>일기 쓰기</div>
+            <Menus>일기 쓰기</Menus>
           </Icons>
         </NavLink>
         <NavLink to="/calendar">
@@ -86,7 +90,7 @@ const NavBar = () => {
             <div>
               <img src={calendarIcon} alt="" />
             </div>
-            <div>캘린더</div>
+            <Menus>캘린더</Menus>
           </Icons>
         </NavLink>
         <NavLink to="/mypage">
@@ -94,7 +98,7 @@ const NavBar = () => {
             <div>
               <img src={myPageIcon} alt="" />
             </div>
-            <div>마이페이지</div>
+            <Menus>마이페이지</Menus>
           </Icons>
         </NavLink>
       </Nav>
