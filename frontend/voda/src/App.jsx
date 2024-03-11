@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import Pet from "./pages/pet/Pet";
 import DiaryList from "./pages/diarylist/DiaryList";
 import Calendar from "./pages/calendar/Calendar";
-import MypPage from "./pages/mypage/MyPage";
+import User from "./pages/user/User";
 import VoiceDiary from "./pages/voicediary/VoiceDiary";
 import Record from "./pages/voicediary/Record";
 import CheckChat from "./pages/voicediary/CheckChat";
@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<Pet />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
-          <Route path="/mypage" element={<MypPage />}></Route>
+          <Route path="/user" element={<User />}></Route>
           <Route path="/voice" element={<VoiceDiary />}></Route>
           <Route path="/voice/record" element={<Record />}></Route>
           <Route path="/voice/check" element={<CheckChat />}></Route>

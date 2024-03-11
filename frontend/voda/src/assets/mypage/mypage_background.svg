@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="900" height="1600" preserveAspectRatio="xMidYMid" viewBox="0 0 900 1600" style="z-index:1;margin-right:-1.6px;display:block;background-color:rgb(255, 255, 255);animation-play-state:paused" ><g transform="translate(450,800) scale(1,1) translate(-450,-800)" style="transform:matrix(1, 0, 0, 1, 0, 0);animation-play-state:paused" ><linearGradient id="lg-0.5464483978248431" x1="0" x2="1" y1="0" y2="0" style="animation-play-state:paused" ><stop stop-color="#fffae1" offset="0" style="animation-play-state:paused" ></stop>
-
-  
-<stop stop-color="#98b3a4" offset="1" style="animation-play-state:paused" ></stop></linearGradient>
-<path d="M 0 0 L 0 1482.06 Q 225 1087.32 450 1050.8 T 900 700.651 L 900 0 Z" fill="url(#lg-0.5464483978248431)" opacity="0.4" style="opacity:0.4;animation-play-state:paused" ></path></g></svg>
