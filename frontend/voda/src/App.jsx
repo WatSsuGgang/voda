@@ -17,10 +17,10 @@ import styled from "styled-components";
 const isLogin = true;
 
 const Wrapper = styled.div`
-  bottom: 0;
   left: 0;
   right: 0;
-  position: fixed;
+  bottom: 0;
+  position: absolute;
 `;
 
 function App() {
