@@ -13,7 +13,7 @@ import NavBar from "./components/common/NavBar";
 // 비로그인 상태에서는 서비스 소개 및 로그인 화면만 볼 수 있음.
 import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
-import Signup from "./pages/login/Signup";
+import Nickname from "./pages/login/Nickname";
 const isLogin = false;
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Introduction />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/nickname" element={<Nickname />}></Route>
       </Routes>
     );
   }

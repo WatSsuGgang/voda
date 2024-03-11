@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import vodaLogo from "/logo.svg";
 import vodaLogoLetter from "/logo_letter.svg";
@@ -30,7 +30,7 @@ const Login = () => {
       <ImageContainer>
         <img
           src={vodaLogo}
-          alt=""
+          alt="logo"
           style={{
             marginTop: "2.5rem",
             height: "85%",

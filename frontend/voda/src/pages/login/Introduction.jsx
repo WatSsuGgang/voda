@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; // eslint-disable-line no-unused-vars
 import IntroductionCarousel from "../../components/login/IntroductionCarousel";
 import LoginButton from "../../components/login/LoginButton";
 
