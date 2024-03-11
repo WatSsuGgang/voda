@@ -1,9 +1,7 @@
 package io.watssuggang.voda.pet.controller;
 
-import io.watssuggang.voda.pet.domain.PetTalk;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
-import io.watssuggang.voda.pet.dto.res.PetHomeResponse;
-import io.watssuggang.voda.pet.dto.res.PetTalkResponse;
+import io.watssuggang.voda.pet.dto.res.*;
 import io.watssuggang.voda.pet.service.PetService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -33,17 +31,16 @@ public class PetController {
     }
 
     @PostMapping("/talk")
-    public ResponseEntity<?> createTalk(@RequestBody @Valid PetTalkRequest request)
-            throws Exception {
+    public ResponseEntity<?> createTalk(@RequestBody @Valid PetTalkRequest request) {
         Integer createdId = petService.createTalk(request);
         URI location = URI.create(String.format("api/v1/pet/%d", createdId));
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/feed")
-    public ResponseEntity<?> feed() {
-        petService.feed();
-        return ResponseEntity.ok().build();
+    @PatchMapping("/feed/{pet-id}")
+    public ResponseEntity<?> feed(@PathVariable("pet-id") Integer petId) {
+        PetResponse feed = petService.feed(petId);
+        return ResponseEntity.ok(feed);
     }
 
     @PatchMapping("/levelup")

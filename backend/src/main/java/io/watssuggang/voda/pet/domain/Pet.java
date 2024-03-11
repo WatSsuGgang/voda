@@ -43,6 +43,15 @@ public class Pet extends BaseEntity {
         this.member = member;
     }
 
+    public void updateExp(Byte exp){
+        int plus = exp + this.petExp;
+        if(plus < 128) {
+            this.petExp = (byte) plus;
+        }
+
+        this.petLastFeed = LocalDateTime.now();
+    }
+
     @Builder
     public Pet(String petName) {
         this.petName = petName;

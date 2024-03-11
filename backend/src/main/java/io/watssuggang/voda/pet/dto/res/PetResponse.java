@@ -26,7 +26,7 @@ public class PetResponse {
         this.level = pet.getPetLevel();
         this.emotion = pet.getPetEmotion();
         this.stage = pet.getPetStage();
-        this.isFeed = DateUtil.AfterMidNight(pet.getPetLastFeed());
+        this.isFeed = DateUtil.AfterTodayMidNight(pet.getPetLastFeed());
     }
 
     public static PetResponse of(Pet pet, PetFile petFile) {

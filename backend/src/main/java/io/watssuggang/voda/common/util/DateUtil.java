@@ -4,13 +4,13 @@ import java.time.*;
 
 public class DateUtil {
 
-    public static boolean AfterMidNight(LocalDateTime lastFeed) {
+    public static boolean AfterTodayMidNight(LocalDateTime time) {
         LocalDateTime midNight = getTodayDate();
 
-        return lastFeed.isBefore(midNight);
+        return time.isAfter(midNight);
     }
 
-    public static LocalDateTime getTodayDate(){
+    public static LocalDateTime getTodayDate() {
         return LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
     }
 }

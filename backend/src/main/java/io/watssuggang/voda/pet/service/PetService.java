@@ -22,7 +22,20 @@ public class PetService {
     private final DiaryRepository diaryRepository;
     private final OwnService ownService;
 
-    public void feed() {
+    public PetResponse feed(Integer petId) {
+        Pet pet = getVerifyPetById(petId);
+
+        if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
+            throw new RuntimeException();
+        }
+
+        PetFile petFile = petFileRepository.findByPetEmotionAndPetStage(
+                pet.getPetEmotion(),
+                pet.getPetStage()
+        ).orElseThrow(RuntimeException::new);
+
+        pet.updateExp((byte) 5);
+        return PetResponse.of(pet, petFile);
     }
 
     public void levelUp() {
@@ -38,7 +51,7 @@ public class PetService {
         int count = diaryRepository.countDiaryByPetIdAndAfterToday(petId, DateUtil.getTodayDate());
 
         List<PetStatus> petStatuses = new ArrayList<>(List.of(PetStatus.JOKE));
-        if (DateUtil.AfterMidNight(pet.getPetLastFeed())) {
+        if (!DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
             petStatuses.add(PetStatus.HUNGRY);
         }
 
@@ -56,7 +69,7 @@ public class PetService {
         return PetTalkResponse.of(status.get(rand));
     }
 
-    public Integer createTalk(PetTalkRequest request) throws Exception {
+    public Integer createTalk(PetTalkRequest request) {
         PetTalk petTalk = new PetTalk(request.getTalk(), request.getStatus());
         verifyPetTalk(petTalk);
         return petTalkRepository.save(petTalk).getPetTalkId();
@@ -70,7 +83,7 @@ public class PetService {
     }
 
     public PetHomeResponse getPetHomeInfo(Integer memberId) {
-        Pet pet = getPetInfo(memberId);
+        Pet pet = getVerifyPetById(memberId);
         PetFile petFile = petFileRepository.findByPetEmotionAndPetStage(pet.getPetEmotion(),
                         pet.getPetStage())
                 .orElseThrow(RuntimeException::new);
@@ -81,7 +94,7 @@ public class PetService {
         );
     }
 
-    private Pet getPetInfo(Integer memberId) {
+    public Pet getVerifyPetById(Integer memberId) {
         return petRepository.findByMember_MemberId(memberId)
                 .orElseThrow(RuntimeException::new);
     }
