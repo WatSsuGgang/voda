@@ -42,22 +42,6 @@ const providerList = [
 
 const Login = () => {
   const BASE_URL = import.meta.env.VITE_REACT_APP_SPRING_API;
-  // const signupHandler = async () => {
-  // const response = await axios.get(
-  //   BASE_URL + "/oauth2/authorization/kakao",
-  //   {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Access-Control-Allow-Origin": "*",
-  //       withCredentials: true,
-  //     },
-  //   }
-  // );
-  // console.log(response);
-  // const user = response.data.user;
-  // const accessToken = response.headers["access_token"];
-  // const refreshToken = response.headers["refresh_token"];
-  // };
 
   function clickHandler(e) {
     e.preventDefault();

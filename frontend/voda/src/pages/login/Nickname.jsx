@@ -51,7 +51,10 @@ export default function Nickname() {
         },
       }
     );
+    localStorage.removeItem("email");
+    localStorage.removeItem("provider");
     console.log(response);
+    window.location.href = "/login";
   };
 
   function onChangeHandler(e) {

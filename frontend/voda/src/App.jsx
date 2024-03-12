@@ -42,7 +42,7 @@ function App() {
         <Route path="/" element={<Introduction />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/login/nickname" element={<Nickname />}></Route>
-        <Route path="/loginSuccess" element={<LoginSuccess />}></Route>
+        <Route path="/login-success" element={<LoginSuccess />}></Route>
       </Routes>
     );
   }
