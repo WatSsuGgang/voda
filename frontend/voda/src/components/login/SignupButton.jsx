@@ -25,19 +25,7 @@ export default function SignupButton() {
   }
   return (
     <>
-      <Button onClick={handleClickHandler}>
-        회원가입
-        {/* <Link
-          to="/"
-          style={{
-            textDecoration: "none",
-            color: "black",
-            fontWeight: "bold",
-          }}
-        >
-          회원가입
-        </Link> */}
-      </Button>
+      <Button onClick={handleClickHandler}>회원가입</Button>
     </>
   );
 }

@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import SignupButton from "../../components/login/SignupButton";
+import axios from "axios";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -33,6 +34,25 @@ const InputContainer = styled.div({
 
 export default function Nickname() {
   const [nickname, setNickname] = useState("");
+
+  const handleSignup = async () => {
+    const email = localStorage.getItem("email");
+    const provider = localStorage.getItem("provider");
+    const response = await axios.post(
+      import.meta.env.REACT_APP_SPRING_API + "/auth/signup",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          email,
+          provider,
+          nickname,
+        },
+      }
+    );
+    console.log(response);
+  };
 
   function onChangeHandler(e) {
     setNickname(e.target.value);
@@ -74,7 +94,7 @@ export default function Nickname() {
             ),
           }}
         ></TextField>
-        <SignupButton />
+        <SignupButton onClick={handleSignup} />
       </InputContainer>
     </>
   );
