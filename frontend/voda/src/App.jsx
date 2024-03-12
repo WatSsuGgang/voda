@@ -15,6 +15,7 @@ import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
 import Nickname from "./pages/login/Nickname";
 import useStore from "./store/store";
+import LoginSuccess from "./pages/login/LoginSuccess";
 
 // const isLogin = false;
 
@@ -40,7 +41,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Introduction />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/nickname" element={<Nickname />}></Route>
+        <Route path="/login/nickname" element={<Nickname />}></Route>
+        <Route path="/loginSuccess" element={<LoginSuccess />}></Route>
       </Routes>
     );
   }
