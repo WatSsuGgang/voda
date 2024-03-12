@@ -19,10 +19,9 @@ public class Own {
     private Member member;
 
     public void purchase(Member member, Item item) {
-        if (!member.getOwns().contains(this)) {
-            member.getOwns().remove(this);
+        if (member.getOwns().contains(this)) {
+            member.getOwns().add(this);
         }
-        member.getOwns().add(this);
         this.item = item;
         this.member = member;
     }
