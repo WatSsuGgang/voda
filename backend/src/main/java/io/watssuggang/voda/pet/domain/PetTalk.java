@@ -1,6 +1,5 @@
 package io.watssuggang.voda.pet.domain;
 
-import io.watssuggang.voda.common.converter.PetStatusConverter;
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.PetStatus;
 import jakarta.persistence.*;
@@ -10,7 +9,7 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"petTalk","petStatus"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"petTalk", "petStatus"})})
 public class PetTalk extends BaseEntity {
 
     @Id
@@ -19,10 +18,10 @@ public class PetTalk extends BaseEntity {
     @NotNull
     @Column(length = 30)
     private String petTalk;
-    @Convert(converter = PetStatusConverter.class)
     @Column(columnDefinition = "char(2)")
     private PetStatus petStatus;
 
+    @Builder
     public PetTalk(String petTalk, PetStatus petStatus) {
         this.petTalk = petTalk;
         this.petStatus = petStatus;

@@ -70,7 +70,10 @@ public class PetService {
     }
 
     public Integer createTalk(PetTalkRequest request) {
-        PetTalk petTalk = new PetTalk(request.getTalk(), request.getStatus());
+        PetTalk petTalk = PetTalk.builder()
+                .petTalk(request.getTalk())
+                .petStatus(request.getStatus())
+                .build();
         verifyPetTalk(petTalk);
         return petTalkRepository.save(petTalk).getPetTalkId();
     }
@@ -88,7 +91,7 @@ public class PetService {
                         pet.getPetStage())
                 .orElseThrow(RuntimeException::new);
 
-        return new PetHomeResponse(
+        return PetHomeResponse.of(
                 PetResponse.of(pet, petFile),
                 ownService.getAllOwnByMember(memberId)
         );
