@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum PetStatus implements LabelEnum {
 
-    DIARY("01"), EAT("02"), HUNGRY("03"), REVOLUTION("04"), JOKE("05");
+    DIARY("01"), EAT("02"), HUNGRY("03"), EVOLUTION("04"), JOKE("05");
 
     private final String label;
 
