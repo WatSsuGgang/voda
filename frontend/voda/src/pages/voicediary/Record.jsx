@@ -2,9 +2,7 @@ import React, { useState } from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Timer from "../../components/voicediary/Timer";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import { useNavigate } from "react-router-dom";
 const Title = styled.h1`
   text-align: center;
   font-size: 1.2rem;
@@ -12,8 +10,13 @@ const Title = styled.h1`
 `;
 
 const Record = () => {
-  const { isListening } = useSpeechRecognition();
   const [voiceRecognized] = useState(true);
+  const navigate = useNavigate();
+  const exit = () => {
+    if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
+      navigate(-1);
+    }
+  };
   const Emoticon = voiceRecognized ? (
     <img
       src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People%20with%20activities/Man%20Gesturing%20OK%20Light%20Skin%20Tone.png"
@@ -40,7 +43,7 @@ const Record = () => {
   return (
     <div>
       <div style={{ marginTop: "15%", display: "flex", justifyContent: "end" }}>
-        <LogoutIcon />
+        <LogoutIcon onClick={exit} />
       </div>
       <Title>AI와 대화하며 일기를 작성해요</Title>
       <div style={{ textAlign: "center" }}>{Emoticon}</div>
