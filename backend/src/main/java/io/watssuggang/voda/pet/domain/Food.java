@@ -4,7 +4,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("f")
-public class Frame extends Item {
+@DiscriminatorValue("F")
+public class Food extends Item {
 
 }

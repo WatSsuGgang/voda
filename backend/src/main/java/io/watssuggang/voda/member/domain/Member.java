@@ -2,16 +2,8 @@ package io.watssuggang.voda.member.domain;
 
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.diary.domain.Diary;
-import io.watssuggang.voda.pet.domain.Item;
-import io.watssuggang.voda.pet.domain.Pet;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import io.watssuggang.voda.pet.domain.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -44,11 +36,11 @@ public class Member extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<PointLog> pointLogs = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.PERSIST)
     private Pet pet;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
-    private List<Item> items = new ArrayList<>();
+    private List<Own> owns = new ArrayList<>();
 
     public void addDiaries(Diary diary) {
         this.diaries.add(diary);
@@ -56,6 +48,11 @@ public class Member extends BaseEntity {
 
     public void addPointLogs(PointLog pointLog) {
         this.pointLogs.add(pointLog);
+    }
+
+    public void addPet(Pet pet) {
+        this.pet = pet;
+        pet.addPet(this);
     }
 
     @Builder
