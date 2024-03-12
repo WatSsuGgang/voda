@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface DiaryRepository extends JpaRepository<Diary, Integer> {
 
     @Query("SELECT COUNT(d) FROM Diary d WHERE d.member.pet.petId = :petId AND d.createdAt >= :createdAt")
-    int countDiaryByPetIdAndAfterToday(Integer petId, LocalDateTime createdAt);
+    Integer countDiaryByPetIdAndAfterToday(Integer petId, LocalDateTime createdAt);
 
 }
