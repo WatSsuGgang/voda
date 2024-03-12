@@ -1,6 +1,5 @@
 package io.watssuggang.voda.pet.domain;
 
-import io.watssuggang.voda.common.converter.EmotionConverter;
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.Emotion;
 import io.watssuggang.voda.member.domain.Member;
@@ -29,7 +28,6 @@ public class Pet extends BaseEntity {
     @Column(columnDefinition = "tinyint")
     private Byte petExp = 0;
 
-    @Convert(converter = EmotionConverter.class)
     @Column(columnDefinition = "char(2)")
     private Emotion petEmotion = Emotion.JOY;
 
@@ -43,9 +41,9 @@ public class Pet extends BaseEntity {
         this.member = member;
     }
 
-    public void updateExp(Byte exp){
+    public void updateExp(Byte exp) {
         int plus = exp + this.petExp;
-        if(plus < 128) {
+        if (plus < 128) {
             this.petExp = (byte) plus;
         }
 

@@ -1,6 +1,5 @@
 package io.watssuggang.voda.pet.domain;
 
-import io.watssuggang.voda.common.converter.EmotionConverter;
 import io.watssuggang.voda.common.domain.File;
 import io.watssuggang.voda.common.enums.Emotion;
 import jakarta.persistence.*;
@@ -12,7 +11,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PetFile extends File {
 
-    @Convert(converter = EmotionConverter.class)
     @Column(columnDefinition = "char(2)")
     private Emotion petEmotion;
 
