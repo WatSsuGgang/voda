@@ -33,11 +33,6 @@ const ChatBox = (props) => {
     setChatContents(newContents);
   };
 
-  const handleInputClick = (index) => {
-    const newContents = [...chatContents];
-    setChatContents(newContents);
-  };
-
   const renderInputs = () => {
     return chatContents.map((content, index) => {
       if (index % 2 === 1) {
