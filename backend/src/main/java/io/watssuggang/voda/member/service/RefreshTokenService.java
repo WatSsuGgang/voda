@@ -25,6 +25,7 @@ public class RefreshTokenService {
         RefreshToken token = tokenRepository.findByAccessToken(accessToken)
             .orElseThrow(IllegalArgumentException::new);
 
+        System.out.println("삭제하려는 갱신 토큰: " + token);
         tokenRepository.delete(token);
     }
 

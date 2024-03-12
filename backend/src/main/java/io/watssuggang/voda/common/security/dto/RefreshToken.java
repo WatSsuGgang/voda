@@ -16,6 +16,7 @@ public class RefreshToken implements Serializable {
     @Id
     private String id;
 
+    // Indexed 어노테이션을 붙이면 findBy가 가능해짐
     @Indexed
     private String accessToken;
 
