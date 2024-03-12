@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export default function LoginSuccess() {
-  const params = useParams();
+  const [query, setQuery] = useSearchParams();
   // const [accessToken, setAccessToken] = useState(undefined);
   // const [email, setEmail] = useState(undefined);
   // const [provider, setProvider] = useState(undefined);
 
   useEffect(() => {
-    const accessToken = params.accessToken;
-    const email = params.email;
-    const provider = params.provider;
+    const accessToken = query.get("accessToken");
+    const email = query.get("email");
+    const provider = query.get("provider");
     console.log("accessToken", accessToken);
     console.log("email", email);
     console.log("provider", provider);
