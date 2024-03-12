@@ -54,7 +54,12 @@ export default function Nickname() {
     localStorage.removeItem("email");
     localStorage.removeItem("provider");
     console.log(response);
-    window.location.href = "/login";
+    if (response.statusCode === 200) {
+      window.alert("회원가입 성공");
+    } else if (response.statusCode === 400) {
+      window.alert("회원가입 실패");
+    }
+    // window.location.href = "/login";
   };
 
   function onChangeHandler(e) {

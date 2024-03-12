@@ -5,7 +5,7 @@ import vodaLogoLetter from "/logo_letter.svg";
 import btn_google from "/login_btn/btn_google.svg";
 import btn_naver from "/login_btn/naver.png";
 import btn_kakao from "/login_btn/kakao.png";
-import axios from "axios";
+// import axios from "axios";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -24,21 +24,6 @@ const ButtonContainer = styled.div({
   gap: "1rem",
   marginTop: "3rem",
 });
-
-const providerList = [
-  {
-    text: "kakao",
-    href: "https://localhost:3000/oauth2/authorization/kakao",
-  },
-  {
-    text: "naver",
-    href: "https://localhost:3000/oauth2/authorization/naver",
-  },
-  {
-    text: "google",
-    href: "https://localhost:3000/oauth2/authorization/google",
-  },
-];
 
 const Login = () => {
   const BASE_URL = import.meta.env.VITE_REACT_APP_SPRING_API;

@@ -1,7 +1,7 @@
 import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
 import { Link } from "react-router-dom"; // eslint-disable-line no-unused-vars
-import useStore from "../../store/store";
+// import useStore from "../../store/store";
 // import Button from '@mui/material';
 
 const Button = styled.button({
@@ -18,14 +18,25 @@ const Button = styled.button({
 });
 
 export default function SignupButton() {
-  const { login } = useStore();
+  // const { login } = useStore();
 
   function handleClickHandler() {
-    login();
+    // login();
   }
   return (
     <>
-      <Button onClick={handleClickHandler}>회원가입</Button>
+      <Button onClick={handleClickHandler}>
+        <Link
+          to="/login"
+          style={{
+            textDecoration: "none",
+            color: "black",
+            fontWeight: "bold",
+          }}
+        >
+          회원가입
+        </Link>
+      </Button>
     </>
   );
 }
