@@ -4,8 +4,8 @@ import { Route, Routes } from "react-router-dom";
 // 로그인된 사용자가 볼 수 있는 페이지
 import Pet from "./pages/pet/Pet";
 import DiaryList from "./pages/diarylist/DiaryList";
-import Calendar from "./pages/calendar/Calendar";
-import User from "./pages/user/User";
+import Calendar from "./pages/calendar/CalendarPage";
+import MypPage from "./pages/mypage/MyPage";
 import VoiceDiary from "./pages/voicediary/VoiceDiary";
 import Record from "./pages/voicediary/Record";
 import CheckChat from "./pages/voicediary/CheckChat";
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  position: absolute;
+  position: fixed;
 `;
 
 function App() {

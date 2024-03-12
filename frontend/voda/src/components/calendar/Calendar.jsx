@@ -1,7 +1,14 @@
 import React from "react"; // eslint-disable-line no-unused-vars
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
 const Calendar = () => {
-  return <div>Calendar</div>;
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DateCalendar />
+    </LocalizationProvider>
+  );
 };
 
 export default Calendar;
