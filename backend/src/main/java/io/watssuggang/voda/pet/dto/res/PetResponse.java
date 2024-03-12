@@ -5,9 +5,7 @@ import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.pet.domain.Pet;
 import io.watssuggang.voda.pet.domain.PetFile;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
 public class PetResponse {
 
@@ -19,7 +17,7 @@ public class PetResponse {
     private final Byte stage;
     private final Boolean isFeed;
 
-    public PetResponse(Pet pet, PetFile petFile) {
+    private PetResponse(Pet pet, PetFile petFile) {
         this.name = pet.getPetName();
         this.petImgUrl = PetFileResponse.of(petFile);
         this.exp = pet.getPetExp();

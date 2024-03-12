@@ -2,10 +2,8 @@ package io.watssuggang.voda.pet.dto.res;
 
 import io.watssuggang.voda.pet.domain.Item;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class OwnResponse {
 
     private final Integer itemId;
