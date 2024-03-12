@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; // eslint-disable-line
 import { useSearchParams } from "react-router-dom";
 
 export default function LoginSuccess() {
