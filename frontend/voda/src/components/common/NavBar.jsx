@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import diaryListIcon from "../../assets/navbar/diaryList.svg";
 import calendarIcon from "../../assets/navbar/calendar.svg";
-import myPageIcon from "../../assets/navbar/myPage.svg";
+import userIcon from "../../assets/navbar/user.svg";
 import petIcon from "../../assets/navbar/pet.svg";
 import voiceDiaryIcon from "../../assets/navbar/voiceDiary.svg";
 import { useLocation } from "react-router-dom";
@@ -13,7 +13,7 @@ const opacity = {
   voice: 0,
   calendar: 0,
   pet: 0,
-  mypage: 0,
+  user: 0,
 };
 
 const Nav = styled.nav`
@@ -93,10 +93,10 @@ const NavBar = () => {
             <Menus>캘린더</Menus>
           </Icons>
         </NavLink>
-        <NavLink to="/mypage">
-          <Icons style={{ opacity: opacity.mypage }}>
+        <NavLink to="/user">
+          <Icons style={{ opacity: opacity.user }}>
             <div>
-              <img src={myPageIcon} alt="" />
+              <img src={userIcon} alt="" />
             </div>
             <Menus>마이페이지</Menus>
           </Icons>

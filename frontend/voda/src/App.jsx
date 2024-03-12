@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<Pet />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
-          <Route path="/mypage" element={<MypPage />}></Route>
+          <Route path="/user" element={<User />}></Route>
           <Route path="/voice" element={<VoiceDiary />}></Route>
           <Route path="/voice/record" element={<Record />}></Route>
           <Route path="/voice/check" element={<CheckChat />}></Route>
