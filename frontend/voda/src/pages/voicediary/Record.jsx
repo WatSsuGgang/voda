@@ -14,7 +14,7 @@ const Record = () => {
   const navigate = useNavigate();
   const exit = () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
-      navigate(-1);
+      navigate("/voice");
     }
   };
   const Emoticon = voiceRecognized ? (
