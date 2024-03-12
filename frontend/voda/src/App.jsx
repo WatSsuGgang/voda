@@ -1,10 +1,10 @@
-// import React from "react";
+import React from "react"; // eslint-disable-line no-unused-vars
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 // 로그인된 사용자가 볼 수 있는 페이지
 import Pet from "./pages/pet/Pet";
 import DiaryList from "./pages/diarylist/DiaryList";
-import Calendar from "./pages/calendar/Calendar";
+import Calendar from "./pages/calendar/CalendarPage";
 import MypPage from "./pages/mypage/MyPage";
 import VoiceDiary from "./pages/voicediary/VoiceDiary";
 import Record from "./pages/voicediary/Record";
@@ -18,6 +18,15 @@ import useStore from "./store/store";
 import LoginSuccess from "./pages/login/LoginSuccess";
 
 // const isLogin = false;
+import styled from "styled-components";
+const isLogin = true;
+
+const Wrapper = styled.div`
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+`;
 
 function App() {
   const { isLoggedIn } = useStore();
@@ -28,12 +37,14 @@ function App() {
           <Route path="/" element={<Pet />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
-          <Route path="/mypage" element={<MypPage />}></Route>
-          <Route path="/voicediary" element={<VoiceDiary />}></Route>
-          <Route path="/record" element={<Record />}></Route>
-          <Route path="/checkchat" element={<CheckChat />}></Route>
+          <Route path="/user" element={<User />}></Route>
+          <Route path="/voice" element={<VoiceDiary />}></Route>
+          <Route path="/voice/record" element={<Record />}></Route>
+          <Route path="/voice/check" element={<CheckChat />}></Route>
         </Routes>
-        <NavBar />
+        <Wrapper>
+          <NavBar />
+        </Wrapper>
       </div>
     );
   } else {
