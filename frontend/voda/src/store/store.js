@@ -1,13 +1,15 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware"; // 디버깅 용도
 
-const store = (set) => ({
+const store = (set, get) => ({
+  editAllow: true,
   isLoggedIn: false,
-  bears: 0,
-  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  removeAllBears: () => set({ bears: 0 }),
   login: () => set({ isLoggedIn: true }),
   logout: () => set({ isLoggedIn: false }),
+  changeEditMode: () => {
+    set((state) => ({ editAllow: !state.editAllow }));
+    // console.log(get().editAllow);
+  },
 });
 
 const useStore = create(
