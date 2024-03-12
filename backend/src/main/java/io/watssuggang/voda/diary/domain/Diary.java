@@ -1,16 +1,12 @@
 package io.watssuggang.voda.diary.domain;
 
-import io.watssuggang.voda.common.converter.EmotionConverter;
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.Emotion;
 import io.watssuggang.voda.member.domain.Member;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -27,7 +23,6 @@ public class Diary extends BaseEntity {
     @Column(columnDefinition = "text")
     private String diarySummary;
 
-    @Convert(converter = EmotionConverter.class)
     @Column(columnDefinition = "char(2)", length = 2)
     private Emotion diaryEmotion;
 
@@ -41,9 +36,10 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "member_id")
     Member member;
 
-
     public void addMember(Member member) {
-        member.getDiaries().add(this);
+        if (member.getDiaries().contains(this)) {
+            member.getDiaries().add(this);
+        }
         this.member = member;
     }
 
