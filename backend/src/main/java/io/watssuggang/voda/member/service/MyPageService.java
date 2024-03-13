@@ -27,4 +27,8 @@ public class MyPageService {
 
         return new UserInfoResponse(newNickname);
     }
+
+    public void deleteUser(Integer memberId) {
+        memberRepository.deleteById(memberId);
+    }
 }

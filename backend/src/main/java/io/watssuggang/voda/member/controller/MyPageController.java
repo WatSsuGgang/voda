@@ -46,7 +46,7 @@ public class MyPageController {
         // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
         Integer memberId = 0;
 
-        myPageService.deleteUesr(memberId);
+        myPageService.deleteUser(memberId);
 
         return ResponseEntity.ok().build();
     }
