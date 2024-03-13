@@ -3,9 +3,10 @@ import { devtools } from "zustand/middleware"; // 디버깅 용도
 
 const store = (set, get) => ({
   editAllow: true,
-  isLoggedIn: false,
-  login: () => set({ isLoggedIn: true }),
-  logout: () => set({ isLoggedIn: false }),
+  isLoggedIn: true,
+  nickname: "갓소민",
+  login: () => set({ isLoggedIn: true, nickname: "갓소민" }),
+  logout: () => set({ isLoggedIn: false, nickname: null }),
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
     // console.log(get().editAllow);
