@@ -50,11 +50,7 @@ export default function IntroductionCarousel() {
   };
 
   return (
-    <div
-      style={{
-        marginTop: "10vh",
-      }}
-    >
+    <div>
       <Slider {...settings}>
         {items.map((item, index) => (
           <div key={index}>
