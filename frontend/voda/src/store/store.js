@@ -5,6 +5,9 @@ const store = (set, get) => ({
   editAllow: true,
   isLoggedIn: true,
   login: () => set({ isLoggedIn: true }),
+  // login: () => {
+  //   set((state) => ({ isLoggedIn: !state.isLoggedIn}))
+  // }
   logout: () => set({ isLoggedIn: false }),
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
