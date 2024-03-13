@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import Pet from "./pages/pet/Pet";
 import DiaryList from "./pages/diarylist/DiaryList";
 import Calendar from "./pages/calendar/CalendarPage";
-import MypPage from "./pages/mypage/MyPage";
+import User from "./pages/user/User";
 import VoiceDiary from "./pages/voicediary/VoiceDiary";
 import Record from "./pages/voicediary/Record";
 import CheckChat from "./pages/voicediary/CheckChat";
@@ -29,8 +29,9 @@ const Wrapper = styled.div`
 `;
 
 function App() {
+  const accessToken = localStorage.getItem("accessToken");
   const { isLoggedIn } = useStore();
-  if (isLoggedIn) {
+  if (accessToken) {
     return (
       <div>
         <Routes>
