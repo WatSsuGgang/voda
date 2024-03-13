@@ -35,7 +35,7 @@ const ButtonContainer = styled.div({
 const Login = () => {
   const navigate = useNavigate();
   const store = useStore();
-  const BASE_URL = import.meta.env.VITE_REACT_APP_SPRING_API;
+  const url = import.meta.env.VITE_REACT_APP_SPRING_API;
 
   function clickHandler(e) {
     e.preventDefault();
@@ -46,7 +46,7 @@ const Login = () => {
       console.log("로그인 후", store.isLoggedIn);
       navigate("/");
     } else {
-      window.location.href = BASE_URL + `/oauth2/authorization/${e.target.id}`;
+      window.location.href = url + `/oauth2/authorization/${e.target.id}`;
     }
   }
   return (
