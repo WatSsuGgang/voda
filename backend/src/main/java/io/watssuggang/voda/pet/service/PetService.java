@@ -7,6 +7,7 @@ import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.pet.domain.Pet;
 import io.watssuggang.voda.pet.domain.PetTalk;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
+import io.watssuggang.voda.pet.dto.req.PetUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.*;
 import io.watssuggang.voda.pet.repository.PetRepository;
 import io.watssuggang.voda.pet.repository.PetTalkRepository;
@@ -30,7 +31,7 @@ public class PetService {
     private final OwnService ownService;
 
     public PetResponse feed(Integer petId) {
-        Pet pet = getVerifyPetById(petId);
+        Pet pet = getVerifyPetByPetId(petId);
 
         if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
             throw new RuntimeException();
@@ -41,7 +42,7 @@ public class PetService {
     }
 
     public PetResponse levelUp(Integer petId) {
-        Pet pet = getVerifyPetById(petId);
+        Pet pet = getVerifyPetByPetId(petId);
 
         // 펫 레벨업 empty: 변화없음, 2, 3: 단계
         Byte beforePetStage = pet.getPetStage();
@@ -105,7 +106,13 @@ public class PetService {
         }).orElseThrow(RuntimeException::new);
     }
 
-    public void update() {
+    public PetResponse update(Integer petId, PetUpdateRequest updateRequest) {
+        Pet pet = getVerifyPetByPetId(petId);
+
+        Optional.of(updateRequest.getName())
+                .ifPresent(pet::updateName);
+
+        return PetResponse.of(pet);
     }
 
     public PetTalkResponse getTalk(Integer petId) {
@@ -150,7 +157,7 @@ public class PetService {
     }
 
     public PetHomeResponse getPetHomeInfo(Integer memberId) {
-        Pet pet = getVerifyPetById(memberId);
+        Pet pet = getVerifyPetByMemberId(memberId);
 
         return PetHomeResponse.of(
                 PetResponse.of(pet),
@@ -158,8 +165,13 @@ public class PetService {
         );
     }
 
-    public Pet getVerifyPetById(Integer memberId) {
+    public Pet getVerifyPetByMemberId(Integer memberId) {
         return petRepository.findByMember_MemberId(memberId)
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public Pet getVerifyPetByPetId(Integer petId) {
+        return petRepository.findByMember_MemberId(petId)
                 .orElseThrow(RuntimeException::new);
     }
 }

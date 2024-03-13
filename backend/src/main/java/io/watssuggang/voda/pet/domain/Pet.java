@@ -81,4 +81,8 @@ public class Pet extends BaseEntity {
     public Pet(String petName) {
         this.petName = petName;
     }
+
+    public void updateName(String name) {
+        this.petName = name;
+    }
 }

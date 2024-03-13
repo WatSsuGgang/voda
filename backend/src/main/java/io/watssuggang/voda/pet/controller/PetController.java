@@ -1,6 +1,7 @@
 package io.watssuggang.voda.pet.controller;
 
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
+import io.watssuggang.voda.pet.dto.req.PetUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.*;
 import io.watssuggang.voda.pet.service.PetService;
 import jakarta.validation.Valid;
@@ -49,9 +50,12 @@ public class PetController {
         return ResponseEntity.ok(petResponse);
     }
 
-    @PatchMapping
-    public ResponseEntity<?> updateInfo() {
-        petService.update();
-        return ResponseEntity.ok().build();
+    @PatchMapping("{pet-id}")
+    public ResponseEntity<?> updateInfo(
+            @PathVariable("pet-id") Integer petId,
+            @RequestBody PetUpdateRequest updateRequest
+    ) {
+        PetResponse petResponse = petService.update(petId, updateRequest);
+        return ResponseEntity.ok(petResponse);
     }
 }
