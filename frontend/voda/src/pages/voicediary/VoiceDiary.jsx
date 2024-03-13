@@ -1,4 +1,4 @@
-import React from "react"; // eslint-disable-line no-unused-vars
+import React from "react";
 import styled from "styled-components";
 import EditAllow from "../../components/voicediary/EditAllow";
 import StartRecord from "../../components/voicediary/StartRecord";
