@@ -2,8 +2,9 @@ package io.watssuggang.voda.member.domain;
 
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.diary.domain.Diary;
-import io.watssuggang.voda.pet.domain.Item;
+import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.domain.Pet;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,17 +39,20 @@ public class Member extends BaseEntity {
     @Setter
     private Integer memberDiaryCount;
 
+    @Setter
+    private String memberEmail;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Diary> diaries = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<PointLog> pointLogs = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.PERSIST)
     private Pet pet;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
-    private List<Item> items = new ArrayList<>();
+    private List<Own> owns = new ArrayList<>();
 
     public void addDiaries(Diary diary) {
         this.diaries.add(diary);
@@ -58,11 +62,18 @@ public class Member extends BaseEntity {
         this.pointLogs.add(pointLog);
     }
 
+    public void addPet(Pet pet) {
+        this.pet = pet;
+        pet.addPet(this);
+    }
+
     @Builder
-    public Member(String memberName, Integer memberPoint, Integer memberDiaryCount, Pet pet) {
+    public Member(String memberName, Integer memberPoint, Integer memberDiaryCount, Pet pet,
+        String memberEmail) {
         this.memberName = memberName;
         this.memberPoint = memberPoint;
         this.memberDiaryCount = memberDiaryCount;
+        this.memberEmail = memberEmail;
         this.pet = pet;
     }
 }

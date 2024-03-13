@@ -21,6 +21,13 @@ public class DiaryFile extends File {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+    public void addDiary(Diary diary) {
+        if (diary.getDiaryFiles().contains(this)) {
+            diary.getDiaryFiles().add(this);
+        }
+        this.diary = diary;
+    }
+
     @Builder
     public DiaryFile(FileType fileType, String fileUrl) {
         this.setFileType(fileType);
