@@ -49,6 +49,11 @@ public class Pet extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public void addPet(Member member) {
+        this.member = member;
+    }
+
+
     @Builder
     public Pet(String petName, Byte petStage, Byte petLevel, Byte petExp, Emotion petEmotion,
         String petDiaryUrl, LocalDateTime petLastFeed, Member member) {

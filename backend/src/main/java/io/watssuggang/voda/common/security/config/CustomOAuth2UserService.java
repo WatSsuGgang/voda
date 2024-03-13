@@ -1,19 +1,15 @@
 package io.watssuggang.voda.common.security.config;
 
-import io.watssuggang.voda.member.domain.Member;
-import io.watssuggang.voda.member.repository.MemberRepository;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Service;
+import io.watssuggang.voda.member.domain.*;
+import io.watssuggang.voda.member.repository.*;
+import java.util.*;
+import lombok.*;
+import lombok.extern.slf4j.*;
+import org.springframework.security.core.authority.*;
+import org.springframework.security.oauth2.client.userinfo.*;
+import org.springframework.security.oauth2.core.*;
+import org.springframework.security.oauth2.core.user.*;
+import org.springframework.stereotype.*;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +20,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("loadUser 진입");
+
         // 1. 유저 정보(attributes) 가져오기
         Map<String, Object> oAuth2UserAttributes = super.loadUser(userRequest).getAttributes();
 
@@ -35,18 +31,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
             .getUserInfoEndpoint().getUserNameAttributeName();
 
-        log.info("userNameAttributeName: " + userNameAttributeName);
-
         // OAuth2UserService를 사용하여 가져온 OAuth2User 정보로 OAuth2UserInfo 객체를 만든다.
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, userNameAttributeName,
             oAuth2UserAttributes);
 
-        // OAuth2UserInfo의 속성값들을 Map으로 변환
         Map<String, Object> memberAttribute = oAuth2UserInfo.convertToMap();
 
-        // 사용자 email(또는 id) 정보를 가져온다.
         String email = memberAttribute.get("email").toString();
-        log.info("email: " + email);
 
         // 이메일로 가입된 회원인지 조회한다.
         Optional<Member> findMember = memberRepository.findByMemberEmail(email);

@@ -1,11 +1,10 @@
 package io.watssuggang.voda.common.security.handler;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
+import jakarta.servlet.http.*;
+import java.io.*;
+import org.springframework.security.core.*;
+import org.springframework.security.web.authentication.*;
+import org.springframework.stereotype.*;
 
 @Component
 public class OAuth2FailureHandler implements AuthenticationFailureHandler {
@@ -15,6 +14,5 @@ public class OAuth2FailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException exception) throws IOException {
         response.sendRedirect("http://localhost:5173/login");
-        System.out.println("OAuth2FailureHandler 메서드, login 페이지로 다시 이동");
     }
 }
