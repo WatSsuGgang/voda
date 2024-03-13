@@ -10,6 +10,7 @@ import VoiceDiary from "./pages/voicediary/VoiceDiary";
 import Record from "./pages/voicediary/Record";
 import CheckChat from "./pages/voicediary/CheckChat";
 import NavBar from "./components/common/NavBar";
+import DiaryDetail from "./pages/diarylist/DiaryDetail";
 // 비로그인 상태에서는 서비스 소개 및 로그인 화면만 볼 수 있음.
 import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Pet />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
+          <Route path="/diary/:id" element={<DiaryDetail />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
           <Route path="/user" element={<User />}></Route>
           <Route path="/voice" element={<VoiceDiary />}></Route>
