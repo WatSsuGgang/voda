@@ -3,7 +3,7 @@ import { devtools } from "zustand/middleware"; // 디버깅 용도
 
 const store = (set, get) => ({
   editAllow: true,
-  isLoggedIn: false,
+  isLoggedIn: true,
   login: () => set({ isLoggedIn: true }),
   logout: () => set({ isLoggedIn: false }),
   changeEditMode: () => {
