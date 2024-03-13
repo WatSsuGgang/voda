@@ -1,11 +1,13 @@
 package io.watssuggang.voda.member.controller;
 
+import io.watssuggang.voda.member.dto.req.UpdateUserInfoRequest;
 import io.watssuggang.voda.member.dto.res.UserInfoResponse;
 import io.watssuggang.voda.member.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,13 +21,21 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-
     @GetMapping
-    public ResponseEntity<?> getMemberInfo() {
+    public ResponseEntity<?> getUserInfo() {
         // TODO: Authentication에서 이메일을 읽어와서 동작하도록 수정
         String userEmail = "test@ssafy.com";
 
         UserInfoResponse response = myPageService.getUserInfo(userEmail);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> updateUserInfo(UpdateUserInfoRequest req) {
+        // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
+        Integer memberId = 0;
+        UserInfoResponse response = myPageService.updateUserInfo(memberId, req.getNewNickname());
 
         return ResponseEntity.ok(response);
     }
