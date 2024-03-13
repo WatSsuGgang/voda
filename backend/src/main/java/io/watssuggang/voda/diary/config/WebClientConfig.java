@@ -1,4 +1,4 @@
-package io.watssuggang.voda.diary.Config;
+package io.watssuggang.voda.diary.config;
 
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
@@ -37,7 +37,7 @@ public class WebClientConfig {
         .build();
 
     ClientHttpConnector connector = new JdkClientHttpConnector(httpClient);
-    
+
     return WebClient.builder()
         .clientConnector(connector)
         .baseUrl("https://api.anthropic.com/v1/messages")

@@ -1,4 +1,4 @@
-package io.watssuggang.voda.diary.controller;
+package io.watssuggang.voda.diary.util;
 
 public class PromptHolder {
 

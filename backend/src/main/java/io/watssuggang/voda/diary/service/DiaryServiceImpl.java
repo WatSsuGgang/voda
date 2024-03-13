@@ -1,8 +1,12 @@
 package io.watssuggang.voda.diary.service;
 
 
-import io.watssuggang.voda.diary.dto.res.DiaryChatRequestDto;
+import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto;
+import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.util.PromptHolder;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,15 +17,23 @@ public class DiaryServiceImpl implements DiaryService {
 
   private final WebClient chatClient;
 
-  @Override
-  public DiaryChatResponseDto getChat(DiaryChatRequestDto dto) {
-    DiaryChatResponseDto result = chatClient.post()
+  private DiaryChatResponseDto getChat(DiaryChatRequestDto dto) {
+    return chatClient.post()
         .uri("https://api.anthropic.com/v1/messages")
         .bodyValue(dto)
         .retrieve()
         .bodyToMono(DiaryChatResponseDto.class)
         .block();
-    return result;
+  }
+
+  @Override
+  public DiaryChatResponseDto init() {
+    List<MessageDTO> message = new ArrayList<>();
+    message.add(new MessageDTO("user", PromptHolder.INIT_PROMPT));
+    DiaryChatRequestDto reqDto = DiaryChatRequestDto.builder()
+        .messages(message)
+        .build();
+    return getChat(reqDto);
   }
 
 //  @Override

@@ -1,13 +1,10 @@
 package io.watssuggang.voda.diary.dto.res;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
+import lombok.*;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class DiaryChatResponseDto {
 
@@ -18,21 +15,19 @@ public class DiaryChatResponseDto {
   private Integer stopSequence;
   private String type;
   private UsageDTO usage;
-  private ContentDTO[] content;
+  private List<ContentDTO> content;
 
   @Data
   @Builder
-  @NoArgsConstructor
   @AllArgsConstructor
   public static class UsageDTO {
 
-    private int inputTokens;
-    private int outputTokens;
+    private Integer inputTokens;
+    private Integer outputTokens;
   }
 
   @Data
   @Builder
-  @NoArgsConstructor
   @AllArgsConstructor
   public static class ContentDTO {
 
