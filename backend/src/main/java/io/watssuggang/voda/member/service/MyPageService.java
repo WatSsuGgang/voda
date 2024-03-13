@@ -1,6 +1,7 @@
 package io.watssuggang.voda.member.service;
 
 import io.watssuggang.voda.member.domain.Member;
+import io.watssuggang.voda.member.dto.res.EmotionReportResponse;
 import io.watssuggang.voda.member.dto.res.MemberInfoResponse;
 import io.watssuggang.voda.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,9 @@ public class MyPageService {
 
     public void deleteMember(Integer memberId) {
         memberRepository.deleteById(memberId);
+    }
+
+    public EmotionReportResponse getEmotionReport(Integer memberId) {
+        return null;
     }
 }
