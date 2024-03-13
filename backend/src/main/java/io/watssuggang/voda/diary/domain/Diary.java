@@ -32,7 +32,7 @@ public class Diary extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary")
     List<Talk> diaryTalks = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     Member member;
 

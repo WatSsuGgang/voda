@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum Emotion implements LabelEnum {
-    JOY("01"), ANGER("02"), SADNESS("03"), FEAR("04"), CURIOSITY("05");
+    NONE("00"), JOY("01"), ANGER("02"), SADNESS("03"), FEAR("04"), CURIOSITY("05");
 
     private final String label;
 

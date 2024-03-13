@@ -43,10 +43,10 @@ public class PetController {
         return ResponseEntity.ok(feed);
     }
 
-    @PatchMapping("/levelup")
-    public ResponseEntity<?> levelUp() {
-        petService.levelUp();
-        return ResponseEntity.ok().build();
+    @PatchMapping("/levelup/{pet-id}")
+    public ResponseEntity<?> levelUp(@PathVariable("pet-id") Integer petId) {
+        PetResponse petResponse = petService.levelUp(petId);
+        return ResponseEntity.ok(petResponse);
     }
 
     @PatchMapping
