@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useStore from "../../store/store";
+import { useNavigate } from "react-router-dom";
 const Date = styled.div`
   background-color: #cad6c0;
   border-radius: 15px;
@@ -18,6 +19,10 @@ const Line = styled.div`
 `;
 
 const FilterdDiaryList = () => {
+  const navigate = useNavigate();
+  const goDetail = (id) => {
+    navigate(`${id}`);
+  };
   const store = useStore();
   const diaries = [
     {
@@ -46,13 +51,38 @@ const FilterdDiaryList = () => {
     },
   ];
   if (diaries.length === 0) {
-    return <div>No diaries found.</div>;
+    return (
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Expressionless%20Face.png"
+            alt="Expressionless Face"
+            width="200"
+            height="200"
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          검색 조건에 맞는 일기가 없습니다.
+        </div>
+      </div>
+    );
   }
   const diaryList = diaries.map((diary) => {
     const emotionImageUrl = store.emotions[diary.emotion];
     return (
       <div key={diary.id}>
         <div
+          onClick={() => goDetail(diary.id)}
           style={{ display: "flex", alignItems: "center", padding: "0.5rem" }}
         >
           <img
