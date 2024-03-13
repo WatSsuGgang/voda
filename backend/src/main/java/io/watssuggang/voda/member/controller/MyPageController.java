@@ -6,6 +6,7 @@ import io.watssuggang.voda.member.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ public class MyPageController {
 
     @GetMapping
     public ResponseEntity<?> getUserInfo() {
-        // TODO: Authentication에서 이메일을 읽어와서 동작하도록 수정
+        // TODO: jwt에 있는 값을 바로 리턴하고, 필요 시 Authentication에서 id을 읽어와서 동작하도록 수정
         String userEmail = "test@ssafy.com";
 
         UserInfoResponse response = myPageService.getUserInfo(userEmail);
@@ -38,5 +39,15 @@ public class MyPageController {
         UserInfoResponse response = myPageService.updateUserInfo(memberId, req.getNewNickname());
 
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser() {
+        // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
+        Integer memberId = 0;
+
+        myPageService.deleteUser(memberId);
+
+        return ResponseEntity.ok().build();
     }
 }
