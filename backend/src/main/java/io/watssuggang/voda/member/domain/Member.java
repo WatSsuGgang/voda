@@ -2,8 +2,17 @@ package io.watssuggang.voda.member.domain;
 
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.diary.domain.Diary;
-import io.watssuggang.voda.pet.domain.*;
-import jakarta.persistence.*;
+import io.watssuggang.voda.pet.domain.Own;
+import io.watssuggang.voda.pet.domain.Pet;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -29,6 +38,9 @@ public class Member extends BaseEntity {
 
     @Setter
     private Integer memberDiaryCount;
+
+    @Setter
+    private String memberEmail;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Diary> diaries = new ArrayList<>();
@@ -56,10 +68,12 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(String memberName, Integer memberPoint, Integer memberDiaryCount, Pet pet) {
+    public Member(String memberName, Integer memberPoint, Integer memberDiaryCount, Pet pet,
+        String memberEmail) {
         this.memberName = memberName;
         this.memberPoint = memberPoint;
         this.memberDiaryCount = memberDiaryCount;
+        this.memberEmail = memberEmail;
         this.pet = pet;
     }
 }
