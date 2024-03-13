@@ -20,8 +20,8 @@ const Line = styled.div`
 
 const FilterdDiaryList = () => {
   const navigate = useNavigate();
-  const goDetail = (id) => {
-    navigate(`${id}`);
+  const goDetail = (id, diary) => {
+    navigate(`${id}`, { state: diary });
   };
   const store = useStore();
   const diaries = [
@@ -82,7 +82,7 @@ const FilterdDiaryList = () => {
     return (
       <div key={diary.id}>
         <div
-          onClick={() => goDetail(diary.id)}
+          onClick={() => goDetail(diary.id, diary)}
           style={{ display: "flex", alignItems: "center", padding: "0.5rem" }}
         >
           <img

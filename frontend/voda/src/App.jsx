@@ -37,7 +37,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Pet />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
-          <Route path="/diary/:id" elemet={<DiaryDetail />}></Route>
+          <Route path="/diary/:id" element={<DiaryDetail />}></Route>
           <Route path="/calendar" element={<Calendar />}></Route>
           <Route path="/user" element={<User />}></Route>
           <Route path="/voice" element={<VoiceDiary />}></Route>
