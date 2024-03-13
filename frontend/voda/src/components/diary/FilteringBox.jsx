@@ -82,11 +82,11 @@ const FilteringBox = () => {
           <MenuItem value="">
             <em></em>
           </MenuItem>
+          <MenuItem value={"joy"}>기쁨</MenuItem>
+          <MenuItem value={"anger"}>분노</MenuItem>
           <MenuItem value={"sad"}>슬픔</MenuItem>
-          <MenuItem value={"happy"}>기쁨</MenuItem>
-          <MenuItem value={"scared"}>무서움</MenuItem>
-          <MenuItem value={"surprised"}>놀람</MenuItem>
-          <MenuItem value={"excited"}>신남</MenuItem>
+          <MenuItem value={"fear"}>무서움</MenuItem>
+          <MenuItem value={"curiosity"}>놀람</MenuItem>
         </Select>
       </FormControl>
       <Button

@@ -13,8 +13,12 @@ const DiaryList = () => {
     <div>
       <Title>{store.nickname}님의 일기를 확인해보세요</Title>
       <div>
-        <FilteringBox />
-        <FilterdDiaryList />
+        <div style={{ marginTop: "5%" }}>
+          <FilteringBox />
+        </div>
+        <div style={{ marginTop: "10%" }}>
+          <FilterdDiaryList />
+        </div>
       </div>
     </div>
   );
