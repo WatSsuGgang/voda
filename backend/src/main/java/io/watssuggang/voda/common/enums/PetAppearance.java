@@ -1,11 +1,12 @@
 package io.watssuggang.voda.common.enums;
 
+import io.watssuggang.voda.common.converter.AbstractLabelConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum PetAppearance {
+public enum PetAppearance implements LabelEnum{
 
     EGG("01", "달걀", Emotion.NONE),
     CHICK("02", "병아리", Emotion.NONE),
@@ -51,5 +52,13 @@ public enum PetAppearance {
             }
         }
         return OTTER;
+    }
+
+    @jakarta.persistence.Converter(autoApply = true)
+    static class ConverterAbstract extends AbstractLabelConverter<PetAppearance> {
+
+        public ConverterAbstract() {
+            super(PetAppearance.class);
+        }
     }
 }

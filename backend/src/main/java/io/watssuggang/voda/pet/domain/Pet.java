@@ -37,8 +37,8 @@ public class Pet extends BaseEntity {
     @Column(columnDefinition = "char(2)")
     private Emotion petEmotion = Emotion.JOY;
 
-    @Column(length = 10)
-    private PetAppearance petAppearance;
+    @Column(columnDefinition = "char(2)")
+    private PetAppearance petAppearance = PetAppearance.EGG;
 
     private LocalDateTime petLastFeed = LocalDateTime.now();
 
