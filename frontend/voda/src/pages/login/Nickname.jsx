@@ -13,15 +13,13 @@ const ImageContainer = styled.div({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  // height: "100vh",
-  width: "100vw",
 });
 
 const Description = styled.p({
   textAlign: "center",
   fontSize: "1rem",
   fontWeight: "bold",
-  marginTop: "1.5rem",
+  marginTop: "5rem",
 });
 
 const InputContainer = styled.div({
@@ -77,9 +75,9 @@ export default function Nickname() {
           src={vodaLogo}
           alt="logo"
           style={{
-            marginTop: "2.5rem",
-            height: "85%",
-            width: "85%",
+            marginTop: "5rem",
+            height: "65%",
+            width: "65%",
           }}
         />
       </ImageContainer>

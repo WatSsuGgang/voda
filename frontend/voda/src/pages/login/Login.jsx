@@ -3,8 +3,8 @@ import styled from "styled-components";
 import vodaLogo from "/logo.svg";
 import vodaLogoLetter from "/logo_letter.svg";
 import btn_google from "/login_btn/btn_google.svg";
-import btn_naver from "/login_btn/naver.png";
-import btn_kakao from "/login_btn/kakao.png";
+import btn_naver from "/login_btn/btn_naver.svg";
+import btn_kakao from "/login_btn/btn_kakao.svg";
 // import axios from "axios";
 
 const ImageContainer = styled.div({
@@ -12,17 +12,22 @@ const ImageContainer = styled.div({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  // height: "100vh",
-  width: "100vw",
+});
+
+const InstructionContainer = styled.p({
+  textAlign: "center",
+  fontSize: "1rem",
+  fontWeight: "bold",
+  marginTop: "5rem",
 });
 
 const ButtonContainer = styled.div({
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
-  gap: "1rem",
-  marginTop: "3rem",
+  gap: "1.5rem",
+  marginTop: "1.5rem",
 });
 
 const Login = () => {
@@ -33,15 +38,15 @@ const Login = () => {
     window.location.href = BASE_URL + `/oauth2/authorization/${e.target.id}`;
   }
   return (
-    <div>
+    <>
       <ImageContainer>
         <img
           src={vodaLogo}
           alt="logo"
           style={{
-            marginTop: "2.5rem",
-            height: "85%",
-            width: "85%",
+            marginTop: "5rem",
+            height: "65%",
+            width: "65%",
           }}
         />
         <img
@@ -52,15 +57,24 @@ const Login = () => {
           }}
         />
       </ImageContainer>
+      <InstructionContainer>SNS로 간편 로그인</InstructionContainer>
       <ButtonContainer>
-        <img src={btn_google} alt="" id="google" onClick={clickHandler} />
+        <img
+          src={btn_google}
+          alt=""
+          id="google"
+          onClick={clickHandler}
+          style={{
+            width: "3rem",
+          }}
+        />
         <img
           src={btn_kakao}
           alt=""
           id="kakao"
           onClick={clickHandler}
           style={{
-            width: "85%",
+            width: "3rem",
           }}
         />
         <img
@@ -69,11 +83,12 @@ const Login = () => {
           id="naver"
           onClick={clickHandler}
           style={{
-            width: "85%",
+            width: "3rem",
+            borderRadius: "100%",
           }}
         />
       </ButtonContainer>
-    </div>
+    </>
   );
 };
 
