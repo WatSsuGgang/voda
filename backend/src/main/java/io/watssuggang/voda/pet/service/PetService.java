@@ -1,6 +1,6 @@
 package io.watssuggang.voda.pet.service;
 
-import io.watssuggang.voda.common.enums.PetStatus;
+import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.pet.domain.*;
@@ -8,7 +8,11 @@ import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
 import io.watssuggang.voda.pet.dto.res.*;
 import io.watssuggang.voda.pet.repository.*;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,34 +30,77 @@ public class PetService {
   public PetResponse feed(Integer petId) {
     Pet pet = getVerifyPetById(petId);
 
-    if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
-      throw new RuntimeException();
+        if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
+            throw new RuntimeException();
+        }
+
+        pet.updateExp((byte) 5);
+        return PetResponse.of(pet);
     }
 
-    PetFile petFile = petFileRepository.findByPetEmotionAndPetStage(
-        pet.getPetEmotion(),
-        pet.getPetStage()
-    ).orElseThrow(RuntimeException::new);
+    public PetResponse levelUp(Integer petId) {
+        Pet pet = getVerifyPetById(petId);
 
-    pet.updateExp((byte) 5);
-    return PetResponse.of(pet, petFile);
-  }
+        // 펫 레벨업 empty: 변화없음, 2, 3: 단계
+        Byte beforePetStage = pet.getPetStage();
+        Optional<Byte> levelUpStage = pet.levelUp();
+        return levelUpStage.map(s -> {
+            byte status = levelUpStage.get();
 
-  public void levelUp() {
-  }
+            if (beforePetStage != status) {
+                if (status == 3) {
+                    PetAppearance evolution = evolution(petId);
+                    pet.updateAppearance(evolution);
+                } else if (status == 2) {
+                    pet.updateAppearance(PetAppearance.CHICK);
+                }
+            }
+            return PetResponse.of(pet);
+        }).orElseThrow(RuntimeException::new);
+    }
 
-  public void update() {
-  }
+    public PetAppearance evolution(Integer petId) {
+        List<Diary> diaries = diaryRepository.findAllByPetId(petId);
 
-  public PetTalkResponse getTalk(Integer petId) {
-    Pet pet = petRepository.findById(petId)
-        .orElseThrow(RuntimeException::new);
+        // 감정별 일기 최신 값
+        Map<Emotion, Optional<Diary>> latestDiariesByEmotion = diaries.stream()
+                .collect(Collectors.groupingBy(Diary::getDiaryEmotion,
+                        Collectors.maxBy(Comparator.comparing(Diary::getModifiedAt))));
 
-    int count = diaryRepository.countDiaryByPetIdAndAfterToday(petId, DateUtil.getTodayDate());
+        // 감정별 일기 수
+        Map<Emotion, Long> emotionCount = diaries.stream()
+                .collect(Collectors.groupingBy(Diary::getDiaryEmotion, Collectors.counting()));
 
-    List<PetStatus> petStatuses = new ArrayList<>(List.of(PetStatus.JOKE));
-    if (!DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
-      petStatuses.add(PetStatus.HUNGRY);
+        // 최대 감정 수 및 최신 감정 찾기
+        Optional<Entry<Emotion, Long>> findDiary = emotionCount.entrySet().stream()
+                .max(Comparator.comparing((Entry<Emotion, Long> entry) -> {
+                    Emotion emotion = entry.getKey();
+                    Long count = entry.getValue();
+                    Optional<Diary> recentDiary = latestDiariesByEmotion.get(emotion);
+                    // 감정 개수와 최신 일기의 modifiedAt 값을 합쳐서 비교
+                    // 최신 일기가 없는 경우에는 감정 개수만으로 비교
+                    return recentDiary.map(diary -> count +
+                                    diary.getModifiedAt()
+                                            .toInstant(ZoneOffset.UTC)
+                                            .toEpochMilli())
+                            .orElse(count);
+                }));
+
+        // 일기를 안쓰고 진화 조건 충족
+        if (findDiary.isEmpty()) {
+            return PetAppearance.OTTER;
+        }
+
+        return findDiary.map(entry -> {
+            Emotion emotion = entry.getKey();
+            long highestEmotionCount = entry.getValue();
+            // 감정에 따라 다른 동물
+            return PetAppearance.findAppearanceByEmotionAndCount(
+                    emotion,
+                    highestEmotionCount == diaries.size(),
+                    LocalDateTime.now().getHour() % 2 == 0
+            );
+        }).orElseThrow(RuntimeException::new);
     }
 
     if (count > 0) {
@@ -98,8 +145,17 @@ public class PetService {
     );
   }
 
-  public Pet getVerifyPetById(Integer memberId) {
-    return petRepository.findByMember_MemberId(memberId)
-        .orElseThrow(RuntimeException::new);
-  }
+    public PetHomeResponse getPetHomeInfo(Integer memberId) {
+        Pet pet = getVerifyPetById(memberId);
+
+        return PetHomeResponse.of(
+                PetResponse.of(pet),
+                ownService.getAllOwnByMember(memberId)
+        );
+    }
+
+    public Pet getVerifyPetById(Integer memberId) {
+        return petRepository.findByMember_MemberId(memberId)
+                .orElseThrow(RuntimeException::new);
+    }
 }
