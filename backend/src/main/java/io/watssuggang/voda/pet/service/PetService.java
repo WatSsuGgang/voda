@@ -43,17 +43,19 @@ public class PetService {
         Pet pet = getVerifyPetById(petId);
 
         // 펫 레벨업 empty: 변화없음, 2, 3: 단계
+        Byte beforePetStage = pet.getPetStage();
         Optional<Byte> levelUpStage = pet.levelUp();
         return levelUpStage.map(s -> {
             byte status = levelUpStage.get();
 
-            if (status == 3) {
-                PetAppearance evolution = evolution(petId);
-                pet.updateAppearance(evolution);
-            } else if (status == 2) {
-                pet.updateAppearance(PetAppearance.CHICK);
+            if (beforePetStage != status) {
+                if (status == 3) {
+                    PetAppearance evolution = evolution(petId);
+                    pet.updateAppearance(evolution);
+                } else if (status == 2) {
+                    pet.updateAppearance(PetAppearance.CHICK);
+                }
             }
-
             return PetResponse.of(pet);
         }).orElseThrow(RuntimeException::new);
     }

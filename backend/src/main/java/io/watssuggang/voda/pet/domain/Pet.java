@@ -67,6 +67,7 @@ public class Pet extends BaseEntity {
                     this.petLevel.equals(MAX_STAGE2_LEVEL)) {
                 return Optional.of(++this.petStage);
             }
+            return Optional.of(this.petStage);
         }
 
         return Optional.empty();
