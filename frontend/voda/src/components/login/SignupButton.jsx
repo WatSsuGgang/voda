@@ -1,6 +1,8 @@
 import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
-import { Link } from "react-router-dom"; // eslint-disable-line no-unused-vars
+import { Link, Router, useRoutes } from "react-router-dom"; // eslint-disable-line no-unused-vars
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 // import useStore from "../../store/store";
 // import Button from '@mui/material';
 
@@ -17,26 +19,41 @@ const Button = styled.button({
   marginTop: "20vh",
 });
 
-export default function SignupButton() {
-  // const { login } = useStore();
+export default function SignupButton({ nickname }) {
+  const navigate = useNavigate();
+  const handleSignup = async () => {
+    if (!nickname) {
+      alert("닉네임을 입력하세요");
+    } else {
+      const email = localStorage.getItem("email");
+      const provider = localStorage.getItem("provider");
+      const url = import.meta.env.VITE_REACT_APP_SPRING_API + "/auth/signup";
 
-  function handleClickHandler() {
-    // login();
-  }
+      const response = await axios.post(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          email,
+          provider,
+          nickname,
+        },
+      });
+      localStorage.removeItem("email");
+      localStorage.removeItem("provider");
+      console.log(response);
+      if (response.status === 200) {
+        window.alert("회원가입 성공");
+      } else {
+        window.alert("회원가입 실패");
+      }
+
+      navigate("/login");
+    }
+  };
   return (
     <>
-      <Button onClick={handleClickHandler}>
-        <Link
-          to="/login"
-          style={{
-            textDecoration: "none",
-            color: "black",
-            fontWeight: "bold",
-          }}
-        >
-          회원가입
-        </Link>
-      </Button>
+      <Button onClick={handleSignup}>회원가입</Button>
     </>
   );
 }

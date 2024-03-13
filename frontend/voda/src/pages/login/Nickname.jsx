@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import SignupButton from "../../components/login/SignupButton";
-import axios from "axios";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -32,33 +31,6 @@ const InputContainer = styled.div({
 
 export default function Nickname() {
   const [nickname, setNickname] = useState("");
-
-  const handleSignup = async () => {
-    const email = localStorage.getItem("email");
-    const provider = localStorage.getItem("provider");
-    const response = await axios.post(
-      import.meta.env.REACT_APP_SPRING_API + "/auth/signup",
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          email,
-          provider,
-          nickname,
-        },
-      }
-    );
-    localStorage.removeItem("email");
-    localStorage.removeItem("provider");
-    console.log(response);
-    if (response.statusCode === 200) {
-      window.alert("회원가입 성공");
-    } else if (response.statusCode === 400) {
-      window.alert("회원가입 실패");
-    }
-    // window.location.href = "/login";
-  };
 
   function onChangeHandler(e) {
     setNickname(e.target.value);
@@ -100,7 +72,7 @@ export default function Nickname() {
             ),
           }}
         ></TextField>
-        <SignupButton onClick={handleSignup} />
+        <SignupButton nickname={nickname} />
       </InputContainer>
     </>
   );
