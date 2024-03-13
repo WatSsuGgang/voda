@@ -28,17 +28,17 @@ export default function SignupButton({ nickname }) {
       const email = localStorage.getItem("email");
       const provider = localStorage.getItem("provider");
       const url = import.meta.env.VITE_REACT_APP_SPRING_API + "/auth/signup";
-
-      const response = await axios.post(url, {
+      const data = {
+        email,
+        provider,
+        nickname,
+      };
+      const config = {
         headers: {
           "Content-Type": "application/json",
         },
-        body: {
-          email,
-          provider,
-          nickname,
-        },
-      });
+      };
+      const response = await axios.post(url, data, config);
       localStorage.removeItem("email");
       localStorage.removeItem("provider");
       console.log(response);
