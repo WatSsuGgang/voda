@@ -1,14 +1,10 @@
 package io.watssuggang.voda.pet.domain;
 
+import io.watssuggang.voda.common.converter.EmotionConverter;
 import io.watssuggang.voda.common.domain.File;
 import io.watssuggang.voda.common.enums.Emotion;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -16,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PetFile extends File {
 
+    @Convert(converter = EmotionConverter.class)
+    @Column(columnDefinition = "char(2)")
     private Emotion petEmotion;
 
     @Column(columnDefinition = "tinyint")
