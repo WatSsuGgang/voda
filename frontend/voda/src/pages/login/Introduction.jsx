@@ -1,5 +1,6 @@
 import React from "react"; // eslint-disable-line no-unused-vars
 import IntroductionCarousel from "../../components/login/IntroductionCarousel";
+import IntroductionHeader from "../../components/login/IntroductionHeader";
 import LoginButton from "../../components/login/LoginButton";
 
 const Introduction = () => {
@@ -10,6 +11,7 @@ const Introduction = () => {
         margin: "auto",
       }}
     >
+      <IntroductionHeader />
       <IntroductionCarousel />
       <LoginButton />
     </div>
