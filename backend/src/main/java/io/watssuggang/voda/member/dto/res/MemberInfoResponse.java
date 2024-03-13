@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class UserInfoResponse {
+public class MemberInfoResponse {
 
     private final String nickname;
 

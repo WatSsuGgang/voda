@@ -1,7 +1,7 @@
 package io.watssuggang.voda.member.service;
 
 import io.watssuggang.voda.member.domain.Member;
-import io.watssuggang.voda.member.dto.res.UserInfoResponse;
+import io.watssuggang.voda.member.dto.res.MemberInfoResponse;
 import io.watssuggang.voda.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,21 +14,15 @@ public class MyPageService {
 
     private final MemberRepository memberRepository;
 
-    public UserInfoResponse getUserInfo(String userEmail) {
-        Member member = memberRepository.findMemberByMemberEmail(userEmail);
-
-        return new UserInfoResponse(member.getMemberName());
-    }
-
-    public UserInfoResponse updateUserInfo(Integer memberId, String newNickname) {
+    public MemberInfoResponse updateMemberInfo(Integer memberId, String newNickname) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new RuntimeException("회원 정보 없음"));
         member.setMemberName(newNickname);
 
-        return new UserInfoResponse(newNickname);
+        return new MemberInfoResponse(newNickname);
     }
 
-    public void deleteUser(Integer memberId) {
+    public void deleteMember(Integer memberId) {
         memberRepository.deleteById(memberId);
     }
 }
