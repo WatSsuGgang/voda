@@ -62,6 +62,7 @@ const DiaryDetail = () => {
             <img src={trash} alt="" />
           </div>
         </div>
+        <div>내용입니다.</div>
       </Container>
     </div>
   );
