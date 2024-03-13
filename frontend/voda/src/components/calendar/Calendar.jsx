@@ -140,7 +140,8 @@ export default function DateCalendarServerRequest() {
           },
         }}
         showDaysOutsideCurrentMonth
-        views={["year", "month", "day"]}
+
+        // views={["year", "month", "day"]}
       />
     </LocalizationProvider>
   );
