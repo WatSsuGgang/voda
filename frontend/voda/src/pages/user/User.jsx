@@ -35,8 +35,11 @@ const User = () => {
       alert("갱신 성공");
       console.log("response 200:", refreshAccessToken);
       localStorage.setItem("accessToken", refreshAccessToken);
+      ilgooGet();
     } else if (response.status === 400) {
       alert("갱신 실패!");
+      localStorage.removeItem("accessToken");
+      window.location.href = "/login";
     }
   };
 
