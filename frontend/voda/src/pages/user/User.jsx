@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Box } from "@mui/material";
 import TopComponent from "../../components/user/TopComponent";
 import BottomComponent from "../../components/user/BottomComponent";
+import axios from "axios";
 
 const CustomBox = styled.div({
   backgroundImage: `url(${myPageBackground})`,
@@ -17,8 +18,20 @@ const CustomBox = styled.div({
 });
 
 const User = () => {
+  const ilgooGet = async () => {
+    const url = import.meta.env.VITE_REACT_APP_SPRING_API + "/auth/ilgoo";
+    const accessToken = localStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: accessToken,
+      },
+    };
+    const response = await axios.get(url, config);
+    console.log(response);
+  };
   return (
     <CustomBox>
+      <button onClick={ilgooGet}>일구</button>
       <TopComponent />
       <BottomComponent />
     </CustomBox>
