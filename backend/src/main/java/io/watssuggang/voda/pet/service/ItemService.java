@@ -4,6 +4,8 @@ import io.watssuggang.voda.pet.domain.Item;
 import io.watssuggang.voda.pet.dto.req.ItemRequest;
 import io.watssuggang.voda.pet.dto.req.ItemUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
+import io.watssuggang.voda.pet.exception.DuplicateItemNameException;
+import io.watssuggang.voda.pet.exception.ItemNotFoundException;
 import io.watssuggang.voda.pet.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class ItemService {
 
     public ItemResponse updateItem(Integer itemId, ItemUpdateRequest updateRequest) {
         Item findItem = itemRepository.findById(itemId)
-                .orElseThrow();
+                .orElseThrow(ItemNotFoundException::new);
 
         findItem.update(updateRequest);
 
@@ -33,6 +35,6 @@ public class ItemService {
 
     private void verifyExistItemName(String itemName) {
         itemRepository.findByItemName(itemName)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(DuplicateItemNameException::new);
     }
 }
