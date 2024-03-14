@@ -33,15 +33,14 @@ const ButtonContainer = styled.div({
 
 const Login = () => {
   const navigate = useNavigate();
-  const url = import.meta.env.VITE_REACT_APP_SPRING_API;
 
-  function clickHandler(e) {
+  function onClickHandler(e) {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      window.location.href = "/";
+      navigate("/");
     } else {
-      window.location.href = url + `/oauth2/authorization/${e.target.id}`;
+      navigate(`/oauth2/authorization/${e.target.id}`);
     }
   }
   return (
@@ -70,7 +69,7 @@ const Login = () => {
           src={btn_google}
           alt=""
           id="google"
-          onClick={clickHandler}
+          onClick={onClickHandler}
           style={{
             width: "3rem",
           }}
@@ -79,7 +78,7 @@ const Login = () => {
           src={btn_kakao}
           alt=""
           id="kakao"
-          onClick={clickHandler}
+          onClick={onClickHandler}
           style={{
             width: "3rem",
           }}
@@ -88,7 +87,7 @@ const Login = () => {
           src={btn_naver}
           alt=""
           id="naver"
-          onClick={clickHandler}
+          onClick={onClickHandler}
           style={{
             width: "3rem",
             borderRadius: "100%",

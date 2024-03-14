@@ -1,5 +1,7 @@
 import React from "react"; // eslint-disable-line no-unused-vars
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signUp } from "../../services/auth";
 import styled from "styled-components";
 import vodaLogo from "/logo.svg";
 import TextField from "@mui/material/TextField";
@@ -31,6 +33,7 @@ const InputContainer = styled.div({
 
 export default function Nickname() {
   const [nickname, setNickname] = useState("");
+  const navigate = useNavigate();
 
   function onChangeHandler(e) {
     setNickname(e.target.value);
@@ -38,6 +41,23 @@ export default function Nickname() {
 
   function onClickClearHandler() {
     setNickname("");
+  }
+
+  function onClickSignUpHandler() {
+    const data = {
+      email: localStorage.getItem("email"),
+      provider: localStorage.getItem("provider"),
+      nickname: nickname,
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    signUp(data, config);
+    localStorage.removeItem("email");
+    localStorage.removeItem("provider");
+    navigate("/");
   }
 
   return (
@@ -72,7 +92,7 @@ export default function Nickname() {
             ),
           }}
         ></TextField>
-        <SignupButton nickname={nickname} />
+        <SignupButton onClick={onClickSignUpHandler} />
       </InputContainer>
     </>
   );
