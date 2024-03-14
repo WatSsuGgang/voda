@@ -8,10 +8,10 @@ pipeline {
 									               file(credentialsId: 'application-secret-credentials', variable: 'secretConfigFile'),
 									               file(credentialsId: 'application-redis-credentials', variable: 'redisConfigFile')]) {
                     script {
-                        sh 'chmod 755 $defaultConfigFile'
-                        sh 'chmod 755 $oauthConfigFile'
-                        sh 'chmod 755 $secretConfigFile'
-                        sh 'chmod 755 $redisConfigFile'
+                        sh 'chmod -R 755 $defaultConfigFile'
+                        sh 'chmod -R 755 $oauthConfigFile'
+                        sh 'chmod -R 755 $secretConfigFile'
+                        sh 'chmod -R 755 $redisConfigFile'
                         sh 'cp -f $defaultConfigFile backend/src/main/resources/application.yml'
                         sh 'cp -f $oauthConfigFile backend/src/main/resources/application-oauth.yml'
                         sh 'cp -f $secretConfigFile backend/src/main/resources/application-secret.yml'
