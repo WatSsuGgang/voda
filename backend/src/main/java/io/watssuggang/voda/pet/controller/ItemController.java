@@ -1,6 +1,7 @@
 package io.watssuggang.voda.pet.controller;
 
 import io.watssuggang.voda.pet.dto.req.ItemRequest;
+import io.watssuggang.voda.pet.dto.req.ItemUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
 import io.watssuggang.voda.pet.service.ItemService;
 import jakarta.validation.Valid;
@@ -21,5 +22,13 @@ public class ItemController {
     ) {
         ItemResponse item = itemService.createItem(postRequest);
         return ResponseEntity.ok(item);
+    }
+
+    @PatchMapping("{item-id}")
+    public ResponseEntity<?> createItem(
+            @RequestBody @Valid ItemUpdateRequest updateRequest,
+            @PathVariable("item-id") Integer itemId) {
+        ItemResponse itemResponse = itemService.updateItem(itemId, updateRequest);
+        return ResponseEntity.ok(itemResponse);
     }
 }

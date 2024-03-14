@@ -3,7 +3,9 @@ package io.watssuggang.voda.pet.domain;
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.ItemCategory;
 import io.watssuggang.voda.pet.dto.req.ItemRequest;
+import io.watssuggang.voda.pet.dto.req.ItemUpdateRequest;
 import jakarta.persistence.*;
+import java.util.Optional;
 import lombok.*;
 
 @Entity
@@ -22,7 +24,7 @@ public class Item extends BaseEntity {
 
     private Integer itemPrice;
 
-    @Column(columnDefinition = "char(30)")
+    @Column(columnDefinition = "char(30)", unique = true)
     private String itemName;
 
     public Item(String itemImageUrl, Integer itemPrice, String itemName) {
@@ -49,5 +51,12 @@ public class Item extends BaseEntity {
             }
         }
         throw new RuntimeException();
+    }
+
+    public void update(ItemUpdateRequest updateRequest) {
+        Optional.ofNullable(updateRequest.getPrice())
+                .ifPresent(price -> this.itemPrice = price);
+        Optional.ofNullable(updateRequest.getImgUrl())
+                .ifPresent(imgUrl -> this.itemImageUrl = imgUrl);
     }
 }
