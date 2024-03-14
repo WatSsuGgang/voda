@@ -1,5 +1,3 @@
-
-sdfsdfs
 pipeline {
     agent any
     stages {
