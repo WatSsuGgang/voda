@@ -14,6 +14,7 @@ import lombok.*;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.CHAR, name = "item_type")
 @DiscriminatorValue("i")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"item_name", "item_type"})})
 public class Item extends BaseEntity {
 
     @Id
@@ -24,7 +25,7 @@ public class Item extends BaseEntity {
 
     private Integer itemPrice;
 
-    @Column(columnDefinition = "char(30)", unique = true)
+    @Column(columnDefinition = "char(30)")
     private String itemName;
 
     public Item(String itemImageUrl, Integer itemPrice, String itemName) {
