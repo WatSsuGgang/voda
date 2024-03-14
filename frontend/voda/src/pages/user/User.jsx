@@ -27,7 +27,8 @@ const User = () => {
   };
   const ilgooRefresh = async () => {
     console.log("일구refresh 들어왔어요");
-    const response = await axios.post(url + "/token/refresh", config);
+    console.log("토큰: " + config.headers.Authorization);
+    const response = await axios.post(url + "/token/refresh", {}, config);
     console.log("ilgooRefresh response", response);
     const refreshAccessToken = response.data.accessToken;
     if (response.status === 200) {
@@ -40,10 +41,11 @@ const User = () => {
   };
 
   const ilgooGet = async () => {
-    const response = await axios.get(url + "/auth/ilgoo", config);
-    console.log("ilgooGet", response);
-    console.log("response status:", response.status);
-    if (response.status === 401) {
+    try {
+      const response = await axios.get(url + "/auth/ilgoo", config);
+      console.log("ilgooGet", response);
+      console.log("response status:", response.status);
+    } catch (error) {
       console.log("일구refresh 들어갑니다");
       ilgooRefresh();
     }
