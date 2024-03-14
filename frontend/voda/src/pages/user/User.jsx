@@ -18,16 +18,28 @@ const CustomBox = styled.div({
 });
 
 const User = () => {
+  const url = import.meta.env.VITE_REACT_APP_SPRING_API;
+  const accessToken = localStorage.getItem("accessToken");
+  const config = {
+    headers: {
+      Authorization: accessToken,
+    },
+  };
+  const ilgooRefresh = async () => {
+    const response = await axios.post(url + "/token/refresh", config);
+    const refreshAccessToken = response.data.accessToken;
+    if (response.status === 200) {
+      localStorage.setItem("accessToken", refreshAccessToken);
+    } else if (response.status === 400) {
+      alert("갱신 실패!");
+    }
+  };
+
   const ilgooGet = async () => {
-    const url = import.meta.env.VITE_REACT_APP_SPRING_API + "/auth/ilgoo";
-    const accessToken = localStorage.getItem("accessToken");
-    const config = {
-      headers: {
-        Authorization: accessToken,
-      },
-    };
-    const response = await axios.get(url, config);
-    console.log(response);
+    const response = await axios.get(url + "/auth/ilgoo", config);
+    if (response.status === 401) {
+      ilgooRefresh();
+    }
   };
   return (
     <CustomBox>
