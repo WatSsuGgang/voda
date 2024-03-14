@@ -8,12 +8,14 @@ import io.watssuggang.voda.pet.exception.DuplicateItemNameException;
 import io.watssuggang.voda.pet.exception.ItemNotFoundException;
 import io.watssuggang.voda.pet.repository.ItemQueryRepository;
 import io.watssuggang.voda.pet.repository.ItemRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -42,8 +44,8 @@ public class ItemService {
         }
     }
 
-    public List<ItemResponse> getAllItemByCategory() {
-        List<Item> findAllItem = itemRepository.findAll();
+    public List<ItemResponse> getAllItemByCategory(String category) {
+        List<? extends Item> findAllItem = itemQueryRepository.findAllItemByCategory(category);
 
         return findAllItem.stream().map(ItemResponse::of)
                 .toList();

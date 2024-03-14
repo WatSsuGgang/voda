@@ -1,5 +1,7 @@
 package io.watssuggang.voda.pet.controller;
 
+import io.watssuggang.voda.common.enums.ItemCategory;
+import io.watssuggang.voda.common.validator.EnumValidator;
 import io.watssuggang.voda.pet.dto.req.ItemRequest;
 import io.watssuggang.voda.pet.dto.req.ItemUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
@@ -35,8 +37,12 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getItemsByCategory() {
-        List<ItemResponse> itemsByCategory = itemService.getAllItemByCategory();
+    public ResponseEntity<?> getItemsByCategory(
+            @Valid @RequestParam(value = "category")
+            @EnumValidator(enumClass = ItemCategory.class, message = "유효하지 않은 카테고리입니다.")
+            String category
+    ) {
+        List<ItemResponse> itemsByCategory = itemService.getAllItemByCategory(category);
         return ResponseEntity.ok(itemsByCategory);
     }
 }
