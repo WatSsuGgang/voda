@@ -7,7 +7,6 @@ import btn_naver from "/login_btn/btn_naver.svg";
 import btn_kakao from "/login_btn/btn_kakao.svg";
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useStore from "../../store/store";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -34,17 +33,13 @@ const ButtonContainer = styled.div({
 
 const Login = () => {
   const navigate = useNavigate();
-  const store = useStore();
   const url = import.meta.env.VITE_REACT_APP_SPRING_API;
 
   function clickHandler(e) {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      console.log("로그인 전", store.isLoggedIn);
-      store.login();
-      console.log("로그인 후", store.isLoggedIn);
-      navigate("/");
+      window.location.href = "/";
     } else {
       window.location.href = url + `/oauth2/authorization/${e.target.id}`;
     }
