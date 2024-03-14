@@ -56,7 +56,8 @@ public class SecurityConfig {
                 request.requestMatchers(
                         new AntPathRequestMatcher("/auth/login"),
                         new AntPathRequestMatcher("/auth/signup"),
-                        new AntPathRequestMatcher("/token/**")
+                        new AntPathRequestMatcher("/token/refresh"),
+                        new AntPathRequestMatcher("/token/logout")
                     ).permitAll()
                     .anyRequest().authenticated()   // 그 외의 모든 요청은 인증이 필요하다
             )

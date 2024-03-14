@@ -1,5 +1,6 @@
 package io.watssuggang.voda.member.controller;
 
+import io.watssuggang.voda.common.security.annotation.*;
 import io.watssuggang.voda.common.security.dto.*;
 import io.watssuggang.voda.member.dto.req.*;
 import io.watssuggang.voda.member.service.*;
@@ -22,7 +23,7 @@ public class MemberController {
         Integer memberId = memberService.signUp(signUpRequest);
 
         if (memberId == null) {
-            return new ResponseEntity<>(HttpStatusCode.valueOf(400));
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
 
@@ -32,7 +33,7 @@ public class MemberController {
     @GetMapping("/ilgoo")
     public ResponseEntity<SecurityUserDto> ilgoo(@CurrentUser SecurityUserDto securityUserDto) {
 
-        return new ResponseEntity<>(securityUserDto, HttpStatus.OK);
+        return ResponseEntity.ok(securityUserDto);
     }
 
     @DeleteMapping("/delete")

@@ -1,8 +1,6 @@
 package io.watssuggang.voda.common.security.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor

@@ -17,11 +17,10 @@ public class TokenController {
 
     private final RefreshTokenService tokenService;
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     public ResponseEntity<StatusResponseDto> logout(
         @RequestHeader("Authorization") final String accessToken) {
-        log.info("로그아웃");
-       
+
         // 엑세스 토큰으로 현재 Redis 정보 삭제
         tokenService.removeRefreshToken(accessToken);
         return ResponseEntity.ok(StatusResponseDto.addStatus(200));
@@ -32,7 +31,7 @@ public class TokenController {
         @RequestHeader("Authorization") final String accessToken) {
 
         String newAccessToken = tokenService.republishAccessToken(accessToken);
-
+        
         if (StringUtils.hasText(newAccessToken)) {
             return ResponseEntity.ok(TokenResponseStatus.addStatus(200, newAccessToken));
         }

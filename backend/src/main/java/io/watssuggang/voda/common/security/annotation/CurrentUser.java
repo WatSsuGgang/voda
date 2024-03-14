@@ -1,11 +1,7 @@
-package io.watssuggang.voda.common.security.dto;
+package io.watssuggang.voda.common.security.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import java.lang.annotation.*;
+import org.springframework.security.core.annotation.*;
 
 @Target({ElementType.PARAMETER, ElementType.TYPE})  // 파라미터와 타입(클래스, 인터페이스 등)에 적용될 수 있다
 @Retention(RetentionPolicy.RUNTIME)                 //어노테이션 정보가 런타임에도 유지
