@@ -1,16 +1,18 @@
 package io.watssuggang.voda.pet.domain;
 
 
+import io.watssuggang.voda.common.enums.ItemCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@DiscriminatorValue("E")
+@DiscriminatorValue("02")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Effect extends Item {
 
     @Builder
-    public Effect(String itemImageUrl, Integer itemPrice, String itemName) {
-        super(itemImageUrl, itemPrice, itemName);
+    public Effect(String itemImageUrl, Integer itemPrice, String itemName,
+            ItemCategory itemCategory) {
+        super(itemImageUrl, itemPrice, itemName, itemCategory);
     }
 }

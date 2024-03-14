@@ -11,8 +11,8 @@ import lombok.*;
 @Entity
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.CHAR, name = "item_type")
-@DiscriminatorValue("i")
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "item_category")
+@DiscriminatorValue("item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"item_name", "item_type"})})
 public class Item extends BaseEntity {
@@ -28,10 +28,15 @@ public class Item extends BaseEntity {
     @Column(columnDefinition = "char(30)")
     private String itemName;
 
-    public Item(String itemImageUrl, Integer itemPrice, String itemName) {
+    @Column(name = "item_category", insertable = false, updatable = false)
+    private ItemCategory itemCategory;
+
+    public Item(String itemImageUrl, Integer itemPrice, String itemName,
+            ItemCategory itemCategory) {
         this.itemImageUrl = itemImageUrl;
         this.itemPrice = itemPrice;
         this.itemName = itemName;
+        this.itemCategory = itemCategory;
     }
 
     public static Item toEntity(ItemRequest postRequest) {
@@ -41,6 +46,7 @@ public class Item extends BaseEntity {
                         .itemName(postRequest.getName())
                         .itemPrice(postRequest.getPrice())
                         .itemImageUrl(postRequest.getImgUrl())
+                        .itemCategory(ItemCategory.EFFECT)
                         .build();
             }
             case FOOD -> {
@@ -48,6 +54,7 @@ public class Item extends BaseEntity {
                         .itemName(postRequest.getName())
                         .itemPrice(postRequest.getPrice())
                         .itemImageUrl(postRequest.getImgUrl())
+                        .itemCategory(ItemCategory.FOOD)
                         .build();
             }
         }
