@@ -1,6 +1,6 @@
 package io.watssuggang.voda.pet.controller;
 
-import io.watssuggang.voda.pet.dto.req.ItemPostRequest;
+import io.watssuggang.voda.pet.dto.req.ItemRequest;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
 import io.watssuggang.voda.pet.service.ItemService;
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemResponse> createItem(
-            @RequestBody @Valid ItemPostRequest postRequest
+            @RequestBody @Valid ItemRequest postRequest
     ) {
         ItemResponse item = itemService.createItem(postRequest);
         return ResponseEntity.ok(item);

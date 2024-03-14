@@ -2,7 +2,7 @@ package io.watssuggang.voda.pet.domain;
 
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.ItemCategory;
-import io.watssuggang.voda.pet.dto.req.ItemPostRequest;
+import io.watssuggang.voda.pet.dto.req.ItemRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,7 +31,7 @@ public class Item extends BaseEntity {
         this.itemName = itemName;
     }
 
-    public static Item toEntity(ItemPostRequest postRequest) {
+    public static Item toEntity(ItemRequest postRequest) {
         switch (ItemCategory.valueOf(postRequest.getCategory().toUpperCase())) {
             case EFFECT -> {
                 return Effect.builder()

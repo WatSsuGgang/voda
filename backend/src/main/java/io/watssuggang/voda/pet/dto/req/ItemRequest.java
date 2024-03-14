@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
 @Getter
-public class ItemPostRequest {
+public class ItemRequest {
 
     @NotBlank(message = "이미지 주소를 입력하세요.")
     private String imgUrl;
