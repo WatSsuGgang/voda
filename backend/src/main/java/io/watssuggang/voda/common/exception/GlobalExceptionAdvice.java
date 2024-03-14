@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorResponse> handleValidationExceptions(
+    private ResponseEntity<ValidationErrorResponse> handleValidationExceptions(
             MethodArgumentNotValidException e
     ) {
         ValidationErrorResponse errorResponse = new ValidationErrorResponse();
@@ -23,5 +23,14 @@ public class GlobalExceptionAdvice {
                 )
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(BaseException.class)
+    private ResponseEntity<BaseExceptionResponse> handleBaseException(BaseException e) {
+        return ResponseEntity.status(e.errorCode.getStatus())
+                .body(BaseExceptionResponse.builder()
+                        .errorCode(e.errorCode.getStatus().value())
+                        .errorMessage(e.errorCode.getMessage())
+                        .build());
     }
 }
