@@ -5,6 +5,7 @@ import io.watssuggang.voda.pet.dto.req.ItemUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
 import io.watssuggang.voda.pet.service.ItemService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,15 @@ public class ItemController {
     @PatchMapping("{item-id}")
     public ResponseEntity<?> createItem(
             @RequestBody @Valid ItemUpdateRequest updateRequest,
-            @PathVariable("item-id") Integer itemId) {
+            @PathVariable("item-id") Integer itemId
+    ) {
         ItemResponse itemResponse = itemService.updateItem(itemId, updateRequest);
         return ResponseEntity.ok(itemResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getItemsByCategory() {
+        List<ItemResponse> itemsByCategory = itemService.getAllItemByCategory();
+        return ResponseEntity.ok(itemsByCategory);
     }
 }

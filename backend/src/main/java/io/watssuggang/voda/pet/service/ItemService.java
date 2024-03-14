@@ -8,6 +8,7 @@ import io.watssuggang.voda.pet.exception.DuplicateItemNameException;
 import io.watssuggang.voda.pet.exception.ItemNotFoundException;
 import io.watssuggang.voda.pet.repository.ItemQueryRepository;
 import io.watssuggang.voda.pet.repository.ItemRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,12 @@ public class ItemService {
         if (itemQueryRepository.existByItemNameAndItemCategory(itemName, category)) {
             throw new DuplicateItemNameException();
         }
+    }
+
+    public List<ItemResponse> getAllItemByCategory() {
+        List<Item> findAllItem = itemRepository.findAll();
+
+        return findAllItem.stream().map(ItemResponse::of)
+                .toList();
     }
 }
