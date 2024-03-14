@@ -18,7 +18,6 @@ const store = (set, get) => ({
   logout: () => set({ isLoggedIn: false, nickname: null }),
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
-    // console.log(get().editAllow);
   },
 });
 
