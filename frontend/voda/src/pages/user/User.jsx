@@ -26,9 +26,13 @@ const User = () => {
     },
   };
   const ilgooRefresh = async () => {
+    console.log("일구refresh 들어왔어요");
     const response = await axios.post(url + "/token/refresh", config);
+    console.log("ilgooRefresh response", response);
     const refreshAccessToken = response.data.accessToken;
     if (response.status === 200) {
+      alert("갱신 성공");
+      console.log("response 200:", refreshAccessToken);
       localStorage.setItem("accessToken", refreshAccessToken);
     } else if (response.status === 400) {
       alert("갱신 실패!");
@@ -37,7 +41,10 @@ const User = () => {
 
   const ilgooGet = async () => {
     const response = await axios.get(url + "/auth/ilgoo", config);
+    console.log("ilgooGet", response);
+    console.log("response status:", response.status);
     if (response.status === 401) {
+      console.log("일구refresh 들어갑니다");
       ilgooRefresh();
     }
   };
