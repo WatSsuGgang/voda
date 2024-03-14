@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 const Container = styled.div`
-  margin: 8vh 1vh 0 1vh;
-  max-height: 50vh;
+  margin: 3vh 1vh;
+  max-height: 55vh;
   overflow: auto;
 `;
 
@@ -45,7 +45,7 @@ const ChatBox = (props) => {
                 border: "0",
                 backgroundColor: "#D8E5FF",
                 borderRadius: "10px",
-                padding: "10px",
+                padding: "20px",
               }}
               key={index}
               placeholder={content}
@@ -68,7 +68,7 @@ const ChatBox = (props) => {
                 border: "0",
                 backgroundColor: "#F2F2F2",
                 borderRadius: "10px",
-                padding: "10px",
+                padding: "20px",
               }}
               key={index}
               placeholder={content}

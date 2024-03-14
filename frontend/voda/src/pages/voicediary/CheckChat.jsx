@@ -17,12 +17,14 @@ const CheckChat = () => {
   };
   return (
     <div>
-      <div style={{ marginTop: "15%", display: "flex", justifyContent: "end" }}>
+      <div style={{ marginTop: "10%", display: "flex", justifyContent: "end" }}>
         <LogoutIcon onClick={exit} />
       </div>
       <Title>대화 내용을 수정할 수 있어요</Title>
       <ChatBox />
-      <div style={{ textAlign: "center", marginTop: "5vh" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "4vh" }}
+      >
         <Button variant="contained" style={{ backgroundColor: "#6C8CAC" }}>
           확인
         </Button>
