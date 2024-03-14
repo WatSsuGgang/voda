@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PetUpdateRequest {
 
-    public String name;
+    private String name;
 
 }
