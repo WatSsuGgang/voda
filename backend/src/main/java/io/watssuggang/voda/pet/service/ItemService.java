@@ -34,7 +34,8 @@ public class ItemService {
     }
 
     private void verifyExistItemName(String itemName) {
-        itemRepository.findByItemName(itemName)
-                .orElseThrow(DuplicateItemNameException::new);
+        if (itemRepository.existsByItemName(itemName)) {
+            throw new DuplicateItemNameException();
+        }
     }
 }
