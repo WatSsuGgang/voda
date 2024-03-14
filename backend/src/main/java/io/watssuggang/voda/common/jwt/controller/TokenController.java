@@ -20,8 +20,8 @@ public class TokenController {
     @PostMapping("/logout")
     public ResponseEntity<StatusResponseDto> logout(
         @RequestHeader("Authorization") final String accessToken) {
-        log.info("Auth컨트롤러 로그아웃 들어옴!!!");
-        log.info("들어온 accesstoken: " + accessToken);
+        log.info("로그아웃");
+       
         // 엑세스 토큰으로 현재 Redis 정보 삭제
         tokenService.removeRefreshToken(accessToken);
         return ResponseEntity.ok(StatusResponseDto.addStatus(200));
@@ -30,10 +30,6 @@ public class TokenController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponseStatus> refresh(
         @RequestHeader("Authorization") final String accessToken) {
-
-        log.info("갱신 토큰 컨트롤러");
-
-        log.info(accessToken);
 
         String newAccessToken = tokenService.republishAccessToken(accessToken);
 

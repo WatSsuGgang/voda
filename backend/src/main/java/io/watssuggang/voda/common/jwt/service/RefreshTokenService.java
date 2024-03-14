@@ -16,7 +16,6 @@ public class RefreshTokenService {
 
     @Transactional
     public void removeRefreshToken(String accessToken) {
-        System.out.println("removeRefreshToken 메서드");
 
         RefreshToken token = tokenRepository.findByAccessToken(accessToken)
             .orElseThrow(IllegalArgumentException::new);
@@ -40,7 +39,7 @@ public class RefreshTokenService {
             // 액세스 토큰의 값을 수정해준다.
             resultToken.updateAccessToken(newAccessToken);
             tokenRepository.save(resultToken);
-            // 새로운 액세스 토큰을 반환해준다.
+
             return newAccessToken;
         }
 

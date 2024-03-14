@@ -10,11 +10,9 @@ import java.security.*;
 import java.util.Base64;
 import java.util.*;
 import lombok.*;
-import lombok.extern.slf4j.*;
 import org.springframework.stereotype.*;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class TokenProvider {
 
@@ -63,7 +61,7 @@ public class TokenProvider {
 
 
     public String generateAccessToken(String email, String role) {
-        long tokenPeriod = 1000L * 60L * 30L; // 30분
+        long tokenPeriod = 1000L * 60L * 30L; // 30분마다 토큰 갱신
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
 
@@ -85,6 +83,7 @@ public class TokenProvider {
     }
 
     public boolean verifyToken(String token) {
+        
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(decodedSecretKey) // 비밀키를 설정하여 파싱한다.

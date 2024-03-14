@@ -18,9 +18,8 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody SignUpRequest signUpRequest) {
-        log.info("회원가입 요청 옴");
+        log.info("회원가입");
         Integer memberId = memberService.signUp(signUpRequest);
-        log.info(signUpRequest.toString());
 
         if (memberId == null) {
             return new ResponseEntity<>(HttpStatusCode.valueOf(400));
@@ -29,9 +28,9 @@ public class MemberController {
 
     }
 
+    // 마이페이지 유저 정보 GET
     @GetMapping("/ilgoo")
     public ResponseEntity<SecurityUserDto> ilgoo(@CurrentUser SecurityUserDto securityUserDto) {
-        System.out.println("CurrentUser 테스트");
 
         return new ResponseEntity<>(securityUserDto, HttpStatus.OK);
     }

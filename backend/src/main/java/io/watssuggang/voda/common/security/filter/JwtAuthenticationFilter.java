@@ -10,7 +10,6 @@ import jakarta.servlet.http.*;
 import java.io.*;
 import java.util.*;
 import lombok.*;
-import lombok.extern.slf4j.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;
@@ -19,9 +18,8 @@ import org.springframework.stereotype.*;
 import org.springframework.util.*;
 import org.springframework.web.filter.*;
 
-@RequiredArgsConstructor
-@Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
@@ -36,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("JWT Auth Filter");
+
         // request Header에서 AccessToken을 가져온다.
         String atc = request.getHeader("Authorization");
 

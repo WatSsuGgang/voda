@@ -14,7 +14,6 @@ public class AccessTokenService {
 
     @Transactional
     public void saveTokenInfo(String email, String refreshToken, String accessToken) {
-        System.out.println("refreshTokenService 세이브 메서드");
 
         tokenRepository.save(new RefreshToken(email, accessToken, refreshToken));
     }

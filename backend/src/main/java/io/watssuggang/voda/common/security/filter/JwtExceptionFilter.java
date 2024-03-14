@@ -21,11 +21,10 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("JWT Exception Filter");
         try {
             filterChain.doFilter(request, response);
         } catch (JwtException e) {
-            response.setStatus(401);
+            response.setStatus(401);    // UNAUTHORIZED
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
             objectMapper.writeValue(response.getWriter(), StatusResponseDto.addStatus(401));

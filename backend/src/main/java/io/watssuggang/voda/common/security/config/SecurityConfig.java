@@ -1,28 +1,21 @@
 package io.watssuggang.voda.common.security.config;
 
-import io.watssuggang.voda.common.security.filter.JwtAuthenticationFilter;
-import io.watssuggang.voda.common.security.filter.JwtExceptionFilter;
-import io.watssuggang.voda.common.security.handler.OAuth2FailureHandler;
-import io.watssuggang.voda.common.security.handler.OAuth2SuccessHandler;
-import java.util.Arrays;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import io.watssuggang.voda.common.security.filter.*;
+import io.watssuggang.voda.common.security.handler.*;
+import java.util.*;
+import lombok.*;
+import org.springframework.context.annotation.*;
+import org.springframework.security.config.*;
+import org.springframework.security.config.annotation.method.configuration.*;
+import org.springframework.security.config.annotation.web.builders.*;
+import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.annotation.web.configurers.*;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.*;
+import org.springframework.security.config.http.*;
+import org.springframework.security.web.*;
+import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.util.matcher.*;
+import org.springframework.web.cors.*;
 
 @RequiredArgsConstructor
 @Configuration
@@ -35,7 +28,6 @@ public class SecurityConfig {
     private final OAuth2FailureHandler oAuth2FailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
-
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
@@ -50,7 +42,7 @@ public class SecurityConfig {
         http.csrf(
             AbstractHttpConfigurer::disable); // csrf 비활성화 -> cookie를 사용하지 않으면 꺼도 된다. (cookie를 사용할 경우 httpOnly(XSS 방어), sameSite(CSRF 방어)로 방어해야 한다.)
         http
-            .cors(Customizer.withDefaults()) // cors 비활성화 -> 프론트와 연결 시 따로 설정 필요
+            .cors(Customizer.withDefaults()) // 커스텀한 corsConfigurationSource 설정을 따름
             .httpBasic(AbstractHttpConfigurer::disable) // 기본 인증 로그인 비활성화
             .formLogin(AbstractHttpConfigurer::disable) // 기본 login form 비활성화
             .logout(AbstractHttpConfigurer::disable) // 기본 logout 비활성화
@@ -62,10 +54,8 @@ public class SecurityConfig {
             // request 인증, 인가 설정
             .authorizeHttpRequests(request ->
                 request.requestMatchers(
-                        new AntPathRequestMatcher("/"),
                         new AntPathRequestMatcher("/auth/login"),
                         new AntPathRequestMatcher("/auth/signup"),
-                        new AntPathRequestMatcher("/auth/success"),
                         new AntPathRequestMatcher("/token/**")
                     ).permitAll()
                     .anyRequest().authenticated()   // 그 외의 모든 요청은 인증이 필요하다
@@ -80,7 +70,7 @@ public class SecurityConfig {
                     .failureHandler(oAuth2FailureHandler)   // 성공 핸들러
             );
 
-        // UPAF는 인증되지 않은 사용자의 경우 로그인 페이지로 redirection시키기 떄문에 jwt인증필터 먼저 실행
+        // UsernamePassword인증필터는 인증되지 않은 사용자의 경우 로그인 페이지로 redirect 시키기 떄문에 jwt 인증 필터 먼저 실행
         return http.addFilterBefore(jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
