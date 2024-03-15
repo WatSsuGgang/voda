@@ -34,13 +34,19 @@ public class Member extends BaseEntity {
     private String memberName;
 
     @Setter
+    private String provider;
+
+    @Setter
+    private String memberEmail;
+
+    @Setter
+    private String userRole;
+
+    @Setter
     private Integer memberPoint;
 
     @Setter
     private Integer memberDiaryCount;
-
-    @Setter
-    private String memberEmail;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Diary> diaries = new ArrayList<>();
@@ -68,12 +74,14 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(String memberName, Integer memberPoint, Integer memberDiaryCount, Pet pet,
-        String memberEmail) {
+    public Member(String memberName, String provider, String memberEmail, String userRole,
+        Integer memberPoint, Integer memberDiaryCount, Pet pet) {
         this.memberName = memberName;
+        this.provider = provider;
+        this.memberEmail = memberEmail;
+        this.userRole = userRole;
         this.memberPoint = memberPoint;
         this.memberDiaryCount = memberDiaryCount;
-        this.memberEmail = memberEmail;
         this.pet = pet;
     }
 }

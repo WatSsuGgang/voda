@@ -2,11 +2,15 @@ package io.watssuggang.voda.pet.service;
 
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.util.DateUtil;
+import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
-import io.watssuggang.voda.pet.domain.*;
+import io.watssuggang.voda.pet.domain.Pet;
+import io.watssuggang.voda.pet.domain.PetTalk;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
+import io.watssuggang.voda.pet.dto.req.PetUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.*;
-import io.watssuggang.voda.pet.repository.*;
+import io.watssuggang.voda.pet.repository.PetRepository;
+import io.watssuggang.voda.pet.repository.PetTalkRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -21,14 +25,13 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class PetService {
 
-  private final PetRepository petRepository;
-  private final PetFileRepository petFileRepository;
-  private final PetTalkRepository petTalkRepository;
-  private final DiaryRepository diaryRepository;
-  private final OwnService ownService;
+    private final PetRepository petRepository;
+    private final PetTalkRepository petTalkRepository;
+    private final DiaryRepository diaryRepository;
+    private final OwnService ownService;
 
-  public PetResponse feed(Integer petId) {
-    Pet pet = getVerifyPetById(petId);
+    public PetResponse feed(Integer petId) {
+        Pet pet = getVerifyPetByPetId(petId);
 
         if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
             throw new RuntimeException();
@@ -39,7 +42,7 @@ public class PetService {
     }
 
     public PetResponse levelUp(Integer petId) {
-        Pet pet = getVerifyPetById(petId);
+        Pet pet = getVerifyPetByPetId(petId);
 
         // 펫 레벨업 empty: 변화없음, 2, 3: 단계
         Byte beforePetStage = pet.getPetStage();
@@ -103,50 +106,58 @@ public class PetService {
         }).orElseThrow(RuntimeException::new);
     }
 
-    if (count > 0) {
-      petStatuses.add(PetStatus.DIARY);
+    public PetResponse update(Integer petId, PetUpdateRequest updateRequest) {
+        Pet pet = getVerifyPetByPetId(petId);
+
+        Optional.of(updateRequest.getName())
+                .ifPresent(pet::updateName);
+
+        return PetResponse.of(pet);
     }
 
-    Random random = new Random();
-    int rand = random.nextInt(petStatuses.size());
+    public PetTalkResponse getTalk(Integer petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(RuntimeException::new);
 
-    PetStatus petStatus = petStatuses.get(rand);
-    List<PetTalk> status = petTalkRepository.findAllByPetStatus(petStatus);
+        int count = diaryRepository.countDiaryByPetIdAndAfterToday(petId, DateUtil.getTodayDate());
 
-    rand = random.nextInt(status.size());
-    return PetTalkResponse.of(status.get(rand));
-  }
+        List<PetStatus> petStatuses = new ArrayList<>(List.of(PetStatus.JOKE));
+        if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
+            petStatuses.add(PetStatus.HUNGRY);
+        }
 
-  public Integer createTalk(PetTalkRequest request) {
-    PetTalk petTalk = PetTalk.builder()
-        .petTalk(request.getTalk())
-        .petStatus(request.getStatus())
-        .build();
-    verifyPetTalk(petTalk);
-    return petTalkRepository.save(petTalk).getPetTalkId();
-  }
+        if (count > 0) {
+            petStatuses.add(PetStatus.DIARY);
+        }
 
-  private void verifyPetTalk(PetTalk petTalk) {
-    if (petTalkRepository.existsPetTalkByPetTalkAndPetStatus(petTalk.getPetTalk(),
-        petTalk.getPetStatus())) {
-      throw new RuntimeException();
+        Random random = new Random();
+        int rand = random.nextInt(count);
+
+        PetStatus petStatus = petStatuses.get(rand);
+        List<PetTalk> status = petTalkRepository.findAllByPetStatus(petStatus);
+
+        rand = random.nextInt(status.size());
+        return PetTalkResponse.of(status.get(rand));
     }
-  }
 
-  public PetHomeResponse getPetHomeInfo(Integer memberId) {
-    Pet pet = getVerifyPetById(memberId);
-    PetFile petFile = petFileRepository.findByPetEmotionAndPetStage(pet.getPetEmotion(),
-            pet.getPetStage())
-        .orElseThrow(RuntimeException::new);
+    public Integer createTalk(PetTalkRequest request) {
+        PetTalk petTalk = PetTalk.builder()
+                .petTalk(request.getTalk())
+                .petStatus(request.getStatus())
+                .build();
+        verifyPetTalk(petTalk);
+        return petTalkRepository.save(petTalk).getPetTalkId();
+    }
 
-    return PetHomeResponse.of(
-        PetResponse.of(pet, petFile),
-        ownService.getAllOwnByMember(memberId)
-    );
-  }
+    private void verifyPetTalk(PetTalk petTalk) {
+        if (petTalkRepository.existsPetTalkByPetTalkAndPetStatus(petTalk.getPetTalk(),
+                petTalk.getPetStatus())) {
+            throw new RuntimeException();
+        }
+    }
 
     public PetHomeResponse getPetHomeInfo(Integer memberId) {
-        Pet pet = getVerifyPetById(memberId);
+        Pet pet = getVerifyPetByMemberId(memberId);
 
         return PetHomeResponse.of(
                 PetResponse.of(pet),
@@ -154,8 +165,13 @@ public class PetService {
         );
     }
 
-    public Pet getVerifyPetById(Integer memberId) {
+    public Pet getVerifyPetByMemberId(Integer memberId) {
         return petRepository.findByMember_MemberId(memberId)
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public Pet getVerifyPetByPetId(Integer petId) {
+        return petRepository.findByMember_MemberId(petId)
                 .orElseThrow(RuntimeException::new);
     }
 }
