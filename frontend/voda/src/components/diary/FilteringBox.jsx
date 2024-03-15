@@ -16,10 +16,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const FilteringBox = () => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [emotion, setEmotion] = useState("");
+const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
   function formatDate(year, month, day) {
     // 년, 월, 일을 문자열로 변환하고, 한 자리 숫자인 경우 앞에 0을 붙입니다.
     const formattedMonth = String(month).padStart(2, "0");
@@ -29,21 +26,25 @@ const FilteringBox = () => {
     const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
     return formattedDate;
   }
-  const handleEmotionChange = (event) => {
-    console.log(event);
-    setEmotion(event.target.value);
-  };
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
+  const [emo, setEmo] = useState("");
   const handleStartDateChange = (event) => {
     const date = formatDate(event.$y, event.$M + 1, event.$D);
-    setStartDate(date);
+    setStart(date);
   };
   const handleEndDateChange = (event) => {
     const date = formatDate(event.$y, event.$M + 1, event.$D);
-    console.log(date);
-    setEndDate(date);
+    setEnd(date);
   };
-
-  const handleButton = () => {};
+  const handleEmotionChange = (event) => {
+    setEmo(event.target.value);
+  };
+  const handleButtonClick = () => {
+    setStartDate(start);
+    setEndDate(end);
+    setEmotion(emo);
+  };
   return (
     <Container>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
@@ -75,7 +76,7 @@ const FilteringBox = () => {
         <Select
           labelId="demo-simple-select-filled-label"
           id="demo-simple-select"
-          value={emotion}
+          value={emo}
           label="Emotion"
           onChange={handleEmotionChange}
         >
@@ -90,6 +91,7 @@ const FilteringBox = () => {
         </Select>
       </FormControl>
       <Button
+        onClick={handleButtonClick}
         style={{
           borderRadius: "10px",
           backgroundColor: "#D9D9D9",
