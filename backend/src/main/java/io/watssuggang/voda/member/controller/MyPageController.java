@@ -50,7 +50,7 @@ public class MyPageController {
     @GetMapping("/report")
     public ResponseEntity<?> getEmotionReport() throws Exception {
         // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
-        Integer memberId = 0;
+        Integer memberId = 1;
 
         EmotionReportResponse response = myPageService.getEmotionReport(memberId);
         return ResponseEntity.ok(response);

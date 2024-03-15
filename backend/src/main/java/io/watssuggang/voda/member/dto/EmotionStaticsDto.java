@@ -3,14 +3,14 @@ package io.watssuggang.voda.member.dto;
 import lombok.*;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class EmotionStaticsDto {
 
-    private Double joy;
-    private Double anger;
-    private Double sadness;
-    private Double fear;
-    private Double curiosity;
+    private final Double joy;
+    private final Double anger;
+    private final Double sadness;
+    private final Double fear;
+    private final Double curiosity;
 
 }
