@@ -46,15 +46,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // AccessToken을 검증하고, 만료되었을경우 예외를 발생시킨다.
         if (!tokenProvider.verifyToken(atc)) {
-            throw new JwtException("Access Token 만료!");
+            throw new JwtException();
         }
 
         // AccessToken의 값이 있고, 유효한 경우에 진행한다.
         if (tokenProvider.verifyToken(atc)) {
 
             // AccessToken 내부의 payload에 있는 email로 user를 조회한다. 없다면 예외를 발생시킨다 -> 정상 케이스가 아님
-            Member findMember = memberService.findByEmail(tokenProvider.getUid(atc))
-                .orElseThrow(IllegalStateException::new);
+            Member findMember = memberService.findByEmail(tokenProvider.getUid(atc));
 
             // SecurityContext에 등록할 User 객체를 만들어준다.
             SecurityUserDto userDto = SecurityUserDto.builder()
