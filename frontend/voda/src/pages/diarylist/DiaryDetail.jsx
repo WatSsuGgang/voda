@@ -58,8 +58,8 @@ const DiaryDetail = () => {
         }}
       >
         <Title>
-          {store.nickname}님의 {state.date.slice(5, 7)}/
-          {state.date.slice(8, 10)}
+          {store.nickname}님의 {parseInt(state.date.slice(5, 7))}/
+          {parseInt(state.date.slice(8, 10))}
           일기
         </Title>
         <img
