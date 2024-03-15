@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import useStore from "../../store/store";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ const Date = styled.div`
   display: flex;
   align-items: center;
   min-height: 2.5vh;
-  padding: 0.2rem;
+  padding: 0.5rem;
   margin-right: 0.5rem;
 `;
 
@@ -18,38 +18,13 @@ const Line = styled.div`
   border: 0.1px solid #cacaca;
 `;
 
-const FilterdDiaryList = () => {
+const FilterdDiaryList = ({ diaries }) => {
+  const store = useStore();
   const navigate = useNavigate();
   const goDetail = (id, diary) => {
     navigate(`${id}`, { state: diary });
   };
-  const store = useStore();
-  const diaries = [
-    {
-      id: 1,
-      title: "힘들어서 한 잔 했습니다",
-      date: "2020-01-01",
-      emotion: "sad",
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRavVXxGrKkOn7bp0JcTSNO8yBlXnw4fihPPg&usqp=CAU",
-    },
-    {
-      id: 2,
-      title: "힘들어서 한 잔 했습니다",
-      date: "2020-01-01",
-      emotion: "sad",
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRavVXxGrKkOn7bp0JcTSNO8yBlXnw4fihPPg&usqp=CAU",
-    },
-    {
-      id: 3,
-      title: "힘들어서 한 잔 했습니다",
-      date: "2020-01-01",
-      emotion: "sad",
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRavVXxGrKkOn7bp0JcTSNO8yBlXnw4fihPPg&usqp=CAU",
-    },
-  ];
+
   if (diaries.length === 0) {
     return (
       <div>
@@ -104,7 +79,8 @@ const FilterdDiaryList = () => {
           >
             <div style={{ display: "flex", paddingBottom: "0.8rem" }}>
               <Date>
-                {diary.date.slice(5, 7)}월 {diary.date.slice(8, 10)}일
+                {parseInt(diary.date.slice(5, 7))}월
+                {parseInt(diary.date.slice(8, 10))}일
               </Date>
               <img
                 src={emotionImageUrl}
