@@ -21,7 +21,7 @@ export default function TopComponent() {
     if (response.status === 200) {
       window.alert("로그아웃 성공");
       localStorage.removeItem("accessToken");
-      window.location.href = url + "/login";
+      window.location.href = "/login";
     } else {
       window.alert("로그아웃 실패");
     }
