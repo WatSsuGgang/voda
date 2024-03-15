@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MyPageService {
 
     private final MemberRepository memberRepository;
     private final DiaryRepository diaryRepository;
     private final PetRepository petRepository;
 
+    @Transactional
     public MemberInfoResponse updateMemberInfo(Integer memberId, String newNickname) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new RuntimeException("회원 정보 없음"));
@@ -34,10 +34,12 @@ public class MyPageService {
         return new MemberInfoResponse(newNickname);
     }
 
+    @Transactional
     public void deleteMember(Integer memberId) {
         memberRepository.deleteById(memberId);
     }
 
+    @Transactional(readOnly = true)
     public EmotionReportResponse getEmotionReport(Integer memberId) {
         List<Diary> diaries = diaryRepository.findAllByMemberAndCreatedAtAfterCurrentMonth(
             memberId);
