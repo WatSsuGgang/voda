@@ -1,8 +1,10 @@
 package io.watssuggang.voda.common.jwt.exception;
 
-public class JwtException extends RuntimeException {
+import io.watssuggang.voda.common.exception.*;
 
-    public JwtException(String message) {
-        super("JWT Token Exception: " + message);
+public class JwtException extends BaseException {
+
+    public JwtException() {
+        super(ErrorCode.TOKEN_NOT_AVAILABLE);
     }
 }
