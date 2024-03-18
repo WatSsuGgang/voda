@@ -4,9 +4,9 @@ pipeline {
     	stage('remove previous docker container and image') {
             steps{
             echo 'Remove Docker Process'
-		sh '''if [ ! "$(docker ps -a -q -f name=docker-backend)" ]; then
+		sh '''if [ ! "$(sudo docker ps -a -q -f name=docker-backend)" ]; then
 			sudo docker stop docker-backend 
-			if [ "$(docker ps -aq -f status=exited -f name=docker-backend)" ]; then
+			if [ "$(sudo docker ps -aq -f status=exited -f name=docker-backend)" ]; then
 				sudo docker rm docker-backend
 			fi
 		fi'''
