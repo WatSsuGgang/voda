@@ -18,19 +18,17 @@ pipeline {
                 withCredentials([file(credentialsId: 'application-credentials', variable: 'defaultConfigFile'),
                                  file(credentialsId: 'application-oauth-credentials', variable: 'oauthConfigFile'),
                                  file(credentialsId: 'application-secret-credentials', variable: 'secretConfigFile'),
-                                 file(credentialsId: 'application-redis-credentials', variable: 'redisConfigFile'),
-				 file(credentialsId: 'application-api-credentials', variable: 'apiConfigFile')]) {
+                                 file(credentialsId: 'application-datasource-credentials', variable: 'datasourceConfigFile')]) {
                     script {
                         sh 'chmod 755 $defaultConfigFile'
                         sh 'chmod 755 $oauthConfigFile'
                         sh 'chmod 755 $secretConfigFile'
-                        sh 'chmod 755 $redisConfigFile'
+                        sh 'chmod 755 $datasourceConfigFile'
 			sh 'chmod 755 $apiConfigFile'
                         sh 'cp -f -R $defaultConfigFile backend/src/main/resources/application.yml'
                         sh 'cp -f -R $oauthConfigFile backend/src/main/resources/application-oauth.yml'
                         sh 'cp -f -R $secretConfigFile backend/src/main/resources/application-secret.yml'
-                        sh 'cp -f -R $redisConfigFile backend/src/main/resources/application-redis.yml'
-			sh 'cp -f -R $apiConfigFile backend/src/main/resources/application-api.yml'
+                        sh 'cp -f -R $datasourceConfigFile backend/src/main/resources/application-datasource.yml'
                     }
                 }
             }
