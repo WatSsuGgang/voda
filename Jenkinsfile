@@ -1,6 +1,24 @@
 pipeline {
     agent any
     stages {
+    	stage('remove previous docker container and image') {
+		echo 'Remove Docker Process'
+		sh "
+			if [ ! "$(docker ps -a -q -f name=docker-backend)" ]; then
+				docker stop docker-backend
+
+				if [ "$(docker ps -aq -f status=exited -f name=docker-backend)" ]; then
+					docker rm docker-backend
+				fi
+			fi
+		"
+		echo 'Remove Docker Image'
+		sh "
+			if [ -z "$(docker images -q image-backend 2> /dev/null)" ]; then
+				docker rmi image-backend
+			fi
+		"
+	}
         stage('copy yml before build') {
             steps {
                 withCredentials([file(credentialsId: 'application-credentials', variable: 'defaultConfigFile'),
@@ -21,30 +39,21 @@ pipeline {
             }
         }
 
-        stage('Build Gradle') {
+        stage('build gradle') {
             steps {
                 echo 'Build Gradle'
                 dir('backend') {
-                    sh """
-						  chmod +x ./gradlew
-						  ./gradlew bootJar
-					  """
-
-                    script {
-                        docker.build("${BACKEND_DOCKER_IMAGE}")
-                    }
+                    sh "
+		    	chmod +x ./gradlew
+			./gradlew build
+			"
                 }
+		echo 'Docker Build'
+		sh "docker build -t image-backend"
+		
+		echo 'Docker Run'
+		sh "docker run -p 7777:7777 docker-backend"
 
-                dir('onterview-storage') {
-                    sh """
-						  chmod +x ./gradlew
-						  ./gradlew bootJar
-					  """
-
-                    script {
-                        docker.build("${FILE_SERVER_DOCKER_IMAGE}")
-                    }
-                }
             }
             post {
                 success {
