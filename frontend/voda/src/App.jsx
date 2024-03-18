@@ -32,7 +32,7 @@ const Wrapper = styled.div`
 function App() {
   const accessToken = localStorage.getItem("accessToken");
   const { isLoggedIn } = useStore();
-  if (accessToken) {
+  if (isLoggedIn) {
     return (
       <div>
         <Routes>
