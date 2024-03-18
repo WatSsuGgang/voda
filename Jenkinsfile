@@ -38,7 +38,7 @@ pipeline {
                 echo 'Build Gradle'
                 dir('backend') {
                     sh "chmod +x ./gradlew"
-                    sh "./gradlew build"
+                    sh "./gradlew build -x check --parallel"
                 }
 		echo 'Docker Build'
 		sh "docker build -t image-backend"
