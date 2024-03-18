@@ -2,7 +2,7 @@ import React from "react"; // eslint-disable-line no-unused-vars
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 // 로그인된 사용자가 볼 수 있는 페이지
-import Pet from "./pages/pet/Pet";
+import PetPage from "./pages/pet/PetPage";
 import DiaryList from "./pages/diarylist/DiaryList";
 import CalendarPage from "./pages/calendar/CalendarPage";
 import User from "./pages/user/User";
@@ -21,6 +21,7 @@ import LoginSuccess from "./pages/login/LoginSuccess";
 
 // const isLogin = false;
 import styled from "styled-components";
+import ShopPage from "./pages/pet/ShopPage";
 const isLogin = true;
 
 const Wrapper = styled.div`
@@ -37,7 +38,8 @@ function App() {
     return (
       <div>
         <Routes>
-          <Route path="/" element={<Pet />}></Route>
+          <Route path="/pet" element={<PetPage />}></Route>
+          <Route path="/pet/shop" element={<ShopPage />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
           <Route path="/diary/:id" element={<DiaryDetail />}></Route>
           <Route path="/calendar" element={<CalendarPage />}></Route>

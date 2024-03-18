@@ -43,12 +43,7 @@ const NavLink = styled(Link)`
 const NavBar = () => {
   const location = useLocation();
   function opacityStyle(location) {
-    let loc = "";
-    if (location === "/") {
-      loc = "pet";
-    } else {
-      loc = location.split("/")[1];
-    }
+    let loc = location.split("/")[1];
     for (const key in opacity) {
       if (key === loc) {
         opacity[key] = 1;
@@ -61,7 +56,7 @@ const NavBar = () => {
   return (
     <div>
       <Nav>
-        <NavLink to="/">
+        <NavLink to="/pet">
           <Icons style={{ opacity: opacity.pet }}>
             <div>
               <img src={petIcon} alt="" />
