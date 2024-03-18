@@ -2,7 +2,7 @@ import axios from "axios";
 import { tokenRefresh } from "./auth";
 
 // HTTPMethods
-const HTTPMethods = {
+export const HTTPMethods = {
   GET: "GET",
   POST: "POST",
   PUT: "PUT",
@@ -11,7 +11,7 @@ const HTTPMethods = {
 };
 
 // HTTPStatusCodes
-const HTTPStatusCodes = {
+export const HTTPStatusCodes = {
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,
