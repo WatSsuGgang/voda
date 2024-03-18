@@ -2,10 +2,14 @@ pipeline {
     agent any
     stages {
     	stage('remove previous docker container and image') {
-		echo 'Remove Docker Process'
+            steps{
+                		echo 'Remove Docker Process'
 		sh 'if [ ! "$(docker ps -a -q -f name=docker-backend)" ]; then docker stop docker-backend if [ "$(docker ps -aq -f status=exited -f name=docker-backend)" ]; then docker rm docker-backend fi fi'
 		echo 'Remove Docker Image'
 		sh 'if [ -z "$(docker images -q image-backend 2> /dev/null)" ]; then docker rmi image-backend fi'
+
+            }
+
 	}
         stage('copy yml before build') {
             steps {
