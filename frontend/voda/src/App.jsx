@@ -3,6 +3,7 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 // 로그인된 사용자가 볼 수 있는 페이지
 import PetPage from "./pages/pet/PetPage";
+import PetShopPage from "./pages/pet/PetShopPage";
 import DiaryList from "./pages/diarylist/DiaryList";
 import CalendarPage from "./pages/calendar/CalendarPage";
 import User from "./pages/user/User";
@@ -21,7 +22,6 @@ import LoginSuccess from "./pages/login/LoginSuccess";
 
 // const isLogin = false;
 import styled from "styled-components";
-import ShopPage from "./pages/pet/ShopPage";
 const isLogin = true;
 
 const Wrapper = styled.div`
@@ -39,7 +39,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/pet" element={<PetPage />}></Route>
-          <Route path="/pet/shop" element={<ShopPage />}></Route>
+          <Route path="/pet/shop" element={<PetShopPage />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
           <Route path="/diary/:id" element={<DiaryDetail />}></Route>
           <Route path="/calendar" element={<CalendarPage />}></Route>

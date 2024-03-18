@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/shop/Header";
 import CategoryBar from "../../components/shop/CategoryBar";
@@ -32,21 +32,7 @@ const opacity = {
   effect: 0.5,
 };
 
-export default function ShopPage() {
-  const [currentCategory, setcurrentCategory] = useState("food");
-  function opacityStyle(category) {
-    for (const key in opacity) {
-      if (key === category) {
-        opacity[key] = 1;
-      } else {
-        opacity[key] = 0.5;
-      }
-    }
-  }
-  opacityStyle(currentCategory);
-  function clickHandler(e) {
-    setcurrentCategory(e.target.id);
-  }
+export default function PetShopPage() {
   return (
     <Page>
       <TopComponents>
