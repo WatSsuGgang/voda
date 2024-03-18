@@ -24,7 +24,6 @@ pipeline {
                         sh 'chmod 755 $oauthConfigFile'
                         sh 'chmod 755 $secretConfigFile'
                         sh 'chmod 755 $datasourceConfigFile'
-			sh 'chmod 755 $apiConfigFile'
                         sh 'cp -f -R $defaultConfigFile backend/src/main/resources/application.yml'
                         sh 'cp -f -R $oauthConfigFile backend/src/main/resources/application-oauth.yml'
                         sh 'cp -f -R $secretConfigFile backend/src/main/resources/application-secret.yml'
