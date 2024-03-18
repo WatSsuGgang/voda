@@ -38,7 +38,7 @@ pipeline {
                 echo 'Build Gradle'
                 dir('backend') {
                     sh "chmod +x ./gradlew"
-                    sh "./gradlew build -x check --parallel"
+                    sh "./gradlew clean build -x check --parallel"
                 }
 		echo 'Docker Build'
 		sh "docker build --build-arg JAR_FILE=build/libs/*.jar -t image-backend ."
