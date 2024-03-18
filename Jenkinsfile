@@ -19,7 +19,7 @@ pipeline {
                                  file(credentialsId: 'application-oauth-credentials', variable: 'oauthConfigFile'),
                                  file(credentialsId: 'application-secret-credentials', variable: 'secretConfigFile'),
                                  file(credentialsId: 'application-redis-credentials', variable: 'redisConfigFile'),
-				 file(credentailsId: 'application-api-credentials', variable: 'apiConfigFile')]) {
+				 file(credentialsId: 'application-api-credentials', variable: 'apiConfigFile')]) {
                     script {
                         sh 'chmod 755 $defaultConfigFile'
                         sh 'chmod 755 $oauthConfigFile'
