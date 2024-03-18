@@ -41,7 +41,7 @@ pipeline {
                     sh "./gradlew build -x check --parallel"
                 }
 		echo 'Docker Build'
-		sh "docker build --build-arg JAR_FILE=build/libs/*.jar -t image-backend ."
+		sh "docker build --build-arg JAR_FILE=build/libs/voda-0.0.1-SNAPSHOT.jar -t image-backend ."
 		
 		echo 'Docker Run'
 		sh "docker run -d -p 7777:7777 --name docker-backend image-backend"
