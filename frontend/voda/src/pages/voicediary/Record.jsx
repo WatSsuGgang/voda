@@ -4,7 +4,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import PlingSound from '"../../assets/voicediary/Pling.mp3';
+import PlingSound from "../../assets/voicediary/Pling.mp3";
 
 const Title = styled.h1`
   text-align: center;
@@ -13,12 +13,14 @@ const Title = styled.h1`
 `;
 
 const Record = () => {
+  const [aiSpeaking, setAiSpeaking] = useState(true);
   const [voiceRecognized, setVoiceRecognized] = useState(true);
   const [audioURL, setAudioURL] = useState(null);
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const audioElementRef = useRef(null);
   const analyserRef = useRef(null);
+  const aiAnalyserRef = useRef(null);
 
   // audio context 초기 설정
   useEffect(() => {
@@ -43,10 +45,12 @@ const Record = () => {
           mediaRecorder.ondataavailable = (e) => {
             chunks.push(e.data);
           };
+          setAiSpeaking(false);
           mediaRecorder.onstop = () => {
             const audioBlob = new Blob(chunks, { type: "audio/webm" });
             const audioURL = URL.createObjectURL(audioBlob);
             setAudioURL(audioURL);
+            setAiSpeaking(true);
           };
           recorderRef.current = mediaRecorder;
           audioElementRef.current.play();
@@ -91,7 +95,14 @@ const Record = () => {
       navigate("/voice");
     }
   };
-  const Emoticon = voiceRecognized ? (
+  const Emoticon = aiSpeaking ? (
+    <img
+      src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People%20with%20activities/Man%20Tipping%20Hand%20Light%20Skin%20Tone.png"
+      alt="Man Tipping Hand Light Skin Tone"
+      width="300"
+      height="300"
+    />
+  ) : voiceRecognized ? (
     <img
       src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People%20with%20activities/Man%20Gesturing%20OK%20Light%20Skin%20Tone.png"
       alt="Man Gesturing OK Light Skin Tone"
@@ -106,7 +117,9 @@ const Record = () => {
       height="300"
     />
   );
-  const Mention = voiceRecognized ? (
+  const Mention = aiSpeaking ? (
+    <div>질문을 생성중입니다.</div>
+  ) : voiceRecognized ? (
     <div>잘 듣고 있어요. 계속 말씀하세요</div>
   ) : (
     <div>
@@ -129,8 +142,18 @@ const Record = () => {
       </div>
       <Button onClick={startRecording}>시작</Button>
       <Button onClick={stopRecording}>종료</Button>
-      {/* <audio controls src={audioURL} /> */}
-      <audio controls src={PlingSound} />
+      <audio controls src={audioURL} />
+      <audio
+        ref={audioElementRef}
+        src={PlingSound}
+        style={{ display: "none" }}
+      />
+
+      {/* <audio
+        ref={aiAnalyserRef}
+        src={}
+        style={{ display: "none" }}
+      /> */}
     </div>
   );
 };
