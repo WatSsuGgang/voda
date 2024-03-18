@@ -31,10 +31,8 @@ pipeline {
             steps {
                 echo 'Build Gradle'
                 dir('backend') {
-                    sh "
-		    	chmod +x ./gradlew
-			./gradlew build
-			"
+                    sh "chmod +x ./gradlew"
+                    sh "./gradlew build"
                 }
 		echo 'Docker Build'
 		sh "docker build -t image-backend"
