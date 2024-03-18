@@ -5,14 +5,14 @@ pipeline {
             steps{
             echo 'Remove Docker Process'
 		sh '''if [ ! "$(docker ps -a -q -f name=docker-backend)" ]; then
-			docker stop docker-backend 
+			sudo docker stop docker-backend 
 			if [ "$(docker ps -aq -f status=exited -f name=docker-backend)" ]; then
-				docker rm docker-backend
+				sudo docker rm docker-backend
 			fi
 		fi'''
 		echo 'Remove Docker Image'
 		sh '''if [ -z "$(docker images -q image-backend 2> /dev/null)" ]; then
-			docker rmi image-backend
+			sudo docker rmi image-backend
 		fi'''
             }
 	}
@@ -44,10 +44,10 @@ pipeline {
                     sh "./gradlew build"
                 }
 		echo 'Docker Build'
-		sh "docker build -t image-backend"
+		sh "sudo docker build -t image-backend"
 		
 		echo 'Docker Run'
-		sh "docker run -p 7777:7777 docker-backend"
+		sh "sudo docker run -p 7777:7777 docker-backend"
 
             }
             post {
