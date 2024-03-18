@@ -47,7 +47,7 @@ pipeline {
 		sh "docker build --build-arg JAR_FILE=backend/build/libs/voda-0.0.1-SNAPSHOT.jar -t image-backend ."
 		
 		echo 'Docker Run'
-		sh "docker run -d -p 7777:7777 --name docker-backend image-backend"
+		sh "docker run -d -p 8080:8080 --name docker-backend image-backend"
 
             }
             post {
