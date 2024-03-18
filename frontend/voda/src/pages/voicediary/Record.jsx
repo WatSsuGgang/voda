@@ -4,6 +4,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import PlingSound from '"../../assets/voicediary/Pling.mp3';
 
 const Title = styled.h1`
   text-align: center;
@@ -16,10 +17,11 @@ const Record = () => {
   const [audioURL, setAudioURL] = useState(null);
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
+  const audioElementRef = useRef(null);
   const analyserRef = useRef(null);
-  const voiceRecognizedRef = useRef(false);
+
+  // audio context 초기 설정
   useEffect(() => {
-    // Initialize the audio context
     audioContextRef.current = new (window.AudioContext ||
       window.webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
@@ -47,6 +49,7 @@ const Record = () => {
             setAudioURL(audioURL);
           };
           recorderRef.current = mediaRecorder;
+          audioElementRef.current.play();
         })
         .catch((error) => {
           console.error("Error accessing user media:", error);
@@ -59,12 +62,28 @@ const Record = () => {
   const stopRecording = () => {
     if (recorderRef.current.state == "recording") {
       recorderRef.current.stop();
-      console.log(recorderRef.current);
+      // // 서버로 오디오 파일 전송
+      // recorderRef.current.ondataavailable = (e) => {
+      //   const audioBlob = new Blob([e.data], { type: "audio/webm" });
+      //   const formData = new FormData();
+      //   formData.append("audioFile", audioBlob);
+      //   fetch("/upload", {
+      //     method: "POST",
+      //     body: formData,
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       // 서버에서 받은 텍스트를 화면에 표시
+      //       console.log("음성 파일 텍스트 변환 결과:", data.text);
+      //     })
+      //     .catch((error) => {
+      //       console.error("음성 파일 변환 오류:", error);
+      //     });
+      // };
     } else {
       console.log("녹음 중이 아닙니다.");
     }
   };
-  // useEffect(() => {});
 
   const navigate = useNavigate();
   const exit = () => {
@@ -110,7 +129,8 @@ const Record = () => {
       </div>
       <Button onClick={startRecording}>시작</Button>
       <Button onClick={stopRecording}>종료</Button>
-      <audio controls src={audioURL} />
+      {/* <audio controls src={audioURL} /> */}
+      <audio controls src={PlingSound} />
     </div>
   );
 };
