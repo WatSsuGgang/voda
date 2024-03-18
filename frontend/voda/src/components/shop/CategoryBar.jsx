@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import usePetShopStore from "../../store/petStore";
 
 const Bar = styled.div({
   marginTop: "1rem",
@@ -32,33 +33,24 @@ const opacity = {
 };
 
 export default function CategoryBar() {
-  const [currentCategory, setcurrentCategory] = useState("food");
-  function opacityStyle(category) {
-    for (const key in opacity) {
-      if (key === category) {
-        opacity[key] = 1;
-      } else {
-        opacity[key] = 0.5;
-      }
-    }
-  }
-  opacityStyle(currentCategory);
+  const { currentCategory, setCurrentCategory } = usePetShopStore();
   function clickHandler(e) {
-    setcurrentCategory(e.target.id);
+    setCurrentCategory(e.target.id);
   }
+
   return (
     <Bar>
       <Button
         onClick={clickHandler}
         id={"food"}
-        style={{ opacity: opacity.food }}
+        style={currentCategory === "food" ? { opacity: 1 } : { opacity: 0.5 }}
       >
         간식
       </Button>
       <Button
         onClick={clickHandler}
         id={"effect"}
-        style={{ opacity: opacity.effect }}
+        style={currentCategory === "effect" ? { opacity: 1 } : { opacity: 0.5 }}
       >
         효과
       </Button>

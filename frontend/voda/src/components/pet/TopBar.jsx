@@ -1,7 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import usePetShopStore from "../../store/petStore";
 
 export default function TopBar() {
+  const { currentCoin } = usePetShopStore();
   const navigate = useNavigate();
   function onClickShop() {
     navigate("/pet/shop");
@@ -29,7 +31,7 @@ export default function TopBar() {
           width="40rem"
           height="40rem"
         />
-        <h3>20</h3>
+        <h3>{currentCoin}</h3>
       </div>
       <img
         src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Magic%20Wand.png"
