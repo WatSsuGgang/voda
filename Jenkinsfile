@@ -19,7 +19,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'react-env', variable: 'env')]) {
                     script {
                         sh 'chmod 755 $env'
-                        sh 'cp -f -R $env .env'
+                        sh 'cp -f -R $env /frontend/voda/.env'
                     }
                 }
             }
