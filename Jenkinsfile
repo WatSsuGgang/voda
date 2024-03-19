@@ -12,7 +12,7 @@ pipeline {
                 docker rmi image-backend
 			fi
 		fi'''
-        }
+            }
 	}
         stage('copy yml before build') {
             steps {
