@@ -11,7 +11,8 @@ export default function LoginSuccess() {
     const provider = query.get("provider");
     if (accessToken) {
       window.localStorage.setItem("accessToken", accessToken);
-      navigate("/");
+      window.location.href = "/pet";
+      // navigate("/pet");
     } else if (email && provider) {
       window.localStorage.setItem("email", email);
       window.localStorage.setItem("provider", provider);
