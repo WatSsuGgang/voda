@@ -46,7 +46,7 @@ pipeline {
 		
 		echo 'Docker Run'
 		sh "docker run -d -p 8080:8080 --name docker-backend image-backend"
-
+		sh "docker network connect voda-network docker-backend"
             }
             post {
                 success {
