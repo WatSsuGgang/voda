@@ -29,8 +29,6 @@ pipeline {
                 echo 'Build Npm'
                 script {
                     sh 'docker build -t image-frontend .'
-                    sh 'docker volume rm html'
-                    sh 'docker volume create html'
                     sh 'docker run --rm -v html:/voda/dist --name docker-frontend image-frontend'
                 }
             }
