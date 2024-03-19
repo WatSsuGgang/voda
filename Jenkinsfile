@@ -3,15 +3,36 @@ pipeline {
     agent any
 
     stages {
-        stage('Build npm') {
+        stage('remove previous docker container and image') {
             steps {
-                echo 'Build Gradle'
+                echo 'Remove Docker Process and Image'
+                sh '''if [ "$(docker ps -a -q -f name=docker-frontend)" ]; then
+                    docker stop docker-frontend
+                    if [ "$(docker ps -aq -f status=exited -f name=docker-frontend)" ]; then
+                        docker rm docker-frontend
+                    fi
+                fi'''
+            }
+        }
+        stage('copy env before build') {
+            steps {
+                withCredentials([file(credentialsId: 'react-env', variable: 'env')]) {
+                    script {
+                        sh 'chmod 755 $env'
+                        sh 'cp -f -R $env frontend/.env'
+                    }
+                }
+            }
+        }
+        stage('build npm') {
+            steps {
+                echo 'Build Npm'
                 dir('frontend') {
                     script {
-                        docker.build("${FRONTEND_DOCKER_IMAGE}")
+                        sh 'docker build -t image-frontend .'
                         sh 'docker volume rm html'
                         sh 'docker volume create html'
-                        sh 'docker run --rm -v html:/app/dist --name app ${FRONTEND_DOCKER_IMAGE}'
+                        sh 'docker run --rm -v html:/app/dist --name docker-frontend image-frontend'
                     }
                 }
             }
