@@ -1,35 +1,35 @@
 import React from "react";
-import styled from "styled-components";
 import usePetStore from "../../store/petStore";
-const newspaperSpinning = [
-  { transform: "rotate(0) scale(1)" },
-  { transform: "rotate(360deg) scale(0)" },
-];
 
-const newspaperTiming = {
-  duration: 2000,
-  iterations: 1,
-};
 export default function Food() {
-  const { currentFood, isFed, setIsFed } = usePetStore();
+  const { currentFood, isFed, setIsFed, isFeeding, setIsFeeding } =
+    usePetStore();
   function clickHandler(e) {
-    const food = document.getElementById("food");
-    // food.animate(newspaperSpinning, newspaperTiming);
-    food.animate(
-      [
-        // keyframes
-        {
-          // transform:
-          //   "translateX(-70vw) translateY(+70vh) rotate(720deg) scale(2)",
-          transform: "left(50%)",
-        },
-      ],
-      {
-        // timing options
-        duration: 1500,
-      }
-    );
-    setIsFed(!isFed);
+    if (!isFed) {
+      const food = document.getElementById("food");
+      const foodFeeding = document.getElementById("foodFeeding");
+      // food.animate(newspaperSpinning, newspaperTiming);
+      food.animate(
+        [
+          {
+            // from
+            opacity: 1,
+            filter: "grayscale(0%)",
+            transform: "translateX(0%) translateY(0%) rotate(0deg) scale(1)",
+          },
+          {
+            // to
+            filter: "grayscale(50%)",
+            opacity: 0,
+            transform: `translateX(-250%) translateY(+400%) rotate(${Math.round(
+              Math.random() * 3600
+            )}deg) scale(0.5)`,
+          },
+        ],
+        1000
+      );
+      setIsFed(!isFed);
+    }
   }
   return (
     <>
