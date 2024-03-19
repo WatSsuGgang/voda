@@ -27,13 +27,11 @@ pipeline {
         stage('build npm') {
             steps {
                 echo 'Build Npm'
-                dir('frontend') {
-                    script {
-                        sh 'docker build -t image-frontend .'
-                        sh 'docker volume rm html'
-                        sh 'docker volume create html'
-                        sh 'docker run --rm -v html:/app/dist --name docker-frontend image-frontend'
-                    }
+                script {
+                    sh 'docker build -t image-frontend .'
+                    sh 'docker volume rm html'
+                    sh 'docker volume create html'
+                    sh 'docker run --rm -v html:/app/dist --name docker-frontend image-frontend'
                 }
             }
             post {
