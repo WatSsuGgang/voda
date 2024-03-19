@@ -1,11 +1,13 @@
 import { create } from "zustand";
 
-const usePetShopStore = create((set) => ({
+const usePetStore = create((set) => ({
   currentCoin: 10,
-  currentFood: "candy",
+  currentFood: "Candy",
   currentEffect: "cloud rain",
   currentCategory: "food",
+  isFed: false,
+  setIsFed: (state) => set({ isFed: state }),
   setCurrentCategory: (category) => set({ currentCategory: category }),
 }));
 
-export default usePetShopStore;
+export default usePetStore;

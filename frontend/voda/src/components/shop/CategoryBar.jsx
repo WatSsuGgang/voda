@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import usePetShopStore from "../../store/petStore";
+import usePetStore from "../../store/petStore";
 
 const Bar = styled.div({
   marginTop: "1rem",
@@ -33,7 +33,7 @@ const opacity = {
 };
 
 export default function CategoryBar() {
-  const { currentCategory, setCurrentCategory } = usePetShopStore();
+  const { currentCategory, setCurrentCategory } = usePetStore();
   function clickHandler(e) {
     setCurrentCategory(e.target.id);
   }

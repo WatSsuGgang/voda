@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import usePetShopStore from "../../store/petStore";
+import usePetStore from "../../store/petStore";
 
 const ItemWrapper = styled.div({
   display: "grid",
@@ -540,7 +540,7 @@ const Items = {
 };
 
 export default function ItemList() {
-  const { currentCategory } = usePetShopStore();
+  const { currentCategory } = usePetStore();
   const [items, setItems] = useState(Items.food);
   useEffect(() => {
     setItems(Items[currentCategory]);
