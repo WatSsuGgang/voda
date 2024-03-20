@@ -1,13 +1,14 @@
-import React, { useState, useRef, useEffect } from "react"; // eslint-disable-line no-unused-vars
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
 import PlingSound from "../../assets/voicediary/Pling.mp3";
 import MyVoice from "../../assets/voicediary/MyVoice.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
 import Mention from "../../components/voicediary/Mention";
+import { initDiary, recordDiary, createDiary } from "../../services/voicediary"; // api 함수 불러오기
+
 const Title = styled.h1`
   text-align: center;
   font-size: 1.2rem;
@@ -24,9 +25,13 @@ const Record = () => {
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
-
+  let Id = null;
   // 처음 화면을 렌더링 할 때, ai 질문 음성 파일을 임시로 설정해줌. 추후, init api 요청으로 바꿀 예정
   useEffect(() => {
+    // api init api 요청. 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
+    // const res = initDiary();
+    // Id = res.id
+    // setAiAudioURL(res.audioUrl);
     setAiAudioURL(MyVoice);
   }, []);
 
@@ -61,6 +66,7 @@ const Record = () => {
     }
   };
 
+  // 내가 말할 차례가 오면 음성 데시벨 인식 시작
   useEffect(() => {
     if (aiSpeaking === false) {
       consecutiveSilenceTimeRef.current = 0; // 초기화
@@ -68,6 +74,7 @@ const Record = () => {
       return () => clearInterval(intervalId); // cleanup 함수에서 clearInterval 호출
     }
   }, [aiSpeaking]);
+
   // aiAudioUrl 값이 변경될 때마다 실행
   useEffect(() => {
     // AI의 음성 출력이 끝나면 다시 사용자가 얘기할 수 있도록 로직 구현

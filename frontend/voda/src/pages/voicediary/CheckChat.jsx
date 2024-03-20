@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ChatBox from "../../components/voicediary/ChatBox";
 import Button from "@mui/material/Button";
-
+import { checkChat } from "../../services/voicediary"; // 대화 내역 불러오는 API 함수
 const Title = styled.h3`
   color: 486B73;
   text-align: center;
 `;
-
 const CheckChat = () => {
+  const [chatMessages, setChatMessages] = useState([]);
+  // useEffect(() => {
+  //   const res = checkChat();
+  //   setChatMessages(res.messages());
+  // }, []);
   const exit = () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
       navigate("/voice");
@@ -21,7 +25,7 @@ const CheckChat = () => {
         <LogoutIcon onClick={exit} />
       </div>
       <Title>대화 내용을 수정할 수 있어요</Title>
-      <ChatBox />
+      <ChatBox chatMessages={chatMessages} />
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "4vh" }}
       >
