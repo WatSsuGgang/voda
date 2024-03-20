@@ -40,8 +40,8 @@ const Login = () => {
     if (accessToken) {
       navigate("/pet");
     } else {
-      window.location.href = "/oauth2/authorization/${e.target.id}";
-      navigate(`/oauth2/authorization/${e.target.id}`);
+      const base_url = import.meta.env.VITE_API_URL;
+      window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
     }
   }
   return (
