@@ -23,7 +23,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException {
-        String redirectUrl = "http://localhost:5173/login-success";
+        String redirectUrl = "https://j10a104.p.ssafy.io/login-success";
 
         // OAuth2User로 캐스팅하여 인증된 사용자 정보를 가져온다.
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
