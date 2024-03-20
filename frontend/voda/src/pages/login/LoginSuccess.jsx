@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react"; // eslint-disable-line
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useStore from "../../store/store";
 
 export default function LoginSuccess() {
   const [query] = useSearchParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     const accessToken = query.get("accessToken");
     const email = query.get("email");
