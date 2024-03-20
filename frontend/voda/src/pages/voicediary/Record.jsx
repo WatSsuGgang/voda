@@ -7,8 +7,13 @@ import PlingSound from "../../assets/voicediary/Pling.mp3";
 import MyVoice from "../../assets/voicediary/MyVoice.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
 import Mention from "../../components/voicediary/Mention";
-import { initDiary, recordDiary, createDiary } from "../../services/voicediary"; // api 함수 불러오기
-
+import {
+  initDiary,
+  recordDiary,
+  createDiary,
+  checkChat,
+} from "../../services/voicediary"; // api 함수 불러오기
+import useStore from "../../store/store";
 const Title = styled.h1`
   text-align: center;
   font-size: 1.2rem;
@@ -16,6 +21,8 @@ const Title = styled.h1`
 `;
 
 const Record = () => {
+  const navigate = useNavigate();
+  const store = useStore();
   const [aiSpeaking, setAiSpeaking] = useState(true); // ai가 말하는 중인지 구분
   const [voiceRecognized, setVoiceRecognized] = useState(true); // 음성 인식이 30데시벨 이상으로잘 되고 있는지 구분
   const [audioURL, setAudioURL] = useState(null); // 사용자의 음성 녹음이 종료될 때 생성되는 audioUrl
@@ -81,7 +88,7 @@ const Record = () => {
     const handleAudioEnded = () => {
       startRecording();
     };
-    // AI의 음성 데이터를 가져오고, 1초 있다가 실행
+    // AI의 음성 데이터를 가져오고, 0.5초 있다가 실행
     const timeout = setTimeout(() => {
       aiAudioElementRef.current.play();
     }, 500);
@@ -128,18 +135,19 @@ const Record = () => {
               console.log(formData["audioFile"]);
             }, 1000);
             // // 서버로 오디오 파일 전송
-            // fetch("/upload", {
-            //   method: "POST",
-            //   body: formData,
-            // })
-            //   .then((response) => response.json())
-            //   .then((data) => {
-            //     // 서버에서 받은 텍스트를 화면에 표시
-            //     console.log("음성 파일 텍스트 변환 결과:", data.text);
-            //   })
-            //   .catch((error) => {
-            //     console.error("음성 파일 변환 오류:", error);
-            //   });
+            // const res = recordDiary(formData);
+            // if (res.terminate) {
+            //   if (store.editAllow) {
+            //     navigate("/voice/check/:Id");
+            //   } else {
+            //      const talkRes = checkChat(id)
+            //      const diaryData = {"diaryId": id, "talk_list": talkRes}
+            //      createDiary(diaryData);
+            //      window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요")
+            //      navigate("/pet");
+            //   }
+            // }
+            // setAiAudioURL(res.audioUrl);
 
             // 음성 녹음이 끝나면 다운로드 하는 기능 테스트
             // const link = document.createElement("a");
@@ -168,7 +176,6 @@ const Record = () => {
     }
   };
 
-  const navigate = useNavigate();
   const exit = () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
       navigate("/voice");

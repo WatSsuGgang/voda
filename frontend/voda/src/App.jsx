@@ -34,7 +34,7 @@ const Wrapper = styled.div`
 function App() {
   const accessToken = localStorage.getItem("accessToken");
   const { isLoggedIn } = useStore();
-  if (isLoggedIn) {
+  if (accessToken) {
     return (
       <div>
         <Routes>
@@ -47,7 +47,7 @@ function App() {
           <Route path="/user/report" element={<UserReport />}></Route>
           <Route path="/voice" element={<VoiceDiary />}></Route>
           <Route path="/voice/record" element={<Record />}></Route>
-          <Route path="/voice/check" element={<CheckChat />}></Route>
+          <Route path="/voice/check/:id" element={<CheckChat />}></Route>
         </Routes>
         <Wrapper>
           <NavBar />
