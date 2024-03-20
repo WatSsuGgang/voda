@@ -26,15 +26,11 @@ pipeline {
         }
         stage('build npm') {
             steps {
-                echo 'Stop Nginx'
-                sh 'docker stop docker-nginx'
                 echo 'Build Npm'
                 script {
                     sh 'docker build -t image-frontend .'
                     sh 'docker run -d -v html:/voda/dist --name docker-frontend image-frontend'
                 }
-                echo 'Restart Nginx'
-                sh 'docker restart docker-nginx'
             }
             post {
                 success {
