@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import SignupButton from "../../components/login/SignupButton";
+import { cleanString } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -44,20 +45,25 @@ export default function Nickname() {
   }
 
   function onClickSignUpHandler() {
-    const data = {
-      email: localStorage.getItem("email"),
-      provider: localStorage.getItem("provider"),
-      nickname: nickname,
-    };
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    signUp(data, config);
-    localStorage.removeItem("email");
-    localStorage.removeItem("provider");
-    navigate("/");
+    console.log("버튼");
+    if (nickname.length > 0) {
+      const data = {
+        email: localStorage.getItem("email"),
+        provider: localStorage.getItem("provider"),
+        nickname: nickname,
+      };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      signUp(data, config);
+      localStorage.removeItem("email");
+      localStorage.removeItem("provider");
+      navigate("/");
+    } else {
+      alert("닉네임을 입력해주세요");
+    }
   }
 
   return (

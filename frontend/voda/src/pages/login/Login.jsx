@@ -38,8 +38,9 @@ const Login = () => {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      navigate("/");
+      navigate("/pet");
     } else {
+      window.location.href = "/oauth2/authorization/${e.target.id}";
       navigate(`/oauth2/authorization/${e.target.id}`);
     }
   }
