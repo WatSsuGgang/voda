@@ -30,7 +30,7 @@ pipeline {
                 script {
                     sh 'docker build -t image-frontend .'
                     sh 'docker run -d -v html:/voda/dist --name docker-frontend image-frontend'
-                    sh "docker cp image-frontend:/voda/dist frontend"
+                    sh "docker cp docker-frontend:/voda/dist frontend"
                 }
             }
             post {
