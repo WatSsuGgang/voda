@@ -1,8 +1,8 @@
 FROM node:20.10.0-alpine
 WORKDIR /docker-workspace
-COPY . ./frontend/voda
+COPY ./docker-workspace ./frontend/voda
 RUN npm install
-COPY  . ./frontend/voda
+COPY  ./docker-workspace ./frontend/voda
 RUN npm run build
-COPY . ./frontend/voda
+COPY ./docker-workspace ./frontend/voda
 RUN ls
