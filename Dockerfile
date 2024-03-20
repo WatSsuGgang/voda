@@ -1,5 +1,5 @@
 FROM node:20.10.0-alpine
-WORKDIR /frontend/voda
+WORKDIR /var/www/html
 COPY ./frontend/voda .
 RUN npm install
 COPY  ./frontend/voda .
