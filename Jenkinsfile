@@ -29,7 +29,7 @@ pipeline {
                 echo 'Build Npm'
                 script {
                     sh 'docker build -t image-frontend .'
-                    sh 'docker run --rm -v html:/voda/dist --name docker-frontend image-frontend'
+                    sh 'docker run -d -v html:/voda/dist --name docker-frontend image-frontend'
                 }
             }
             post {
