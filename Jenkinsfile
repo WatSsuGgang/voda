@@ -11,7 +11,7 @@ pipeline {
                     if [ "$(docker ps -aq -f status=exited -f name=docker-frontend)" ]; then
                         docker rm docker-frontend
                     fi
-                docker rmi image-backend
+                docker rmi image-frontend
                 fi'''
             }
         }
