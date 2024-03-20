@@ -2,10 +2,13 @@ import React, { useState } from "react"; // eslint-disable-line no-unused-vars
 import { IconButton } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
+import useStore from "../../store/store";
 // import { useNavigate } from "react-router-dom";
 
 export default function TopComponent() {
   // const navigate = useNavigate();
+  const { isLoggedIn } = useStore();
+
   const handleLogout = async () => {
     const accessToken = localStorage.getItem("accessToken");
     const url = import.meta.env.VITE_REACT_APP_SPRING_API;
@@ -21,6 +24,7 @@ export default function TopComponent() {
     if (response.status === 200) {
       window.alert("로그아웃 성공");
       localStorage.removeItem("accessToken");
+      isLoggedIn(false);
       window.location.href = "/login";
     } else {
       window.alert("로그아웃 실패");

@@ -14,8 +14,7 @@ const store = (set, get) => ({
   editAllow: true,
   isLoggedIn: true,
   nickname: "갓소민",
-  login: () => set({ isLoggedIn: true, nickname: "갓소민" }),
-  logout: () => set({ isLoggedIn: false, nickname: null }),
+  setIsLoggedIn: (state) => set({ isLoggedIn: state }),
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
   },
