@@ -1,6 +1,6 @@
 import React from "react"; // eslint-disable-line no-unused-vars
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import Button from '@mui/material';
 
 const Button = styled.button({
@@ -17,20 +17,10 @@ const Button = styled.button({
 });
 
 export default function LoginButton() {
-  return (
-    <>
-      <Button>
-        <Link
-          to="/login"
-          style={{
-            textDecoration: "none",
-            color: "black",
-            fontWeight: "bold",
-          }}
-        >
-          로그인하러 가기
-        </Link>
-      </Button>
-    </>
-  );
+  const navigate = useNavigate();
+  function clickHandler() {
+    localStorage.setItem("intro", "no");
+    navigate("/login");
+  }
+  return <Button onClick={clickHandler}>로그인하러 가기</Button>;
 }
