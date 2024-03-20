@@ -4,9 +4,11 @@ import { HTTPStatusCodes } from "./api";
 
 // User
 // 펫 정보 (홈 화면)
-export const getPet = () => {
-  const url = "/pet";
-  const response = request(HTTPMethods.GET, url);
+// 임시 memberId
+export const getPet = async (memberId) => {
+  const url = `/pet/${memberId}`;
+  const response = await request(HTTPMethods.GET, url);
+  return response.data;
 };
 
 // User
