@@ -31,7 +31,8 @@ pipeline {
                 script {
                     sh 'docker build -t image-frontend .'
                     sh 'docker run -d --name docker-frontend image-frontend'
-                    sh 'sudo docker cp docker-frontend:/voda/dist/. /frontend'
+                    sh 'chmod 777 docker-frontend:/voda/dist'
+                    sh 'docker cp docker-frontend:/voda/dist/. /frontend'
                 }
             }
             post {
