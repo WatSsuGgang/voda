@@ -5,4 +5,4 @@ COPY ./frontend/voda/package*.json .
 RUN npm install
 COPY ./frontend/voda .
 RUN npm run build
-COPY  --from=builder /voda/build /var/www/html
+COPY --from=build /voda/build /var/www/html
