@@ -13,7 +13,7 @@ const Chatbox = styled.div({
 export default function PetTalk(props) {
   return (
     <>
-      <Chatbox>일기 써 줘.</Chatbox>
+      <Chatbox>일기 써주세요..</Chatbox>
     </>
   );
 }
