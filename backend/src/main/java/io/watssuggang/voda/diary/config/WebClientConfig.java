@@ -1,47 +1,45 @@
 package io.watssuggang.voda.diary.config;
 
-import java.net.http.HttpClient;
-import java.net.http.HttpClient.Redirect;
-import java.time.Duration;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.net.http.*;
+import java.net.http.HttpClient.*;
+import java.time.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.*;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ClientHttpConnector;
-import org.springframework.http.client.reactive.JdkClientHttpConnector;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.*;
+import org.springframework.http.client.reactive.*;
+import org.springframework.web.reactive.function.client.*;
 
 @Configuration
 public class WebClientConfig {
 
-  @Value("${claude.x-api-key}")
-  private String xApiKey;
+    @Value("${Claude.x-api-key}")
+    private String xApiKey;
+    @Value("${Claude.anthropic-version}")
+    private String anthropicVersion;
 
-  @Value("${claude.anthropic-version}")
-  private String anthropicVersion;
-
-  private HttpHeaders chatHeaders() {
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("x-api-key", xApiKey);
-    headers.add("anthropic-version", anthropicVersion);
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    return headers;
-  }
-
-  @Bean
-  public WebClient chatClient() {
-    HttpClient httpClient = HttpClient.newBuilder()
+    private static final HttpClient httpClient = HttpClient.newBuilder()
         .followRedirects(Redirect.NORMAL)
         .connectTimeout(Duration.ofSeconds(20))
         .build();
 
-    ClientHttpConnector connector = new JdkClientHttpConnector(httpClient);
+    private static final ClientHttpConnector connector = new JdkClientHttpConnector(httpClient);
 
-    return WebClient.builder()
-        .clientConnector(connector)
-        .baseUrl("https://api.anthropic.com/v1/messages")
-        .defaultHeaders(httpHeaders -> httpHeaders.addAll(chatHeaders()))
-        .build();
-  }
+    private HttpHeaders chatHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("x-api-key", xApiKey);
+        headers.add("anthropic-version", anthropicVersion);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
+    }
+
+    @Bean
+    public WebClient chatClient() {
+        return WebClient.builder()
+            .clientConnector(connector)
+            .baseUrl("https://api.anthropic.com/v1/messages")
+            .defaultHeaders(httpHeaders -> httpHeaders.addAll(chatHeaders()))
+            .build();
+    }
+
 }

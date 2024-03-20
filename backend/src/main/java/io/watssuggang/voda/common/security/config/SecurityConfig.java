@@ -59,7 +59,8 @@ public class SecurityConfig {
                         new AntPathRequestMatcher("/token/refresh"),
                         new AntPathRequestMatcher("/token/logout")
                     ).permitAll()
-                    .anyRequest().authenticated()   // 그 외의 모든 요청은 인증이 필요하다
+                    //.anyRequest().authenticated()   // 그 외의 모든 요청은 인증이 필요하다
+                    .anyRequest().permitAll()
             )
 
             // oauth2 설정
