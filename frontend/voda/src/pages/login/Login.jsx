@@ -38,7 +38,7 @@ const Login = () => {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      navigate("/");
+      navigate("/pet");
     } else {
       navigate(`/oauth2/authorization/${e.target.id}`);
     }

@@ -32,12 +32,15 @@ const Wrapper = styled.div`
 `;
 
 function App() {
-  const accessToken = localStorage.getItem("accessToken");
   const { isLoggedIn } = useStore();
   if (isLoggedIn) {
     return (
       <div>
         <Routes>
+          <Route path="/intro" element={<Introduction />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/login/nickname" element={<Nickname />}></Route>
+          <Route path="/login-success" element={<LoginSuccess />}></Route>
           <Route path="/pet" element={<PetPage />}></Route>
           <Route path="/pet/shop" element={<PetShopPage />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
@@ -49,15 +52,13 @@ function App() {
           <Route path="/voice/record" element={<Record />}></Route>
           <Route path="/voice/check" element={<CheckChat />}></Route>
         </Routes>
-        <Wrapper>
-          <NavBar />
-        </Wrapper>
+        <Wrapper>{/* <NavBar /> */}</Wrapper>
       </div>
     );
   } else {
     return (
       <Routes>
-        <Route path="/" element={<Introduction />}></Route>
+        <Route path="/intro" element={<Introduction />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/login/nickname" element={<Nickname />}></Route>
         <Route path="/login-success" element={<LoginSuccess />}></Route>
