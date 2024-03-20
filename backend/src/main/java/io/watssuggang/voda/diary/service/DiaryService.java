@@ -2,6 +2,7 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.*;
 import io.watssuggang.voda.diary.dto.res.*;
+import java.time.*;
 import java.util.*;
 
 public interface DiaryService {
@@ -12,6 +13,13 @@ public interface DiaryService {
 
     void createDiary(List<TalkReq> talkList, int diaryId);
 
+    DiaryDetailResponse getDiaryDetail(int memberId, int id);
+
+    List<DiaryDetailResponse> getDiaryList(LocalDateTime start, LocalDateTime end, String emotion,
+        int memberId);
+
+    void addFile(int id, String url);
+
 //  String fileToString(File file) throws IOException; //STT 호출
-    
+
 }
