@@ -32,7 +32,7 @@ pipeline {
                     sh 'docker stop docker-nginx'
                     sh 'docker build -t image-frontend .'
                     sh 'docker run -d --name docker-frontend image-frontend'
-                    sh 'docker cp docker-frontend:/voda/dist/ /frontend'
+                    sh 'docker cp docker-frontend:/voda/dist/. /frontend'
                     sh 'docker restart docker-nginx'
                 }
             }
