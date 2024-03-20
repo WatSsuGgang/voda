@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 const Container = styled.div`
   margin: 3vh 1vh;
@@ -8,6 +8,14 @@ const Container = styled.div`
 
 const ChatBox = (props) => {
   // 음성 일기 더미 데이터. 화면 이동할 때, props로 넘겨주는 방식으로 구현 예정.
+  // const questions = []
+  // const answers =[]
+  // useEffect(() => {
+  //   props.map(data => {
+  //    questions.push(data[q])
+  //    answers.push(data[a])
+  //   })
+  // }, [])
   const questions = [
     "오늘 하루는 어땠어?",
     "왜 기분이 안 좋았어?",
