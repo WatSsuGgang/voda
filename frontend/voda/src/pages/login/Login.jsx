@@ -40,6 +40,7 @@ const Login = () => {
     if (accessToken) {
       navigate("/pet");
     } else {
+      window.location.href = "/oauth2/authorization/${e.target.id}";
       navigate(`/oauth2/authorization/${e.target.id}`);
     }
   }

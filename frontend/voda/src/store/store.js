@@ -12,9 +12,6 @@ const store = (set, get) => ({
       "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Nerd%20Face.png",
   },
   editAllow: true,
-  isLoggedIn: true,
-  nickname: "갓소민",
-  setIsLoggedIn: (state) => set({ isLoggedIn: state }),
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
   },
