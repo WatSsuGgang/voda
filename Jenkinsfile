@@ -28,7 +28,6 @@ pipeline {
             steps {
                 echo 'Build Npm'
                 script {
-                    sh 'ls'
                     sh 'docker build -t image-frontend .'
                     sh 'docker run --rm -v html:/voda/dist --name docker-frontend image-frontend'
                 }
