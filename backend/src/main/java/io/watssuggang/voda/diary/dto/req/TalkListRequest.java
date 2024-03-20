@@ -9,11 +9,11 @@ import lombok.*;
 public class TalkListRequest {
 
     private int diaryId;
-    private List<Talk> talk_list;
+    private List<TalkReq> talk_list;
 
     @Getter
     @ToString
-    public static class Talk {
+    public static class TalkReq {
 
         private String q;
         private String a;

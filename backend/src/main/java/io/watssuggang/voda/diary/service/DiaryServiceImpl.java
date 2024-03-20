@@ -5,6 +5,7 @@ import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.diary.domain.*;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.*;
+import io.watssuggang.voda.diary.dto.req.TalkListRequest.*;
 import io.watssuggang.voda.diary.dto.res.*;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.*;
 import io.watssuggang.voda.diary.exception.*;
@@ -13,11 +14,13 @@ import io.watssuggang.voda.diary.util.*;
 import java.util.*;
 import java.util.stream.*;
 import lombok.*;
+import lombok.extern.slf4j.*;
 import org.json.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.reactive.function.client.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 
@@ -58,6 +61,7 @@ public class DiaryServiceImpl implements DiaryService {
             .toList();
 
         Map<String, Object> resultMap = new HashMap<>();
+
         resultMap.put("talk_list", talkList);
 
         return resultMap;
@@ -66,12 +70,13 @@ public class DiaryServiceImpl implements DiaryService {
 
     // 다이어리 생성
     @Override
-    public void createDiary(List<TalkListRequest.Talk> talkList, int diaryId) {
+    public void createDiary(List<TalkReq> talkList, int diaryId) {
 
         String allAnswers = talkList.stream()
-            .map(TalkListRequest.Talk::getA) // Talk 객체에서 answer만 추출
+            .map(TalkListRequest.TalkReq::getA) // Talk 객체에서 answer만 추출
             .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
-        System.out.println(allAnswers);
+
+        log.info("답변만 모아놓기: " + allAnswers);
 
         ContentDTO completedDiary = callClaude(allAnswers);
 
@@ -81,7 +86,9 @@ public class DiaryServiceImpl implements DiaryService {
             throw new DiaryNotCreateException();
         }
 
-        System.out.println(answerText);
+        log.info("---Claude의 답변---");
+        log.info(answerText);
+
         JSONObject jsonObject = new JSONObject(answerText);
         String title = jsonObject.getString("title");
         String content = jsonObject.getString("diary");
@@ -95,25 +102,6 @@ public class DiaryServiceImpl implements DiaryService {
             .build();
 
         diaryRepository.save(diary);
-    }
-
-    @Override
-    public void ilgoo(ChatReq chatReq, int i) {
-        Diary diary = diaryRepository.findById(i).orElseThrow(DiaryNotFoundException::new);
-
-        Talk talk = Talk.builder()
-            .diary(diary)
-            .talkSpeaker("01")
-            .talkContent(chatReq.getA()).build();
-
-        Talk talk2 = Talk.builder()
-            .diary(diary)
-            .talkSpeaker("02")
-            .talkContent(chatReq.getQ()).build();
-
-        talkRepository.save(talk2);
-        talkRepository.save(talk);
-
     }
 
     //Claude에게 API 요청해서 일기 제목, 내용, 감정을 받음

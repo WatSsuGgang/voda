@@ -24,24 +24,17 @@ public class DiaryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList) {
-        diaryService.createDiary(talkList.getTalk_list(), talkList.getDiaryId());
         System.out.println("일기 생성 컨트롤러 들어옴!!!");
+        diaryService.createDiary(talkList.getTalk_list(), talkList.getDiaryId());
 
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/chat/{id}")
-    public ResponseEntity<Map<String, Object>> getChatList(@PathVariable int id) {
+    @GetMapping("/talk/{id}")
+    public ResponseEntity<Map<String, Object>> getTalkList(@PathVariable int id) {
         System.out.println("채팅 리스트 받기");
         Map<String, Object> chatList = diaryService.getChatList(id);
 
         return ResponseEntity.ok(chatList);
-    }
-
-    @PostMapping("/ilgoo")
-    public ResponseEntity<?> ilgoo(@RequestBody ChatReq chatReq) {
-        System.out.println(chatReq.toString());
-        diaryService.ilgoo(chatReq, 1);
-        return ResponseEntity.ok().build();
     }
 }
