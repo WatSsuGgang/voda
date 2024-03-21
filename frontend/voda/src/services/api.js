@@ -44,7 +44,7 @@ export const request = async (method, url, data = {}) => {
     const status = response.status;
     if (status === HTTPStatusCodes.OK) {
       // 응답코드가 200일 경우 로직
-      console.log(response);
+      // console.log(response);
       return response;
     } else {
       // 응답코드가 200이 아닐 경우 로직
@@ -57,7 +57,8 @@ export const request = async (method, url, data = {}) => {
   } catch (error) {
     // 에러 로직
     console.error(error);
-    return "ERROR!";
+
+    return "error";
   }
 };
 
