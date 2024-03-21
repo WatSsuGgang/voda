@@ -41,6 +41,8 @@ const Login = () => {
       navigate("/pet");
     } else {
       const base_url = import.meta.env.VITE_API_URL;
+      console.log(base_url);
+      console.log(base_url + `/oauth2/authorization/${e.target.id}`);
       window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
     }
   }
