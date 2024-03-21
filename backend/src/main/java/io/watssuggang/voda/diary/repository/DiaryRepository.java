@@ -1,12 +1,11 @@
 package io.watssuggang.voda.diary.repository;
 
-import io.watssuggang.voda.diary.domain.Diary;
-import java.time.LocalDateTime;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import io.watssuggang.voda.diary.domain.*;
+import java.time.*;
+import java.util.*;
+import org.springframework.data.jpa.repository.*;
 
-public interface DiaryRepository extends JpaRepository<Diary, Integer> {
+public interface DiaryRepository extends JpaRepository<Diary, Integer>, DiaryCustomRepository {
 
     @Query("SELECT COUNT(d) FROM Diary d WHERE d.member.pet.petId = :petId AND d.createdAt >= :createdAt")
     Integer countDiaryByPetIdAndAfterToday(Integer petId, LocalDateTime createdAt);
