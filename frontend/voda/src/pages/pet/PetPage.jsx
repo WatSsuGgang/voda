@@ -5,23 +5,28 @@ import MiddleComponent from "../../components/pet/MiddleComponent";
 import Pet from "../../components/pet/Pet";
 import PetTalk from "../../components/pet/PetTalk";
 import { getPet } from "../../services/pet";
+import usePetStore from "../../store/petStore";
+import { CircularProgress } from "@mui/material";
 
 // data 형식
 // data = {owned: [], pet: {emotion: "JOY", exp: 0, isEvolution: false, isFeed: true}}
 const PetPage = () => {
-  const [owned, setOwned] = useState([]);
-  const [emotion, setEmotion] = useState(null);
-  const [exp, setExp] = useState(null);
-  const [isEvolution, setIsEvolution] = useState(null);
-  const [isFeed, setIsFeed] = useState(null);
-  const [level, setLevel] = useState(null);
-  const [name, setName] = useState(null);
-  const [petAppearance, setPetAppearance] = useState(null);
-  const [petId, setPetId] = useState(null);
-  const [stage, setStage] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const {
+    setOwned,
+    setEmotion,
+    setExp,
+    setIsEvolution,
+    setIsFeed,
+    setLevel,
+    setName,
+    setPetAppearance,
+    setPetId,
+    setStage,
+  } = usePetStore();
   useEffect(() => {
     // 임시 memberId
+
     const fetchData = async () => {
       try {
         const response = await getPet(1);
@@ -35,6 +40,7 @@ const PetPage = () => {
         setPetAppearance(response.pet.petAppearance);
         setPetId(response.pet.petId);
         setStage(response.pet.stage);
+        setIsLoading(false);
         return response;
       } catch (error) {
         console.error(error);
@@ -54,22 +60,28 @@ const PetPage = () => {
         alignItems: "center",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "0.5rem",
-        }}
-      >
-        <TopBar />
-        <TopComponent />
-        <MiddleComponent />
-      </div>
-      <Pet />
-      <PetTalk />
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <TopBar />
+            <TopComponent />
+            <MiddleComponent />
+          </div>
+          <Pet />
+          <PetTalk />
+        </>
+      )}
     </div>
   );
 };
