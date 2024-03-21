@@ -53,13 +53,14 @@ public class SecurityConfig {
 
             // request 인증, 인가 설정
             .authorizeHttpRequests(request ->
-                request.requestMatchers(
-                        new AntPathRequestMatcher("/auth/login"),
-                        new AntPathRequestMatcher("/auth/signup"),
-                        new AntPathRequestMatcher("/token/refresh"),
-                        new AntPathRequestMatcher("/token/logout")
-                    ).permitAll()
-                    .anyRequest().authenticated()   // 그 외의 모든 요청은 인증이 필요하다
+                    request.requestMatchers(
+                            new AntPathRequestMatcher("/auth/login"),
+                            new AntPathRequestMatcher("/auth/signup"),
+                            new AntPathRequestMatcher("/token/refresh"),
+                            new AntPathRequestMatcher("/token/logout")
+                        ).permitAll()
+                        .anyRequest().authenticated()   // 그 외의 모든 요청은 인증이 필요하다
+                //.anyRequest().permitAll()
             )
 
             // oauth2 설정

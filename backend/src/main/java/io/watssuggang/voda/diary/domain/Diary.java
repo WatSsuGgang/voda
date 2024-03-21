@@ -1,11 +1,10 @@
 package io.watssuggang.voda.diary.domain;
 
-import io.watssuggang.voda.common.domain.BaseEntity;
-import io.watssuggang.voda.common.enums.Emotion;
-import io.watssuggang.voda.member.domain.Member;
+import io.watssuggang.voda.common.domain.*;
+import io.watssuggang.voda.common.enums.*;
+import io.watssuggang.voda.member.domain.*;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import lombok.*;
 
 @Entity
@@ -52,7 +51,9 @@ public class Diary extends BaseEntity {
     }
 
     @Builder
-    public Diary(String diaryContent, String diarySummary, Emotion diaryEmotion, Member member) {
+    public Diary(int diaryId, String diaryContent, String diarySummary, Emotion diaryEmotion,
+        Member member) {
+        this.diaryId = diaryId;
         this.diaryContent = diaryContent;
         this.diarySummary = diarySummary;
         this.diaryEmotion = diaryEmotion;

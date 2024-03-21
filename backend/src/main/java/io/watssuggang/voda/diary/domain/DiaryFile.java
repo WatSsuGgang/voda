@@ -1,15 +1,10 @@
 package io.watssuggang.voda.diary.domain;
 
-import io.watssuggang.voda.common.domain.File;
-import io.watssuggang.voda.common.enums.FileType;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.*;
+import io.watssuggang.voda.common.domain.*;
+import io.watssuggang.voda.common.enums.*;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @DiscriminatorValue("d")
@@ -19,6 +14,7 @@ public class DiaryFile extends File {
 
     @ManyToOne
     @JoinColumn(name = "diary_id")
+    @JsonIgnore
     private Diary diary;
 
     public void addDiary(Diary diary) {
