@@ -1,7 +1,7 @@
 package io.watssuggang.voda.common.exception;
 
-import lombok.*;
-import org.springframework.http.*;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {

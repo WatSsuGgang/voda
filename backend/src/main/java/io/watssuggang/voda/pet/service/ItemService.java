@@ -29,7 +29,7 @@ public class ItemService {
 
     public ItemResponse updateItem(Integer itemId, ItemUpdateRequest updateRequest) {
         Item findItem = itemRepository.findById(itemId)
-                .orElseThrow(ItemNotFoundException::new);
+            .orElseThrow(ItemNotFoundException::new);
 
         findItem.update(updateRequest);
 
@@ -46,6 +46,6 @@ public class ItemService {
         List<Item> findAllItem = itemRepository.findAll();
 
         return findAllItem.stream().map(ItemResponse::of)
-                .toList();
+            .toList();
     }
 }

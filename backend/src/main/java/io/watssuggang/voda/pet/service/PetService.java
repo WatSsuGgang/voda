@@ -67,27 +67,27 @@ public class PetService {
 
         // 감정별 일기 최신 값
         Map<Emotion, Optional<Diary>> latestDiariesByEmotion = diaries.stream()
-                .collect(Collectors.groupingBy(Diary::getDiaryEmotion,
-                        Collectors.maxBy(Comparator.comparing(Diary::getModifiedAt))));
+            .collect(Collectors.groupingBy(Diary::getDiaryEmotion,
+                Collectors.maxBy(Comparator.comparing(Diary::getModifiedAt))));
 
         // 감정별 일기 수
         Map<Emotion, Long> emotionCount = diaries.stream()
-                .collect(Collectors.groupingBy(Diary::getDiaryEmotion, Collectors.counting()));
+            .collect(Collectors.groupingBy(Diary::getDiaryEmotion, Collectors.counting()));
 
         // 최대 감정 수 및 최신 감정 찾기
         Optional<Entry<Emotion, Long>> findDiary = emotionCount.entrySet().stream()
-                .max(Comparator.comparing((Entry<Emotion, Long> entry) -> {
-                    Emotion emotion = entry.getKey();
-                    Long count = entry.getValue();
-                    Optional<Diary> recentDiary = latestDiariesByEmotion.get(emotion);
-                    // 감정 개수와 최신 일기의 modifiedAt 값을 합쳐서 비교
-                    // 최신 일기가 없는 경우에는 감정 개수만으로 비교
-                    return recentDiary.map(diary -> count +
-                                    diary.getModifiedAt()
-                                            .toInstant(ZoneOffset.UTC)
-                                            .toEpochMilli())
-                            .orElse(count);
-                }));
+            .max(Comparator.comparing((Entry<Emotion, Long> entry) -> {
+                Emotion emotion = entry.getKey();
+                Long count = entry.getValue();
+                Optional<Diary> recentDiary = latestDiariesByEmotion.get(emotion);
+                // 감정 개수와 최신 일기의 modifiedAt 값을 합쳐서 비교
+                // 최신 일기가 없는 경우에는 감정 개수만으로 비교
+                return recentDiary.map(diary -> count +
+                        diary.getModifiedAt()
+                            .toInstant(ZoneOffset.UTC)
+                            .toEpochMilli())
+                    .orElse(count);
+            }));
 
         // 일기를 안쓰고 진화 조건 충족
         if (findDiary.isEmpty()) {
@@ -99,9 +99,9 @@ public class PetService {
             long highestEmotionCount = entry.getValue();
             // 감정에 따라 다른 동물
             return PetAppearance.findAppearanceByEmotionAndCount(
-                    emotion,
-                    highestEmotionCount == diaries.size(),
-                    LocalDateTime.now().getHour() % 2 == 0
+                emotion,
+                highestEmotionCount == diaries.size(),
+                LocalDateTime.now().getHour() % 2 == 0
             );
         }).orElseThrow(RuntimeException::new);
     }
@@ -110,14 +110,14 @@ public class PetService {
         Pet pet = getVerifyPetByPetId(petId);
 
         Optional.of(updateRequest.getName())
-                .ifPresent(pet::updateName);
+            .ifPresent(pet::updateName);
 
         return PetResponse.of(pet);
     }
 
     public PetTalkResponse getTalk(Integer petId) {
         Pet pet = petRepository.findById(petId)
-                .orElseThrow(RuntimeException::new);
+            .orElseThrow(RuntimeException::new);
 
         int count = diaryRepository.countDiaryByPetIdAndAfterToday(petId, DateUtil.getTodayDate());
 
@@ -142,16 +142,16 @@ public class PetService {
 
     public Integer createTalk(PetTalkRequest request) {
         PetTalk petTalk = PetTalk.builder()
-                .petTalk(request.getTalk())
-                .petStatus(request.getStatus())
-                .build();
+            .petTalk(request.getTalk())
+            .petStatus(request.getStatus())
+            .build();
         verifyPetTalk(petTalk);
         return petTalkRepository.save(petTalk).getPetTalkId();
     }
 
     private void verifyPetTalk(PetTalk petTalk) {
         if (petTalkRepository.existsPetTalkByPetTalkAndPetStatus(petTalk.getPetTalk(),
-                petTalk.getPetStatus())) {
+            petTalk.getPetStatus())) {
             throw new RuntimeException();
         }
     }
@@ -160,18 +160,18 @@ public class PetService {
         Pet pet = getVerifyPetByMemberId(memberId);
 
         return PetHomeResponse.of(
-                PetResponse.of(pet),
-                ownService.getAllOwnByMember(memberId)
+            PetResponse.of(pet),
+            ownService.getAllOwnByMember(memberId)
         );
     }
 
     public Pet getVerifyPetByMemberId(Integer memberId) {
         return petRepository.findByMember_MemberId(memberId)
-                .orElseThrow(RuntimeException::new);
+            .orElseThrow(RuntimeException::new);
     }
 
     public Pet getVerifyPetByPetId(Integer petId) {
         return petRepository.findByMember_MemberId(petId)
-                .orElseThrow(RuntimeException::new);
+            .orElseThrow(RuntimeException::new);
     }
 }

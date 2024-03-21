@@ -1,14 +1,16 @@
 package io.watssuggang.voda.diary.config;
 
-import java.net.http.*;
-import java.net.http.HttpClient.*;
-import java.time.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.*;
-import org.springframework.http.client.reactive.*;
-import org.springframework.web.reactive.function.client.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.http.client.reactive.JdkClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {

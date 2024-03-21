@@ -19,7 +19,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemResponse> createItem(
-            @RequestBody @Valid ItemRequest postRequest
+        @RequestBody @Valid ItemRequest postRequest
     ) {
         ItemResponse item = itemService.createItem(postRequest);
         return ResponseEntity.ok(item);
@@ -27,8 +27,8 @@ public class ItemController {
 
     @PatchMapping("{item-id}")
     public ResponseEntity<?> createItem(
-            @RequestBody @Valid ItemUpdateRequest updateRequest,
-            @PathVariable("item-id") Integer itemId
+        @RequestBody @Valid ItemUpdateRequest updateRequest,
+        @PathVariable("item-id") Integer itemId
     ) {
         ItemResponse itemResponse = itemService.updateItem(itemId, updateRequest);
         return ResponseEntity.ok(itemResponse);

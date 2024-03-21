@@ -1,8 +1,8 @@
 package io.watssuggang.voda.common.jwt.config;
 
-import lombok.*;
-import org.springframework.boot.context.properties.*;
-import org.springframework.stereotype.*;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Data
 @Component
