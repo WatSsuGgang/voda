@@ -52,8 +52,8 @@ public class PetController {
 
     @PatchMapping("{pet-id}")
     public ResponseEntity<?> updateInfo(
-            @PathVariable("pet-id") Integer petId,
-            @RequestBody PetUpdateRequest updateRequest
+        @PathVariable("pet-id") Integer petId,
+        @RequestBody PetUpdateRequest updateRequest
     ) {
         PetResponse petResponse = petService.update(petId, updateRequest);
         return ResponseEntity.ok(petResponse);

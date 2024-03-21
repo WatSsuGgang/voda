@@ -1,9 +1,9 @@
 package io.watssuggang.voda.common.jwt.repository;
 
 
-import io.watssuggang.voda.common.jwt.dto.*;
-import java.util.*;
-import org.springframework.data.repository.*;
+import io.watssuggang.voda.common.jwt.dto.RefreshToken;
+import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -23,7 +23,6 @@ public class MyPageController {
     public ResponseEntity<?> getMemberInfo() throws Exception {
         // TODO: jwt에 있는 값을 바로 리턴하고, 필요 시 Authentication에서 id을 읽어와서 동작하도록 수정
         String nickname = "nickname";
-
         return ResponseEntity.ok(nickname);
     }
 

@@ -35,7 +35,7 @@ public class ItemService {
 
     public ItemResponse updateItem(Integer itemId, ItemUpdateRequest updateRequest) {
         Item findItem = itemRepository.findById(itemId)
-                .orElseThrow(ItemNotFoundException::new);
+            .orElseThrow(ItemNotFoundException::new);
 
         findItem.update(updateRequest);
 
@@ -52,7 +52,7 @@ public class ItemService {
         List<? extends Item> findAllItem = itemQueryRepository.findAllItemByCategory(category);
 
         return findAllItem.stream().map(ItemResponse::of)
-                .toList();
+            .toList();
     }
 
     public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {

@@ -1,8 +1,6 @@
 package io.watssuggang.voda.pet.domain;
 
-import static io.watssuggang.voda.common.constant.Constant.MAX_EXP;
-import static io.watssuggang.voda.common.constant.Constant.MAX_STAGE1_LEVEL;
-import static io.watssuggang.voda.common.constant.Constant.MAX_STAGE2_LEVEL;
+import static io.watssuggang.voda.common.constant.Constant.*;
 
 import io.watssuggang.voda.common.domain.BaseEntity;
 import io.watssuggang.voda.common.enums.Emotion;
@@ -64,7 +62,7 @@ public class Pet extends BaseEntity {
             this.petExp = (byte) (this.petExp - MAX_EXP);
             this.petLevel++;
             if (this.petLevel.equals(MAX_STAGE1_LEVEL) ||
-                    this.petLevel.equals(MAX_STAGE2_LEVEL)) {
+                this.petLevel.equals(MAX_STAGE2_LEVEL)) {
                 return Optional.of(++this.petStage);
             }
             return Optional.of(this.petStage);

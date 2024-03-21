@@ -1,15 +1,17 @@
 package io.watssuggang.voda.diary.controller;
 
-import io.watssuggang.voda.common.security.annotation.*;
-import io.watssuggang.voda.common.security.dto.*;
-import io.watssuggang.voda.diary.dto.req.*;
-import io.watssuggang.voda.diary.dto.res.*;
-import io.watssuggang.voda.diary.service.*;
-import java.time.*;
-import java.util.*;
-import lombok.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
+import io.watssuggang.voda.common.security.annotation.CurrentUser;
+import io.watssuggang.voda.common.security.dto.SecurityUserDto;
+import io.watssuggang.voda.diary.dto.req.TalkListRequest;
+import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
+import io.watssuggang.voda.diary.service.DiaryService;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import io.watssuggang.voda.diary.dto.req.KarloRequest;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
@@ -64,10 +66,11 @@ public class DiaryController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<DiaryDetailResponse>> getList(@RequestParam LocalDateTime start,
-        @RequestParam LocalDateTime end, String emotion,
+    public ResponseEntity<List<DiaryDetailResponse>> getList(
+        @RequestParam(defaultValue = "") LocalDateTime start,
+        @RequestParam(defaultValue = "") LocalDateTime end,
+        @RequestParam(defaultValue = "NONE") String emotion,
         @CurrentUser SecurityUserDto securityUserDto) {
-        System.out.println("다이어리 리스트 가져오기" + start + " " + end + " " + emotion);
 
         List<DiaryDetailResponse> diaryList = diaryService.getDiaryList(start, end, emotion,
             securityUserDto.getMemberId());

@@ -1,12 +1,11 @@
 package io.watssuggang.voda.diary.service;
 
-import io.watssuggang.voda.diary.dto.req.TalkListRequest.*;
-import io.watssuggang.voda.diary.dto.res.*;
-import java.time.*;
-import java.util.*;
-import io.watssuggang.voda.diary.dto.req.KarloRequest;
-import io.watssuggang.voda.diary.dto.req.KarloResponse;
+import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 public interface DiaryService {
 
