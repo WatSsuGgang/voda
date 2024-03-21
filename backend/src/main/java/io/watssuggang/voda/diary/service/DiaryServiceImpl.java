@@ -5,9 +5,8 @@ import io.watssuggang.voda.common.enums.Emotion;
 import io.watssuggang.voda.common.enums.Speaker;
 import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.domain.Talk;
-import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto;
+import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
-import io.watssuggang.voda.diary.dto.req.TalkListRequest;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.ContentDTO;
@@ -61,10 +60,10 @@ public class DiaryServiceImpl implements DiaryService {
     public KarloResponse createImage(KarloRequest karloRequest) {
         System.out.println(karloRequest);
         return karloClient.post()
-                .bodyValue(karloRequest)
-                .retrieve()
-                .bodyToMono(KarloResponse.class)
-                .block();
+            .bodyValue(karloRequest)
+            .retrieve()
+            .bodyToMono(KarloResponse.class)
+            .block();
     }
 
     @Override
