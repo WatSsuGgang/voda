@@ -13,4 +13,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer>, DiaryCus
     @Query("SELECT d FROM Diary d WHERE d.member.pet.petId=:petId")
     List<Diary> findAllByPetId(Integer petId);
 
+    @Query("SELECT d FROM Diary d WHERE d.member.memberId = :memberId AND MONTH(d.createdAt) = MONTH (CURRENT_DATE())")
+    List<Diary> findAllByMemberAndCreatedAtAfterCurrentMonth(Integer memberId);
 }
