@@ -1,65 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStore from "../../store/store";
 import styled from "styled-components";
 import FilteringBox from "../../components/diary/FilteringBox";
 import FilterdDiaryList from "../../components/diary/FilterdDiaryList";
+import { getDiaryList } from "../../services/diarylist";
 const Title = styled.h3`
   text-align: center;
 `;
+const Container = styled.div`
+  max-height: 70vh;
+  overflow-y: scroll;
+  margin-top: 10%;
+`;
 const DiaryList = () => {
-  const diaries = [
-    {
-      id: 1,
-      title: "힘들어서 한 잔 했습니다",
-      date: "2020-01-01",
-      emotion: "sad",
-      content:
-        "하... 인생이 많이 쓰다. 오늘은 술 한 잔 했다. 술이 달게 느껴진다. 진호는 왜 이렇게 잘 마시는거야? 피파 잘 하고 싶다. 가지 덮밥 생각보다 맛있다. Skrrr",
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRavVXxGrKkOn7bp0JcTSNO8yBlXnw4fihPPg&usqp=CAU",
-    },
-    {
-      id: 2,
-      title: "힘들어서 한 잔 했습니다",
-      date: "2020-01-01",
-      emotion: "sad",
-      content:
-        "하... 인생이 많이 쓰다. 오늘은 술 한 잔 했다. 술이 달게 느껴진다. 진호는 왜 이렇게 잘 마시는거야? 피파 잘 하고 싶다. 가지 덮밥 생각보다 맛있다. Skrrr",
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRavVXxGrKkOn7bp0JcTSNO8yBlXnw4fihPPg&usqp=CAU",
-    },
-    {
-      id: 3,
-      title: "힘들어서 한 잔 했습니다",
-      date: "2020-10-11",
-      emotion: "sad",
-      content:
-        "하... 인생이 많이 쓰다. 오늘은 술 한 잔 했다. 술이 달게 느껴진다. 진호는 왜 이렇게 잘 마시는거야? 피파 잘 하고 싶다. 가지 덮밥 생각보다 맛있다. Skrrr",
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRavVXxGrKkOn7bp0JcTSNO8yBlXnw4fihPPg&usqp=CAU",
-    },
-  ];
   const store = useStore();
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [emotion, setEmotion] = useState("");
+  const [startDate, setStartDate] = useState("2019-05-30");
+  const [endDate, setEndDate] = useState("2024-03-21");
+  const [emotion, setEmotion] = useState("SADNESS");
+  const [diaryList, setDiaryList] = useState([]);
 
-  const filterDiaries = diaries.filter((diary) => {
-    let start = true;
-    let end = true;
-    let emo = true;
-    const diaryDate = new Date(diary.date);
-    if (startDate) {
-      start = diaryDate >= new Date(startDate);
-    }
-    if (endDate) {
-      end = diaryDate <= new Date(endDate);
-    }
-    if (emotion) {
-      emo = diary.emotion === emotion;
-    }
-    return start && end && emo;
-  });
+  const getDiaries = async (start, end, emo) => {
+    const res = await getDiaryList(start, end, emo);
+    setDiaryList(res.data);
+  };
+
+  useEffect(() => {
+    const start = startDate + "T00:00:00";
+    const end = endDate + "T23:59:59";
+    const emo = emotion;
+    getDiaries(start, end, emo);
+  }, [startDate, endDate, emotion]);
+
   return (
     <div>
       <Title>{store.nickname}님의 일기를 확인해보세요</Title>
@@ -71,9 +42,9 @@ const DiaryList = () => {
             setEmotion={setEmotion}
           />
         </div>
-        <div style={{ marginTop: "10%" }}>
-          <FilterdDiaryList diaries={filterDiaries} />
-        </div>
+        <Container>
+          <FilterdDiaryList diaries={diaryList} />
+        </Container>
       </div>
     </div>
   );
