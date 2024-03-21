@@ -34,6 +34,20 @@ const ButtonContainer = styled.div({
 const Login = () => {
   const navigate = useNavigate();
 
+  async function getIlgoo(target) {
+    const api = import.meta.env.VITE_API_URL;
+    const url = api + `/oauth2/authorization/${target}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    
+    const data = await response.json();
+    console.log(data);
+  }
+
   function onClickHandler(e) {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
@@ -44,6 +58,8 @@ const Login = () => {
       console.log(base_url);
       console.log(base_url + `/oauth2/authorization/${e.target.id}`);
       window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
+
+      getIlgoo(e.target.id)
     }
   }
   return (
