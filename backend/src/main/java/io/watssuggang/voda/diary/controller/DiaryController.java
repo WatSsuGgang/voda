@@ -11,6 +11,13 @@ import lombok.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
+import io.watssuggang.voda.diary.dto.req.KarloRequest;
+import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.service.DiaryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/diary")
@@ -25,6 +32,10 @@ public class DiaryController {
         return ResponseEntity.ok(result.getContent().get(0).getText());
     }
 
+    @PostMapping("/createImage")
+    public ResponseEntity<?> createImageByKarlo(@RequestBody KarloRequest karloRequest) {
+        return ResponseEntity.ok(diaryService.createImage(karloRequest));
+    }
     @PostMapping("/create")
     public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList) {
         System.out.println("일기 생성 컨트롤러 들어옴!!!");

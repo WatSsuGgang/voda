@@ -1,26 +1,31 @@
 package io.watssuggang.voda.diary.service;
 
 
-import io.watssuggang.voda.common.enums.*;
-import io.watssuggang.voda.diary.domain.*;
+import io.watssuggang.voda.common.enums.Emotion;
+import io.watssuggang.voda.common.enums.Speaker;
+import io.watssuggang.voda.diary.domain.Diary;
+import io.watssuggang.voda.diary.domain.Talk;
 import io.watssuggang.voda.diary.dto.req.*;
-import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.*;
-import io.watssuggang.voda.diary.dto.req.TalkListRequest.*;
-import io.watssuggang.voda.diary.dto.res.*;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.*;
-import io.watssuggang.voda.diary.exception.*;
-import io.watssuggang.voda.diary.repository.*;
-import io.watssuggang.voda.diary.util.*;
-import java.time.*;
+import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
+import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
+import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.ContentDTO;
+import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
+import io.watssuggang.voda.diary.exception.DiaryNotCreateException;
+import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
+import io.watssuggang.voda.diary.repository.DiaryRepository;
+import io.watssuggang.voda.diary.repository.TalkRepository;
+import io.watssuggang.voda.diary.util.PromptHolder;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.*;
-import lombok.*;
-import lombok.extern.slf4j.*;
-import org.json.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.reactive.function.client.*;
-import org.springframework.web.server.*;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
@@ -28,6 +33,7 @@ import org.springframework.web.server.*;
 public class DiaryServiceImpl implements DiaryService {
 
     private final WebClient chatClient;
+    private final WebClient karloClient;
     private final DiaryRepository diaryRepository;
     private final TalkRepository talkRepository;
 
@@ -48,6 +54,16 @@ public class DiaryServiceImpl implements DiaryService {
             .messages(message)
             .build();
         return getChat(reqDto);
+    }
+
+    @Override
+    public KarloResponse createImage(KarloRequest karloRequest) {
+        System.out.println(karloRequest);
+        return karloClient.post()
+                .bodyValue(karloRequest)
+                .retrieve()
+                .bodyToMono(KarloResponse.class)
+                .block();
     }
 
     @Override
