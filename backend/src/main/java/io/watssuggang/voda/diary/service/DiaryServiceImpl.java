@@ -30,7 +30,6 @@ public class DiaryServiceImpl implements DiaryService {
     private final WebClient chatClient;
     private final DiaryRepository diaryRepository;
     private final TalkRepository talkRepository;
-    private final DiaryFileRepository diaryFileRepository;
 
     private DiaryChatResponseDto getChat(DiaryChatRequestDto dto) {
         return chatClient.post()
@@ -58,7 +57,8 @@ public class DiaryServiceImpl implements DiaryService {
         List<Map<String, String>> talkList = talks.stream()
             .map(talk -> {
                 Map<String, String> talkMap = new HashMap<>();
-                String key = talk.getTalkSpeaker().equals("02") ? "q" : "a";
+                String key =
+                    talk.getTalkSpeaker().equals(Speaker.AI) ? "question" : "answer";
                 talkMap.put(key, talk.getTalkContent());
                 return talkMap;
             })
@@ -74,10 +74,10 @@ public class DiaryServiceImpl implements DiaryService {
 
     // 다이어리 생성
     @Override
-    public void createDiary(List<TalkReq> talkList, int diaryId) {
+    public void createDiary(List<TalkRequest> talkList, int diaryId) {
 
         String allAnswers = talkList.stream()
-            .map(TalkListRequest.TalkReq::getA) // Talk 객체에서 answer만 추출
+            .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
             .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
 
         log.info("답변만 모아놓기: " + allAnswers);
@@ -136,21 +136,6 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         return responseList;
-    }
-
-    @Override   // 다이어리 파일 테스트용
-    public void addFile(int id, String url) {
-        Diary d = diaryRepository.findById(id).orElseThrow();
-        DiaryFile diaryFile = DiaryFile.builder()
-            .fileType(FileType.IMG)
-            .fileUrl(url)
-            .build();
-
-        diaryFile.addDiary(d);
-        diaryFileRepository.save(diaryFile);
-
-        d.addDiaryFiles(diaryFile);
-        diaryRepository.save(d);
     }
 
     //Claude에게 API 요청해서 일기 제목, 내용, 감정을 받음

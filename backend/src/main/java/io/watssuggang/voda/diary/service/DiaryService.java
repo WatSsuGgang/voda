@@ -11,14 +11,12 @@ public interface DiaryService {
 
     Map<String, Object> getChatList(int id);
 
-    void createDiary(List<TalkReq> talkList, int diaryId);
+    void createDiary(List<TalkRequest> talkList, int diaryId);
 
     DiaryDetailResponse getDiaryDetail(int memberId, int id);
 
     List<DiaryDetailResponse> getDiaryList(LocalDateTime start, LocalDateTime end, String emotion,
         int memberId);
-
-    void addFile(int id, String url);
 
 //  String fileToString(File file) throws IOException; //STT 호출
 

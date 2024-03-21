@@ -9,14 +9,18 @@ import lombok.*;
 public class TalkListRequest {
 
     private int diaryId;
-    private List<TalkReq> talk_list;
+    private List<TalkRequest> talk_list;
 
     @Getter
     @ToString
-    public static class TalkReq {
+    public static class TalkRequest {
 
-        private String q;
-        private String a;
+        private final String question;
+        private final String answer;
 
+        public TalkRequest(String question, String answer) {
+            this.question = question;
+            this.answer = answer;
+        }
     }
 }

@@ -64,13 +64,4 @@ public class DiaryController {
         return ResponseEntity.ok(diaryList);
     }
 
-    @PostMapping("/ilgoo")
-    public ResponseEntity<Void> ilgooilgoo(@RequestParam int id, @RequestParam String url) {
-
-        System.out.println("다이어리 파일 만드는 일구 테스트");
-        System.out.println(id + " " + url);
-        diaryService.addFile(id, url);
-
-        return ResponseEntity.ok().build();
-    }
 }

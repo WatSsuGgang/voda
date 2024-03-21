@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.*;
 import org.springframework.security.oauth2.core.user.*;
 import org.springframework.security.web.authentication.*;
@@ -19,11 +20,13 @@ import org.springframework.web.util.*;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
+    @Value("${FRONT_URL}")
+    private String redirectURL;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException {
-        String redirectUrl = "https://j10a104.p.ssafy.io/login-success";
+        String Url = redirectURL + "/login-success";
 
         // OAuth2User로 캐스팅하여 인증된 사용자 정보를 가져온다.
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -47,7 +50,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             GeneratedToken token = tokenProvider.generateToken(email, role);
 
             // accessToken을 쿼리스트링에 담는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString(redirectUrl)
+            String targetUrl = UriComponentsBuilder.fromUriString(Url)
                 .queryParam("accessToken", token.getAccessToken())
                 .build()
                 .encode(StandardCharsets.UTF_8)
@@ -57,7 +60,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         } else {
             // 회원이 존재하지 않을경우, 서비스 제공자와 email을 쿼리스트링으로 전달하는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString(redirectUrl)
+            String targetUrl = UriComponentsBuilder.fromUriString(Url)
                 .queryParam("email", (String) oAuth2User.getAttribute("email"))
                 .queryParam("provider", provider)
                 .build()
