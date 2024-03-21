@@ -1,7 +1,6 @@
 package io.watssuggang.voda.diary.service;
 
-
-import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto;
+import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
 import io.watssuggang.voda.diary.util.PromptHolder;
@@ -15,7 +14,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 
-  private final WebClient chatClient;
+    private final WebClient chatClient;
+    private final WebClient karloClient;
 
   private DiaryChatResponseDto getChat(DiaryChatRequestDto dto) {
     return chatClient.post()
@@ -35,6 +35,16 @@ public class DiaryServiceImpl implements DiaryService {
         .build();
     return getChat(reqDto);
   }
+
+    @Override
+    public KarloResponse createImage(KarloRequest karloRequest) {
+        System.out.println(karloRequest);
+        return karloClient.post()
+                .bodyValue(karloRequest)
+                .retrieve()
+                .bodyToMono(KarloResponse.class)
+                .block();
+    }
 
 //  @Override
 //  @SuppressWarnings("resource")

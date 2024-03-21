@@ -20,6 +20,11 @@ public class WebClientConfig {
 
   @Value("${claude.anthropic-version}")
   private String anthropicVersion;
+    private final HttpClient httpClient = HttpClient.newBuilder()
+            .followRedirects(Redirect.NORMAL)
+            .connectTimeout(Duration.ofSeconds(20))
+            .build();
+    private final ClientHttpConnector connector = new JdkClientHttpConnector(httpClient);
 
   private HttpHeaders chatHeaders() {
     HttpHeaders headers = new HttpHeaders();
@@ -36,7 +41,6 @@ public class WebClientConfig {
         .connectTimeout(Duration.ofSeconds(20))
         .build();
 
-    ClientHttpConnector connector = new JdkClientHttpConnector(httpClient);
 
     return WebClient.builder()
         .clientConnector(connector)
