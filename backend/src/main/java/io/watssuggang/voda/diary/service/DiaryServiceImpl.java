@@ -34,6 +34,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class DiaryServiceImpl implements DiaryService {
 
     private final WebClient chatClient;
+    private final WebClient karloClient;
     private final DiaryRepository diaryRepository;
     private final TalkRepository talkRepository;
 
@@ -54,6 +55,16 @@ public class DiaryServiceImpl implements DiaryService {
             .messages(message)
             .build();
         return getChat(reqDto);
+    }
+
+    @Override
+    public KarloResponse createImage(KarloRequest karloRequest) {
+        System.out.println(karloRequest);
+        return karloClient.post()
+                .bodyValue(karloRequest)
+                .retrieve()
+                .bodyToMono(KarloResponse.class)
+                .block();
     }
 
     @Override

@@ -19,11 +19,13 @@ public class WebClientConfig {
     private String xApiKey;
     @Value("${Claude.anthropic-version}")
     private String anthropicVersion;
+    @Value("${Karlo.client-id}")
+    private String clientId;
 
     private static final HttpClient httpClient = HttpClient.newBuilder()
-        .followRedirects(Redirect.NORMAL)
-        .connectTimeout(Duration.ofSeconds(20))
-        .build();
+            .followRedirects(Redirect.NORMAL)
+            .connectTimeout(Duration.ofSeconds(20))
+            .build();
 
     private static final ClientHttpConnector connector = new JdkClientHttpConnector(httpClient);
 
@@ -38,10 +40,26 @@ public class WebClientConfig {
     @Bean
     public WebClient chatClient() {
         return WebClient.builder()
-            .clientConnector(connector)
-            .baseUrl("https://api.anthropic.com/v1/messages")
-            .defaultHeaders(httpHeaders -> httpHeaders.addAll(chatHeaders()))
-            .build();
+                .clientConnector(connector)
+                .baseUrl("https://api.anthropic.com/v1/messages")
+                .defaultHeaders(httpHeaders -> httpHeaders.addAll(chatHeaders()))
+                .build();
     }
 
+    private HttpHeaders karloHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, clientId);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
+    }
+
+    @Bean
+    public WebClient karloClient() {
+        return WebClient.builder()
+                .clientConnector(connector)
+                .baseUrl("https://api.kakaobrain.com/v2/inference/karlo/t2i")
+                .defaultHeaders(httpHeaders -> httpHeaders.addAll(karloHeader()))
+                .build();
+    }
 }
