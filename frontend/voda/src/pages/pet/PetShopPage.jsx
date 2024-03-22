@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Header from "../../components/shop/Header";
 import CategoryBar from "../../components/shop/CategoryBar";
 import ItemList from "../../components/shop/ItemList";
+import usePetStore from "../../store/petStore";
+import { getItem } from "../../services/item";
 
 const Page = styled.div`
   display: flex;
@@ -27,12 +29,22 @@ const TopComponents = styled.div`
   width: 100%;
 `;
 
-const opacity = {
-  food: 0.5,
-  effect: 0.5,
-};
-
 export default function PetShopPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const { currentCategory, items, setItems } = usePetStore();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getItem(currentCategory);
+        console.log(response);
+        setItems(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [currentCategory]);
+
   return (
     <Page>
       <TopComponents>

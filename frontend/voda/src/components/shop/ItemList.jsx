@@ -148,6 +148,8 @@ const Items = {
 export default function ItemList() {
   const { currentCategory } = usePetStore();
   const [items, setItems] = useState(Items.food);
+  const imgBaseURL =
+    "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/";
   useEffect(() => {
     setItems(Items[currentCategory]);
   }, [currentCategory]);
@@ -193,7 +195,7 @@ export default function ItemList() {
                 {item.applied ? (
                   <>
                     <img
-                      src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Check%20Mark.png"
+                      src={`${imgBaseURL}Symbols/Check%20Mark.png`}
                       alt="Check Mark"
                       width="20rem"
                       height="20rem"
@@ -210,7 +212,7 @@ export default function ItemList() {
             ) : (
               <>
                 <img
-                  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Coin.png"
+                  src={`${imgBaseURL}Objects/Coin.png`}
                   alt="Coin"
                   width="20rem"
                   height="20rem"
