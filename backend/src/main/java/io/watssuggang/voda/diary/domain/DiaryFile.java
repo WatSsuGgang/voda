@@ -1,8 +1,8 @@
 package io.watssuggang.voda.diary.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.watssuggang.voda.common.domain.File;
-import io.watssuggang.voda.common.enums.FileType;
+import com.fasterxml.jackson.annotation.*;
+import io.watssuggang.voda.common.domain.*;
+import io.watssuggang.voda.common.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 

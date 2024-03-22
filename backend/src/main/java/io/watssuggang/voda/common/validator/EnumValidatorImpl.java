@@ -20,6 +20,6 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Str
         }
 
         return Arrays.stream(enumClass.getEnumConstants())
-            .anyMatch(e -> e.name().equals(value.toUpperCase()));
+                .anyMatch(e -> e.name().equals(value.toUpperCase()));
     }
 }

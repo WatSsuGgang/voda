@@ -1,7 +1,7 @@
 package io.watssuggang.voda.diary.domain;
 
-import io.watssuggang.voda.common.domain.BaseEntity;
-import io.watssuggang.voda.common.enums.Speaker;
+import io.watssuggang.voda.common.domain.*;
+import io.watssuggang.voda.common.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 

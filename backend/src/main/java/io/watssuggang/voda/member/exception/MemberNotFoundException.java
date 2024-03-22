@@ -1,7 +1,6 @@
 package io.watssuggang.voda.member.exception;
 
-import io.watssuggang.voda.common.exception.BaseException;
-import io.watssuggang.voda.common.exception.ErrorCode;
+import io.watssuggang.voda.common.exception.*;
 
 public class MemberNotFoundException extends BaseException {
 

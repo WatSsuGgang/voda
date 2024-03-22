@@ -1,7 +1,6 @@
 package io.watssuggang.voda.member.dto.req;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @ToString

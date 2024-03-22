@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum PetAppearance implements LabelEnum {
+public enum PetAppearance implements LabelEnum{
 
     EGG("01", "달걀", Emotion.NONE),
     CHICK("02", "병아리", Emotion.NONE),
@@ -32,7 +32,7 @@ public enum PetAppearance implements LabelEnum {
     private final Emotion emotion;
 
     public static PetAppearance findAppearanceByEmotionAndCount(
-        Emotion emotion, boolean isEqualDiaryCount, boolean isEvenHour
+            Emotion emotion, boolean isEqualDiaryCount, boolean isEvenHour
     ) {
         switch (emotion) {
             case JOY -> {

@@ -12,7 +12,7 @@ public class Food extends Item {
 
     @Builder
     public Food(String itemImageUrl, Integer itemPrice, String itemName,
-        ItemCategory itemCategory) {
+            ItemCategory itemCategory) {
         super(itemImageUrl, itemPrice, itemName, itemCategory);
     }
 }

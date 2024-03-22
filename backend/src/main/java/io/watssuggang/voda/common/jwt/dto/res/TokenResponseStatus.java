@@ -1,7 +1,6 @@
 package io.watssuggang.voda.common.jwt.dto.res;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 
 // 토큰 응답 상태값

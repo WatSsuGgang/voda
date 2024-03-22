@@ -1,17 +1,15 @@
 package io.watssuggang.voda.common.security.config;
 
-import io.watssuggang.voda.member.domain.Member;
-import io.watssuggang.voda.member.repository.MemberRepository;
+import io.watssuggang.voda.member.domain.*;
+import io.watssuggang.voda.member.repository.*;
 import java.util.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Service;
+import lombok.*;
+import lombok.extern.slf4j.*;
+import org.springframework.security.core.authority.*;
+import org.springframework.security.oauth2.client.userinfo.*;
+import org.springframework.security.oauth2.core.*;
+import org.springframework.security.oauth2.core.user.*;
+import org.springframework.stereotype.*;
 
 @RequiredArgsConstructor
 @Service

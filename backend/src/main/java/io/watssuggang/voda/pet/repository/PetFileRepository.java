@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface PetFileRepository extends JpaRepository<File, Integer> {
 
     @Query("SELECT pf FROM PetFile pf "
-        + "where pf.petEmotion=:emotion "
-        + "and pf.petStage=:stage ")
+            + "where pf.petEmotion=:emotion "
+            + "and pf.petStage=:stage ")
     Optional<PetFile> findByPetEmotionAndPetStage(Emotion emotion, Byte stage);
 }

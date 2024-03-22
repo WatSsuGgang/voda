@@ -1,12 +1,12 @@
 package io.watssuggang.voda.common.jwt.controller;
 
-import io.watssuggang.voda.common.jwt.dto.res.TokenResponseStatus;
-import io.watssuggang.voda.common.jwt.service.RefreshTokenService;
-import io.watssuggang.voda.common.security.dto.StatusResponseDto;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+import io.watssuggang.voda.common.jwt.dto.res.*;
+import io.watssuggang.voda.common.jwt.service.*;
+import io.watssuggang.voda.common.security.dto.*;
+import lombok.*;
+import lombok.extern.slf4j.*;
+import org.springframework.http.*;
+import org.springframework.util.*;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -31,7 +31,7 @@ public class TokenController {
         @RequestHeader("Authorization") final String accessToken) {
 
         String newAccessToken = tokenService.republishAccessToken(accessToken);
-
+        
         if (StringUtils.hasText(newAccessToken)) {
             return ResponseEntity.ok(TokenResponseStatus.addStatus(200, newAccessToken));
         }

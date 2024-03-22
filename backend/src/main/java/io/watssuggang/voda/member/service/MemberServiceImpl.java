@@ -1,12 +1,12 @@
 package io.watssuggang.voda.member.service;
 
-import io.watssuggang.voda.member.domain.Member;
-import io.watssuggang.voda.member.dto.req.SignUpRequest;
-import io.watssuggang.voda.member.exception.MemberNotFoundException;
-import io.watssuggang.voda.member.repository.MemberRepository;
-import io.watssuggang.voda.pet.domain.Pet;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import io.watssuggang.voda.member.domain.*;
+import io.watssuggang.voda.member.dto.req.*;
+import io.watssuggang.voda.member.exception.*;
+import io.watssuggang.voda.member.repository.*;
+import io.watssuggang.voda.pet.domain.*;
+import lombok.*;
+import org.springframework.stereotype.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +31,6 @@ public class MemberServiceImpl implements MemberService {
             .memberEmail(signUpRequest.getEmail())
             .userRole("USER")
             .memberDiaryCount(0)
-            .memberPoint(10)
             .build();
 
         Pet pet = Pet.builder()

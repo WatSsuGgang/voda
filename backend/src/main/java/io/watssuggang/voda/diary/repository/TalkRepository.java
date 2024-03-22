@@ -1,8 +1,8 @@
 package io.watssuggang.voda.diary.repository;
 
-import io.watssuggang.voda.diary.domain.Talk;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import io.watssuggang.voda.diary.domain.*;
+import java.util.*;
+import org.springframework.data.jpa.repository.*;
 
 public interface TalkRepository extends JpaRepository<Talk, Integer> {
 

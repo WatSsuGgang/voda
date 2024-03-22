@@ -1,12 +1,11 @@
 package io.watssuggang.voda.common.security.handler;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
+import jakarta.servlet.http.*;
+import java.io.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.*;
+import org.springframework.security.web.authentication.*;
+import org.springframework.stereotype.*;
 
 @Component
 public class OAuth2FailureHandler implements AuthenticationFailureHandler {

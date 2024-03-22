@@ -1,7 +1,7 @@
 package io.watssuggang.voda.member.service;
 
-import io.watssuggang.voda.member.domain.Member;
-import io.watssuggang.voda.member.dto.req.SignUpRequest;
+import io.watssuggang.voda.member.domain.*;
+import io.watssuggang.voda.member.dto.req.*;
 
 public interface MemberService {
 

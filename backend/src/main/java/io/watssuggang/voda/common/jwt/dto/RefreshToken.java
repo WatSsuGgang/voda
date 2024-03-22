@@ -1,11 +1,10 @@
 package io.watssuggang.voda.common.jwt.dto;
 
-import jakarta.persistence.Id;
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
+import jakarta.persistence.*;
+import java.io.*;
+import lombok.*;
+import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.index.*;
 
 
 @Getter

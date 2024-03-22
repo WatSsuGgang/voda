@@ -6,7 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class ValidationErrorResponse {
-
     private final Map<String, String> fieldErrors = new HashMap<>();
 
     public void addFieldError(String field, String message) {

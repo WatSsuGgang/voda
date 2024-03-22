@@ -1,6 +1,6 @@
 package io.watssuggang.voda.common.exception;
 
-public class BaseException extends RuntimeException {
+public class BaseException extends RuntimeException{
 
     ErrorCode errorCode;
 

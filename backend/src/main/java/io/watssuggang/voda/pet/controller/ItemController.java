@@ -23,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemResponse> createItem(
-        @RequestBody @Valid ItemRequest postRequest
+            @RequestBody @Valid ItemRequest postRequest
     ) {
         ItemResponse item = itemService.createItem(postRequest);
         return ResponseEntity.ok(item);

@@ -1,7 +1,6 @@
 package io.watssuggang.voda.common.jwt.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor

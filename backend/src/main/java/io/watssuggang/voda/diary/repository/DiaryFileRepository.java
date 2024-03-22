@@ -1,7 +1,7 @@
 package io.watssuggang.voda.diary.repository;
 
-import io.watssuggang.voda.diary.domain.DiaryFile;
-import org.springframework.data.jpa.repository.JpaRepository;
+import io.watssuggang.voda.diary.domain.*;
+import org.springframework.data.jpa.repository.*;
 
 public interface DiaryFileRepository extends JpaRepository<DiaryFile, Integer> {
 

@@ -32,7 +32,7 @@ public class Item extends BaseEntity {
     private ItemCategory itemCategory;
 
     public Item(String itemImageUrl, Integer itemPrice, String itemName,
-        ItemCategory itemCategory) {
+            ItemCategory itemCategory) {
         this.itemImageUrl = itemImageUrl;
         this.itemPrice = itemPrice;
         this.itemName = itemName;
@@ -43,19 +43,19 @@ public class Item extends BaseEntity {
         switch (ItemCategory.valueOf(postRequest.getCategory().toUpperCase())) {
             case EFFECT -> {
                 return Effect.builder()
-                    .itemName(postRequest.getName())
-                    .itemPrice(postRequest.getPrice())
-                    .itemImageUrl(postRequest.getImgUrl())
-                    .itemCategory(ItemCategory.EFFECT)
-                    .build();
+                        .itemName(postRequest.getName())
+                        .itemPrice(postRequest.getPrice())
+                        .itemImageUrl(postRequest.getImgUrl())
+                        .itemCategory(ItemCategory.EFFECT)
+                        .build();
             }
             case FOOD -> {
                 return Food.builder()
-                    .itemName(postRequest.getName())
-                    .itemPrice(postRequest.getPrice())
-                    .itemImageUrl(postRequest.getImgUrl())
-                    .itemCategory(ItemCategory.FOOD)
-                    .build();
+                        .itemName(postRequest.getName())
+                        .itemPrice(postRequest.getPrice())
+                        .itemImageUrl(postRequest.getImgUrl())
+                        .itemCategory(ItemCategory.FOOD)
+                        .build();
             }
         }
         throw new RuntimeException();
@@ -63,8 +63,8 @@ public class Item extends BaseEntity {
 
     public void update(ItemUpdateRequest updateRequest) {
         Optional.ofNullable(updateRequest.getPrice())
-            .ifPresent(price -> this.itemPrice = price);
+                .ifPresent(price -> this.itemPrice = price);
         Optional.ofNullable(updateRequest.getImgUrl())
-            .ifPresent(imgUrl -> this.itemImageUrl = imgUrl);
+                .ifPresent(imgUrl -> this.itemImageUrl = imgUrl);
     }
 }
