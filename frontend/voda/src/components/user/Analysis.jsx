@@ -8,9 +8,9 @@ const Analysis = ({ report }) => {
   return (
     <div>
       {/* <AnalysisCount report={report} /> */}
-      <AnalysisEmotion report={report} />
+      {/* <AnalysisEmotion report={report} /> */}
       {/* <AnalysisDaily report={report} /> */}
-      {/* <AnalysisPet report={report} /> */}
+      <AnalysisPet report={report} />
     </div>
   );
 };

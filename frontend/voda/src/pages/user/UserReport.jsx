@@ -31,8 +31,9 @@ const UserReport = () => {
       },
       weekly_statics: {
         monday: {
-          emotion: "대표 감정",
-          summary: "대표 문구",
+          emotion: "ANGER",
+          summary:
+            "카디건을 걸치고서 계단을 올라 옥상 문을 열었다. 시멘트 바닥과 벽에는 예쁘게 그려놓은 꽃들이 화사하게 피어 있었다.",
         },
       },
       pet_name: "펫 이름",
