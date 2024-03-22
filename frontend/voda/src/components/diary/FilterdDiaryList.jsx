@@ -19,12 +19,12 @@ const Line = styled.div`
 `;
 
 const FilterdDiaryList = ({ diaries }) => {
+  console.log("넘어온 일기: ", diaries);
   const store = useStore();
   const navigate = useNavigate();
-  const goDetail = (id, diary) => {
-    navigate(`${id}`, { state: diary });
+  const goDetail = (id) => {
+    navigate(`${id}`);
   };
-
   if (diaries.length === 0) {
     return (
       <div>
@@ -53,15 +53,18 @@ const FilterdDiaryList = ({ diaries }) => {
     );
   }
   const diaryList = diaries.map((diary) => {
-    const emotionImageUrl = store.emotions[diary.emotion];
+    const emotionImageUrl = store.emotions[diary.diaryEmotion];
+    const imageFile = diary.diaryFiles.filter(
+      (file) => file.fileType === "IMG"
+    );
     return (
-      <div key={diary.id}>
+      <div key={diary.diaryId}>
         <div
-          onClick={() => goDetail(diary.id, diary)}
+          onClick={() => goDetail(diary.diaryId)}
           style={{ display: "flex", alignItems: "center", padding: "0.5rem" }}
         >
           <img
-            src={diary.picture}
+            src={imageFile.fileUrl}
             style={{
               width: "25vw",
               height: "10vh",
@@ -79,15 +82,15 @@ const FilterdDiaryList = ({ diaries }) => {
           >
             <div style={{ display: "flex", paddingBottom: "0.8rem" }}>
               <Date>
-                {parseInt(diary.date.slice(5, 7))}월
-                {parseInt(diary.date.slice(8, 10))}일
+                {parseInt(diary.createdAt.slice(5, 7))}월
+                {parseInt(diary.createdAt.slice(8, 10))}일
               </Date>
               <img
                 src={emotionImageUrl}
                 style={{ height: "4vh", width: "8vw" }}
               />
             </div>
-            <div>{diary.title}</div>
+            <div>{diary.diaryTitle}</div>
           </div>
         </div>
         <Line />
