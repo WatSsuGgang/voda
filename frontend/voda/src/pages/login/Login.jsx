@@ -32,7 +32,13 @@ const ButtonContainer = styled.div({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
+  // const REST_API_KEY = "백엔드한테 달라하자1";
+  // const REDIRECT_URI = "백엔드한테 달라하자2";
+  // const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const loginHandler = () => {
+    window.location.href = link;
+  };
   const baseURL = import.meta.env.VITE_API_URL;
 
   async function getIlgoo(target) {
@@ -45,22 +51,9 @@ const Login = () => {
         "Content-Type": "application/json",
       },
     });
-    // const data = await response.json();
-    // console.log(data);
   }
 
-  function onClickHandler(e) {
-    getIlgoo(e.target.id);
-    // e.preventDefault();
-    // const accessToken = localStorage.getItem("accessToken");
-    // if (accessToken) {
-    //   navigate("/pet");
-    // } else {
-    // const base_url = import.meta.env.VITE_API_URL;
-    // window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
-    // getIlgoo(e.target.id);
-    // }
-  }
+  function onClickHandler(e) {}
   return (
     <>
       <ImageContainer>
@@ -83,40 +76,34 @@ const Login = () => {
       </ImageContainer>
       <InstructionContainer>SNS로 간편 로그인</InstructionContainer>
       <ButtonContainer>
-        <a href={baseURL + `/oauth2/authorization/google`}>
-          <img
-            src={btn_google}
-            alt=""
-            id="google"
-            onClick={onClickHandler}
-            style={{
-              width: "3rem",
-            }}
-          />
-        </a>
-        <a href={baseURL + `/oauth2/authorization/kakao`}>
-          <img
-            src={btn_kakao}
-            alt=""
-            id="kakao"
-            onClick={onClickHandler}
-            style={{
-              width: "3rem",
-            }}
-          />
-        </a>
-        <a href={baseURL + `/oauth2/authorization/naver`}>
-          <img
-            src={btn_naver}
-            alt=""
-            id="naver"
-            onClick={onClickHandler}
-            style={{
-              width: "3rem",
-              borderRadius: "100%",
-            }}
-          />
-        </a>
+        <img
+          src={btn_google}
+          alt=""
+          id="google"
+          onClick={onClickHandler}
+          style={{
+            width: "3rem",
+          }}
+        />
+        <img
+          src={btn_kakao}
+          alt=""
+          id="kakao"
+          onClick={onClickHandler}
+          style={{
+            width: "3rem",
+          }}
+        />
+        <img
+          src={btn_naver}
+          alt=""
+          id="naver"
+          onClick={onClickHandler}
+          style={{
+            width: "3rem",
+            borderRadius: "100%",
+          }}
+        />
       </ButtonContainer>
     </>
   );

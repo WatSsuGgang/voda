@@ -9,7 +9,7 @@ export default function IntroductionHeader() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "flex-start",
-        marginTop: "1.5rem",
+        paddingTop: "1.5rem",
       }}
     >
       <img
