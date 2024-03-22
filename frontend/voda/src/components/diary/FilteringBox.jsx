@@ -26,8 +26,8 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
     const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
     return formattedDate;
   }
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
   const [emo, setEmo] = useState("");
   const handleStartDateChange = (event) => {
     const date = formatDate(event.$y, event.$M + 1, event.$D);
@@ -83,11 +83,11 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
           <MenuItem value="">
             <em></em>
           </MenuItem>
-          <MenuItem value={"joy"}>기쁨</MenuItem>
-          <MenuItem value={"anger"}>분노</MenuItem>
-          <MenuItem value={"sad"}>슬픔</MenuItem>
-          <MenuItem value={"fear"}>무서움</MenuItem>
-          <MenuItem value={"curiosity"}>놀람</MenuItem>
+          <MenuItem value={"JOY"}>기쁨</MenuItem>
+          <MenuItem value={"ANGER"}>분노</MenuItem>
+          <MenuItem value={"SADNESS"}>슬픔</MenuItem>
+          <MenuItem value={"FEAR"}>무서움</MenuItem>
+          <MenuItem value={"CURIOSITY"}>놀람</MenuItem>
         </Select>
       </FormControl>
       <Button
