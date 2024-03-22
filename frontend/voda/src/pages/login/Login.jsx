@@ -36,6 +36,7 @@ const Login = () => {
   const baseURL = import.meta.env.VITE_API_URL;
 
   async function getIlgoo(target) {
+    console.log("getIlgoo Start");
     const api = import.meta.env.VITE_API_URL;
     const url = api + `/oauth2/authorization/${target}`;
     const response = await fetch(url, {
@@ -44,20 +45,21 @@ const Login = () => {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json();
-    console.log(data);
+    // const data = await response.json();
+    // console.log(data);
   }
 
   function onClickHandler(e) {
-    e.preventDefault();
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      navigate("/pet");
-    } else {
-      // const base_url = import.meta.env.VITE_API_URL;
-      // window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
-      // getIlgoo(e.target.id);
-    }
+    getIlgoo(e.target.id);
+    // e.preventDefault();
+    // const accessToken = localStorage.getItem("accessToken");
+    // if (accessToken) {
+    //   navigate("/pet");
+    // } else {
+    // const base_url = import.meta.env.VITE_API_URL;
+    // window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
+    // getIlgoo(e.target.id);
+    // }
   }
   return (
     <>
@@ -86,7 +88,7 @@ const Login = () => {
             src={btn_google}
             alt=""
             id="google"
-            // onClick={onClickHandler}
+            onClick={onClickHandler}
             style={{
               width: "3rem",
             }}
@@ -97,7 +99,7 @@ const Login = () => {
             src={btn_kakao}
             alt=""
             id="kakao"
-            // onClick={onClickHandler}
+            onClick={onClickHandler}
             style={{
               width: "3rem",
             }}
@@ -108,7 +110,7 @@ const Login = () => {
             src={btn_naver}
             alt=""
             id="naver"
-            // onClick={onClickHandler}
+            onClick={onClickHandler}
             style={{
               width: "3rem",
               borderRadius: "100%",
