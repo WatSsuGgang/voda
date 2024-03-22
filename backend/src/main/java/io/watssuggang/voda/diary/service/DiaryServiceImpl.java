@@ -1,10 +1,8 @@
 package io.watssuggang.voda.diary.service;
 
 
-import io.watssuggang.voda.common.enums.Emotion;
-import io.watssuggang.voda.common.enums.Speaker;
-import io.watssuggang.voda.diary.domain.Diary;
-import io.watssuggang.voda.diary.domain.Talk;
+import io.watssuggang.voda.common.enums.*;
+import io.watssuggang.voda.diary.domain.*;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
@@ -13,8 +11,7 @@ import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.ContentDTO;
 import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
 import io.watssuggang.voda.diary.exception.DiaryNotCreateException;
 import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
-import io.watssuggang.voda.diary.repository.DiaryRepository;
-import io.watssuggang.voda.diary.repository.TalkRepository;
+import io.watssuggang.voda.diary.repository.*;
 import io.watssuggang.voda.diary.util.PromptHolder;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,6 +32,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final WebClient chatClient;
     private final WebClient karloClient;
     private final DiaryRepository diaryRepository;
+    private final DiaryFileRepository diaryFileRepository;
     private final TalkRepository talkRepository;
 
     private DiaryChatResponseDto getChat(DiaryChatRequestDto dto) {
@@ -58,7 +56,6 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public KarloResponse createImage(KarloRequest karloRequest) {
-        System.out.println(karloRequest);
         return karloClient.post()
             .bodyValue(karloRequest)
             .retrieve()
@@ -113,15 +110,27 @@ public class DiaryServiceImpl implements DiaryService {
         String title = jsonObject.getString("title");
         String content = jsonObject.getString("diary");
         String emotion = jsonObject.getString("emotion");
-
+        String imagePrompt = jsonObject.getString("prompt");
         Diary diary = Diary.builder()
             .diaryId(diaryId)
             .diarySummary(title)
             .diaryEmotion(Emotion.valueOf(emotion))
             .diaryContent(content)
             .build();
+        createImage(KarloRequest.of(imagePrompt))
+                .getImages()
+                .forEach(imageResponse -> {
+                    DiaryFile savedImage = diaryFileRepository.save(DiaryFile.builder()
+                            .fileType(FileType.WEBP)
+                            .fileUrl(imageResponse.getImage())
+                            .build());
+                    savedImage.addDiary(diary);
+                });
 
+        // TODO: S3 업로드
         diaryRepository.save(diary);
+
+        // TODO: return 할 일기 response 만들기
     }
 
     @Override
