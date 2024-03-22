@@ -2,8 +2,7 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
-import io.watssuggang.voda.diary.dto.res.DiaryTtsResponseDto;
+import io.watssuggang.voda.diary.dto.res.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +18,7 @@ public interface DiaryService {
 
     Map<String, Object> getChatList(int id);
 
-    void createDiary(List<TalkRequest> talkList, int diaryId);
+    DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId);
 
     DiaryDetailResponse getDiaryDetail(int memberId, int id);
 

@@ -40,10 +40,8 @@ public class DiaryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList) {
-        System.out.println("일기 생성 컨트롤러 들어옴!!!");
-        diaryService.createDiary(talkList.getTalk_list(), talkList.getDiaryId());
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(diaryService.createDiary(talkList.getTalk_list(),
+                talkList.getDiaryId()));
     }
 
     @GetMapping("/talk/{id}")
@@ -56,27 +54,26 @@ public class DiaryController {
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<DiaryDetailResponse> getDiaryDetail(@CurrentUser SecurityUserDto userDto,
-        @PathVariable int id) {
+            @PathVariable int id) {
         System.out.println("일기 상세 정보 받기");
 
         DiaryDetailResponse diaryDetailResponse = diaryService.getDiaryDetail(userDto.getMemberId(),
-            id);
+                id);
 
         return ResponseEntity.ok(diaryDetailResponse);
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<DiaryDetailResponse>> getList(
-        @RequestParam(defaultValue = "") LocalDateTime start,
-        @RequestParam(defaultValue = "") LocalDateTime end,
-        @RequestParam(defaultValue = "NONE") String emotion,
-        @CurrentUser SecurityUserDto securityUserDto) {
+            @RequestParam(defaultValue = "") LocalDateTime start,
+            @RequestParam(defaultValue = "") LocalDateTime end,
+            @RequestParam(defaultValue = "NONE") String emotion,
+            @CurrentUser SecurityUserDto securityUserDto) {
 
         List<DiaryDetailResponse> diaryList = diaryService.getDiaryList(start, end, emotion,
-            securityUserDto.getMemberId());
+                securityUserDto.getMemberId());
 
         return ResponseEntity.ok(diaryList);
     }
-
 
 }

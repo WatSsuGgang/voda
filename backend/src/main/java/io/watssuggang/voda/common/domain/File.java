@@ -16,8 +16,7 @@ public class File extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer fileId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "CHAR(3)")
+    @Column(columnDefinition = "CHAR(2)")
     @Setter
     private FileType fileType;
 

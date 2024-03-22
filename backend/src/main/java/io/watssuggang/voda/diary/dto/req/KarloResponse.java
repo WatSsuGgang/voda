@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import io.watssuggang.voda.diary.dto.res.ImageResponse;
 import java.util.List;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @Data
