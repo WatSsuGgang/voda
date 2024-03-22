@@ -1,34 +1,40 @@
 import React from "react";
 import usePetStore from "../../store/petStore";
+import { feedPet } from "../../services/pet";
 
 export default function Food() {
-  const { currentFood, isFed, setIsFed, isFeeding, setIsFeeding } =
-    usePetStore();
-  function clickHandler(e) {
-    if (!isFed) {
-      const food = document.getElementById("food");
-      const foodFeeding = document.getElementById("foodFeeding");
-      // food.animate(newspaperSpinning, newspaperTiming);
-      food.animate(
-        [
-          {
-            // from
-            opacity: 1,
-            filter: "grayscale(0%)",
-            transform: "translateX(0%) translateY(0%) rotate(0deg) scale(1)",
-          },
-          {
-            // to
-            filter: "grayscale(50%)",
-            opacity: 0,
-            transform: `translateX(-250%) translateY(+400%) rotate(${Math.round(
-              Math.random() * 3600
-            )}deg) scale(0.5)`,
-          },
-        ],
-        1000
-      );
-      setIsFed(!isFed);
+  const { currentFood, isFeed, petId } = usePetStore();
+  function feed() {
+    const food = document.getElementById("food");
+    food.animate(
+      [
+        {
+          // from
+          opacity: 1,
+          filter: "grayscale(0%)",
+          transform: "translateX(0%) translateY(0%) rotate(0deg) scale(1)",
+        },
+        {
+          // to
+          filter: "grayscale(50%)",
+          opacity: 0,
+          transform: `translateX(-250%) translateY(+400%) rotate(${Math.round(
+            Math.random() * 3600
+          )}deg) scale(0.5)`,
+        },
+      ],
+      1000
+    );
+  }
+
+  async function clickHandler(e) {
+    if (!isFeed) {
+      feed();
+      try {
+        const response = await feedPet(petId);
+      } catch (error) {
+        alert("먹이가 없음");
+      }
     }
   }
   return (
@@ -38,7 +44,7 @@ export default function Food() {
         src={`https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/${currentFood}.png`}
         onClick={clickHandler}
         style={
-          isFed
+          isFeed
             ? {
                 filter: "grayscale(100%)",
                 opacity: "0.5",
