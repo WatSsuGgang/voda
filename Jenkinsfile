@@ -11,6 +11,7 @@ pipeline {
                     if [ "$(docker ps -aq -f status=exited -f name=docker-frontend)" ]; then
                         docker rm docker-frontend
                     fi
+                docker rmi image-frontend
                 fi'''
             }
         }
@@ -29,7 +30,8 @@ pipeline {
                 echo 'Build Npm'
                 script {
                     sh 'docker build -t image-frontend .'
-                    sh 'docker run -d -v html:/voda/dist --name docker-frontend image-frontend'
+                    sh 'docker run -d --name docker-frontend image-frontend'
+                    sh 'docker cp docker-frontend:/voda/dist/. /frontend'
                 }
             }
             post {
