@@ -24,9 +24,7 @@ public class DiaryController {
 
     @GetMapping("/init")
     public ResponseEntity<?> init(@CurrentUser SecurityUserDto userDto) {
-        //    Integer userId = userDto.getMemberId();
-        Integer userId = 1;
-        DiaryTtsResponseDto result = diaryService.init(userId);
+        DiaryTtsResponseDto result = diaryService.init(userDto.getMemberId());
         return ResponseEntity.ok(result);
     }
 
@@ -34,9 +32,7 @@ public class DiaryController {
     public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
         @RequestBody DiaryAnswerRequestDto reqDto)
         throws IOException {
-//    Integer userId = userDto.getMemberId();
-        Integer userId = 1;
-        DiaryTtsResponseDto result = diaryService.answer(reqDto, userId);
+        DiaryTtsResponseDto result = diaryService.answer(reqDto, userDto.getMemberId());
         return ResponseEntity.ok(result);
     }
 
