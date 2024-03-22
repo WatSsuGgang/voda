@@ -3,7 +3,7 @@ package io.watssuggang.voda.diary.controller;
 import io.watssuggang.voda.common.security.annotation.CurrentUser;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.diary.dto.req.*;
-import io.watssuggang.voda.diary.dto.res.*;
+import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
 import io.watssuggang.voda.diary.service.DiaryService;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -23,16 +23,14 @@ public class DiaryController {
 
     @GetMapping("/init")
     public ResponseEntity<?> init(@CurrentUser SecurityUserDto userDto) {
-        DiaryTtsResponseDto result = diaryService.init(userDto.getMemberId());
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(diaryService.init(userDto.getMemberId()));
     }
 
     @PostMapping("/answer")
     public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
-            @RequestBody DiaryAnswerRequestDto reqDto)
-            throws IOException {
-        DiaryTtsResponseDto result = diaryService.answer(reqDto, userDto.getMemberId());
-        return ResponseEntity.ok(result);
+        @RequestBody DiaryAnswerRequestDto reqDto)
+        throws IOException {
+        return ResponseEntity.ok(diaryService.answer(reqDto, userDto.getMemberId()));
     }
 
     @PostMapping("/createImage")
