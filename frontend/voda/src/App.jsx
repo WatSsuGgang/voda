@@ -51,6 +51,7 @@ function App() {
           <Route path="/voice" element={<VoiceDiary />}></Route>
           <Route path="/voice/record" element={<Record />}></Route>
           <Route path="/voice/check/:id" element={<CheckChat />}></Route>
+          <Route path="/login-success" element={<LoginSuccess />}></Route>
         </Routes>
         <Wrapper>
           <NavBar />
