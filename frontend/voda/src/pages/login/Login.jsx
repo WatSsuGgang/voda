@@ -7,6 +7,7 @@ import btn_naver from "/login_btn/btn_naver.svg";
 import btn_kakao from "/login_btn/btn_kakao.svg";
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getSocialLoginUrl } from "../../services/auth";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -32,28 +33,25 @@ const ButtonContainer = styled.div({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
+  async function deleteCaches() {
+    try {
+      const keys = await window.caches.keys();
+      console.log(keys);
+      await Promise.all(keys.map((key) => caches.delete(key)));
+      console.log("deleted");
+    } catch (err) {
+      console.log("deleteCache err: ", err);
+    }
+  }
+
+  const loginHandler = (e) => {
+    const link = getSocialLoginUrl(e.target.id);
+    console.log(link);
+    deleteCaches();
+    window.location.href = link;
+    deleteCaches();
+  };
   const baseURL = import.meta.env.VITE_API_URL;
-
-  async function getIlgoo(target) {
-    console.log("getIlgoo Start");
-    const api = import.meta.env.VITE_API_URL;
-    const url = api + `/oauth2/authorization/${target}`;
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    // const data = await response.json();
-    // console.log(data);
-  }
-
-  function onClickHandler(e) {
-    const baseURL = import.meta.env.VITE_API_URL;
-    const authUrl = `${baseURL}/oauth2/authorization/${e.target.id}?redirect_uri=https://j10a104.p.ssafy.io/login-success;`;
-    window.location.href = authUrl;
-  }
 
   return (
     <>
@@ -81,7 +79,7 @@ const Login = () => {
           src={btn_google}
           alt=""
           id="google"
-          onClick={onClickHandler}
+          onClick={loginHandler}
           style={{
             width: "3rem",
           }}
@@ -90,7 +88,7 @@ const Login = () => {
           src={btn_kakao}
           alt=""
           id="kakao"
-          onClick={onClickHandler}
+          // onClick={loginHandler}
           style={{
             width: "3rem",
           }}
@@ -99,7 +97,7 @@ const Login = () => {
           src={btn_naver}
           alt=""
           id="naver"
-          onClick={onClickHandler}
+          // onClick={loginHandler}
           style={{
             width: "3rem",
             borderRadius: "100%",
