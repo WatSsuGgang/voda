@@ -1,228 +1,148 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import usePetStore from "../../store/petStore";
+import { Modal } from "@mui/material";
+import { Button } from "@mui/material";
+import ItemContainer from "./ItemContainer";
+import ItemNameContainer from "./ItemNameContainer";
+import ItemPriceContainer from "./ItemPriceContainer";
+import { buyItem } from "../../services/item";
 
 const ItemWrapper = styled.div({
   display: "grid",
   width: "85%",
   gridTemplateColumns: "1fr 1fr 1fr",
   gap: "1rem",
+  marginBottom: "6rem",
 });
 
-const ItemNameContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 2rem;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-  background-color: #fff7b2;
-`;
-
-const ItemContainer = styled.div`
+const ModalBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #fff7b2;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  height: 5rem;
-  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 10rem;
+  border-radius: 2rem;
+  background-color: white;
+  padding: 1rem;
 `;
-
-const ItemCostContainer = styled.div`
-  display: flex;
-  height: 2rem;
-  justify-content: center;
-  align-items: center;
-`;
-
-const food = [
-  {
-    id: 1,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Candy.png",
-    name: "사탕",
-    own: true,
-    applied: true,
-    cost: 10,
-  },
-  {
-    id: 2,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Avocado.png",
-    name: "아보카도",
-    own: true,
-    applied: false,
-    cost: 20,
-  },
-  {
-    id: 3,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Pizza.png",
-    name: "피자",
-    own: false,
-    applied: false,
-    cost: 30,
-  },
-  {
-    id: 4,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Blueberries.png",
-    name: "블루베리",
-    own: false,
-    applied: false,
-    cost: 40,
-  },
-  {
-    id: 5,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Cherries.png",
-    name: "체리",
-    own: false,
-    applied: false,
-    cost: 50,
-  },
-  {
-    id: 6,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Doughnut.png",
-    name: "도넛",
-    own: false,
-    applied: false,
-    cost: 60,
-  },
-];
-
-const effect = [
-  {
-    id: 1,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Star.png",
-    name: "별",
-    own: false,
-    applied: false,
-    cost: 70,
-  },
-  {
-    id: 2,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Cloud%20with%20Rain.png",
-    name: "비구름",
-    own: false,
-    cost: 80,
-  },
-  {
-    id: 3,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Hourglass%20Done.png",
-    name: "모래시계",
-    own: false,
-    applied: false,
-    cost: 90,
-  },
-  {
-    id: 4,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Fire.png",
-    name: "불",
-    own: false,
-    applied: false,
-    cost: 100,
-  },
-  {
-    id: 5,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Helicopter.png",
-    name: "헬리콥터",
-    own: false,
-    applied: false,
-    cost: 110,
-  },
-  {
-    id: 1,
-    url: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Maracas.png",
-    name: "마르카스",
-    own: false,
-    applied: false,
-    cost: 120,
-  },
-];
-
-const Items = {
-  food,
-  effect,
-};
 
 export default function ItemList() {
-  const { currentCategory } = usePetStore();
-  const [items, setItems] = useState(Items.food);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalItem, setModalItem] = useState({});
+
+  const handleModalItemChange = (item) => {
+    setModalItem(item);
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => setOpenModal(false);
+  const { items, setItems, owned, currentCategory, setCurrentCategory } =
+    usePetStore();
   const imgBaseURL =
     "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/";
   useEffect(() => {
-    setItems(Items[currentCategory]);
+    window.scrollTo(0, 0);
+    setCurrentCategory(currentCategory);
   }, [currentCategory]);
 
-  function handleOpen() {}
+  function checkName(name = "") {
+    //name의 마지막 음절의 유니코드(UTF-16)
+    const charCode = name.charCodeAt(name.length - 1);
+
+    //유니코드의 한글 범위 내에서 해당 코드의 받침 확인
+    const consonantCode = (charCode - 44032) % 28;
+
+    if (consonantCode === 0) {
+      //0이면 받침 없음 -> 를
+      return "를";
+    }
+    //1이상이면 받침 있음 -> 을
+    return "을";
+  }
+
+  async function handleBuyItem() {
+    await buyItem({ itemId: modalItem.itemId });
+    handleCloseModal();
+  }
+
   return (
     <ItemWrapper>
       {items.map((item, index) => (
-        <div key={index} style={{ zIndex: -1 }}>
-          <ItemNameContainer
-            style={
-              item.own
-                ? { opacity: 1 }
-                : {
-                    opacity: 0.5,
-                    filter: "grayscale(75%)",
-                  }
-            }
-          >
-            <p style={{ margin: "0", fontWeight: "bold" }}>{item.name}</p>
-          </ItemNameContainer>
-          <ItemContainer
-            style={
-              item.own
-                ? { opacity: 1 }
-                : {
-                    opacity: 0.5,
-                    filter: "grayscale(75%)",
-                  }
-            }
-          >
-            <img
-              src={item.url}
-              style={{
-                width: "2.5rem",
-                height: "2.5rem",
-              }}
-            />
-          </ItemContainer>
-          <ItemCostContainer>
-            {item.own ? (
-              <>
-                {item.applied ? (
-                  <>
-                    <img
-                      src={`${imgBaseURL}Symbols/Check%20Mark.png`}
-                      alt="Check Mark"
-                      width="20rem"
-                      height="20rem"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <p style={{ margin: "0", overflow: "hidden" }}>
-                      {"보유중"}
-                    </p>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <img
-                  src={`${imgBaseURL}Objects/Coin.png`}
-                  alt="Coin"
-                  width="20rem"
-                  height="20rem"
-                />
-                <p style={{ margin: "0", overflow: "hidden" }}>{item.cost}</p>
-              </>
-            )}
-          </ItemCostContainer>
+        <div
+          key={index}
+          onTouchStart={() => {
+            handleModalItemChange(item);
+          }}
+          onClick={handleOpenModal}
+        >
+          <div>
+            <ItemNameContainer name={item.name} />
+            <ItemContainer url={imgBaseURL + item.imgURl} />
+            <ItemPriceContainer price={item.price} />
+          </div>
         </div>
       ))}
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <ModalBox>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <img
+              src={imgBaseURL + modalItem.imgURl}
+              style={{
+                width: "3rem",
+                height: "3rem",
+              }}
+            />
+            <p
+              style={{
+                margin: "0",
+              }}
+            >
+              <b>"{modalItem.name}"</b>
+              {checkName(modalItem.name)} 구매하시겠습니까?
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleCloseModal}
+              >
+                취소
+              </Button>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleBuyItem}
+              >
+                구매
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
     </ItemWrapper>
   );
 }

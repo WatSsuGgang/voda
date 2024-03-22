@@ -42,7 +42,12 @@ export const request = async (method, url, data = {}) => {
       data: data,
     });
     const status = response.status;
-    if (status === HTTPStatusCodes.OK) {
+    if (
+      status === HTTPStatusCodes.OK ||
+      status === HTTPStatusCodes.CREATED ||
+      status === HTTPStatusCodes.ACCEPTED ||
+      status === HTTPStatusCodes.NO_CONTENT
+    ) {
       // 응답코드가 200일 경우 로직
       // console.log(response);
       return response;
@@ -53,12 +58,9 @@ export const request = async (method, url, data = {}) => {
       const newAccessToken = tokenRefresh();
     }
     console.log(response);
-    return "RESPONSE NOT OK";
   } catch (error) {
     // 에러 로직
     console.error(error);
-
-    return "error";
   }
 };
 
