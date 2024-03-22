@@ -13,14 +13,14 @@ public interface DiaryService {
 
     DiaryChatResponseDto init(); //claude 호출
 
-    Map<String, Object> getChatList(int id);
+    Map<String, Object> getChatList(int id, Integer memberId);
 
-    void createDiary(List<TalkRequest> talkList, int diaryId);
+    void createDiary(List<TalkRequest> talkList, int diaryId, Integer memberId);
 
-    DiaryDetailResponse getDiaryDetail(int memberId, int id);
+    DiaryDetailResponse getDiaryDetail(Integer memberId, int id);
 
     List<DiaryDetailResponse> getDiaryList(LocalDateTime start, LocalDateTime end, String emotion,
-        int memberId);
+        Integer memberId);
 
     KarloResponse createImage(KarloRequest karloRequest);
 

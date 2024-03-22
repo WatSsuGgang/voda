@@ -3,6 +3,7 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.common.enums.Emotion;
 import io.watssuggang.voda.common.enums.Speaker;
+import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.domain.Talk;
 import io.watssuggang.voda.diary.dto.req.*;
@@ -11,7 +12,7 @@ import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.ContentDTO;
 import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
-import io.watssuggang.voda.diary.exception.DiaryNotCreateException;
+import io.watssuggang.voda.diary.exception.DiaryNotCreatedException;
 import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.diary.repository.TalkRepository;
@@ -22,10 +23,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
@@ -67,8 +66,14 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Map<String, Object> getChatList(int id) {
+    public Map<String, Object> getChatList(int id, Integer memberId) {
         List<Talk> talks = talkRepository.findAllByDiary_DiaryId(id);
+
+        if (!talks.isEmpty()) {
+            if (!isAuthorized(talks.get(0).getWriter(), memberId)) {
+                throw new DiaryNotCreatedException(ErrorCode.TALK_READ_UNAUTHORIZED);
+            }
+        }
 
         List<Map<String, String>> talkList = talks.stream()
             .map(talk -> {
@@ -90,20 +95,25 @@ public class DiaryServiceImpl implements DiaryService {
 
     // 다이어리 생성
     @Override
-    public void createDiary(List<TalkRequest> talkList, int diaryId) {
+    public void createDiary(List<TalkRequest> talkList, int diaryId, Integer memberId) {
+
+        // 생성하려고 하는 일기가 없는 일기일 경우 예외 던지기
+//        if (!isAuthorized(existedDiary.getWriter(), memberId)) {
+//            throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
+//        }
 
         String allAnswers = talkList.stream()
             .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
             .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
 
-        log.info("답변만 모아놓기: " + allAnswers);
+        log.info("합친 답변: " + allAnswers);
 
         ContentDTO completedDiary = callClaude(allAnswers);
 
         String answerText = completedDiary != null ? completedDiary.getText() : null;
 
         if (answerText == null) {
-            throw new DiaryNotCreateException();
+            throw new DiaryNotCreatedException(ErrorCode.DIARY_CONTENT_NOT_CREATED);
         }
 
         log.info("---Claude의 답변---");
@@ -121,16 +131,19 @@ public class DiaryServiceImpl implements DiaryService {
             .diaryContent(content)
             .build();
 
+        //TODO:  이미지 생성 로직 예외처리
+        // throw new DiaryNotCreatedException(ErrorCode.DIARY_IMAGE_NOT_CREATED);
+
         diaryRepository.save(diary);
     }
 
     @Override
-    public DiaryDetailResponse getDiaryDetail(int memberId, int id) {
+    public DiaryDetailResponse getDiaryDetail(Integer memberId, int diaryId) {
 
-        Diary diary = diaryRepository.findById(id).orElseThrow(DiaryNotFoundException::new);
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
 
-        if (!diary.getMember().getMemberId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "자신의 일기만 볼 수 있습니다.");
+        if (!isAuthorized(diary.getWriter(), memberId)) {
+            throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
         }
 
         return DiaryDetailResponse.of(diary);
@@ -139,12 +152,18 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public List<DiaryDetailResponse> getDiaryList(LocalDateTime start, LocalDateTime end,
-        String emotion, int memberId) {
+        String emotion, Integer memberId) {
+
+        List<DiaryDetailResponse> responseList = new ArrayList<>();
 
         List<Diary> filteredDiaryList = diaryRepository.findDiariesByCondition(start, end,
             emotion, memberId);
 
-        List<DiaryDetailResponse> responseList = new ArrayList<>();
+        if (!filteredDiaryList.isEmpty()) {
+            if (!isAuthorized(filteredDiaryList.get(0).getWriter(), memberId)) {
+                throw new DiaryNotCreatedException(ErrorCode.DIARY_READ_UNAUTHORIZED);
+            }
+        }
 
         for (Diary diary : filteredDiaryList) {
             DiaryDetailResponse detailResponse = DiaryDetailResponse.of(diary);
@@ -168,6 +187,11 @@ public class DiaryServiceImpl implements DiaryService {
             .block();
 
         return diaryChatResponseDto != null ? diaryChatResponseDto.getContent().get(0) : null;
+    }
+
+    // 자신의 일기를 조회하거나 수정하려고 하는 지 검사
+    private boolean isAuthorized(Integer diaryMemberId, Integer loginMemberId) {
+        return diaryMemberId != null && diaryMemberId.equals(loginMemberId);
     }
 
 }
