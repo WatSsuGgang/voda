@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
 import styled from "styled-components";
+import { createDiary, getTalkList } from "../../services/voicediary"; // api 함수 불러오기
+
 const TimerStyle = styled.div`
   font-size: 1.5rem;
   color: #628f00;
@@ -31,18 +32,7 @@ function Timer() {
     return `${formattedMinutes}:${formattedSeconds}`;
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <TimerStyle>{formatTime(time.minutes, time.seconds)}</TimerStyle>
-      <StopCircleIcon style={{ marginLeft: "3%" }} />
-    </div>
-  );
+  return <TimerStyle>{formatTime(time.minutes, time.seconds)}</TimerStyle>;
 }
 
 export default Timer;

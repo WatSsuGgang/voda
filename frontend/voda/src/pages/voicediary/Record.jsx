@@ -1,13 +1,19 @@
-import React, { useState, useRef, useEffect } from "react"; // eslint-disable-line no-unused-vars
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import LogoutIcon from "@mui/icons-material/Logout";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
 import PlingSound from "../../assets/voicediary/Pling.mp3";
-import MyVoice from "../../assets/voicediary/MyVoice.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
 import Mention from "../../components/voicediary/Mention";
+import {
+  initDiary,
+  recordDiary,
+  createDiary,
+  getTalkList,
+} from "../../services/voicediary"; // api 함수 불러오기
+import useStore from "../../store/store";
 const Title = styled.h1`
   text-align: center;
   font-size: 1.2rem;
@@ -15,6 +21,8 @@ const Title = styled.h1`
 `;
 
 const Record = () => {
+  const navigate = useNavigate();
+  const store = useStore();
   const [aiSpeaking, setAiSpeaking] = useState(true); // ai가 말하는 중인지 구분
   const [voiceRecognized, setVoiceRecognized] = useState(true); // 음성 인식이 30데시벨 이상으로잘 되고 있는지 구분
   const [audioURL, setAudioURL] = useState(null); // 사용자의 음성 녹음이 종료될 때 생성되는 audioUrl
@@ -24,10 +32,21 @@ const Record = () => {
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
-
+  let Id = null;
   // 처음 화면을 렌더링 할 때, ai 질문 음성 파일을 임시로 설정해줌. 추후, init api 요청으로 바꿀 예정
   useEffect(() => {
-    setAiAudioURL(MyVoice);
+    // api init api 요청. 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
+    const fetchAudioUrl = async () => {
+      try {
+        const res = await initDiary();
+        console.log("최초 응답:", res);
+        setAiAudioURL(res.data);
+        Id = res.diaryId;
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchAudioUrl();
   }, []);
 
   // 음성 데시벨을 측정해서, 20 데시벨 이하로 6초 이상 유지되면 음성 녹음 종료
@@ -61,6 +80,7 @@ const Record = () => {
     }
   };
 
+  // 내가 말할 차례가 오면 음성 데시벨 인식 시작
   useEffect(() => {
     if (aiSpeaking === false) {
       consecutiveSilenceTimeRef.current = 0; // 초기화
@@ -68,13 +88,14 @@ const Record = () => {
       return () => clearInterval(intervalId); // cleanup 함수에서 clearInterval 호출
     }
   }, [aiSpeaking]);
+
   // aiAudioUrl 값이 변경될 때마다 실행
   useEffect(() => {
     // AI의 음성 출력이 끝나면 다시 사용자가 얘기할 수 있도록 로직 구현
     const handleAudioEnded = () => {
       startRecording();
     };
-    // AI의 음성 데이터를 가져오고, 1초 있다가 실행
+    // AI의 음성 데이터를 가져오고, 0.5초 있다가 실행
     const timeout = setTimeout(() => {
       aiAudioElementRef.current.play();
     }, 500);
@@ -84,6 +105,51 @@ const Record = () => {
     };
   }, [aiAudioURL]);
 
+  // 대화 내용 받아오는 함수
+  const fetchTalkList = async (id) => {
+    try {
+      const res = await getTalkList(id);
+      console.log("지금까지의 대화:", res);
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // 일기 생성 요청 보내는 함수
+  const fetchCreate = async (diaryId) => {
+    try {
+      const talkRes = await fetchTalkList(diaryId);
+      const res = await createDiary(diaryId, talkRes);
+      console.log("일기 생성:", res);
+      window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
+      navigate("/pet");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  // 사용자 녹음이 종료되면 서버에 음성 파일 보내는 함수
+  const fetchRecord = async (data) => {
+    try {
+      const res = await recordDiary(data);
+      console.log("응답옴:", res);
+      setAiAudioURL(res.data);
+      // // 만약 terminate가 true이면 일기를 종료해야 된다.
+      // if (res.terminate) {
+      //   // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
+      //   if (store.editAllow) {
+      //     navigate(`/voice/check/${Id}`);
+      //   } else {
+      //     // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
+      //     fetchCreate(diaryData);
+      //   }
+      // } else {
+      //   setAiAudioURL(res.ttsUrl);
+      // }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const startRecording = () => {
     // 이모티콘 변경
     setAiSpeaking(false);
@@ -112,36 +178,13 @@ const Record = () => {
           };
 
           mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(chunks, { type: "audio/webm" });
-            const audioURL = URL.createObjectURL(audioBlob);
-            setAudioURL(audioURL);
+            // 서버로 오디오 파일 전송
+            const audioBlob = new Blob(chunks, { type: "audio/mpeg" });
             const formData = new FormData();
-            formData.append("audioFile", audioBlob);
-            setTimeout(() => {
-              console.log(formData["audioFile"]);
-            }, 1000);
-            // // 서버로 오디오 파일 전송
-            // fetch("/upload", {
-            //   method: "POST",
-            //   body: formData,
-            // })
-            //   .then((response) => response.json())
-            //   .then((data) => {
-            //     // 서버에서 받은 텍스트를 화면에 표시
-            //     console.log("음성 파일 텍스트 변환 결과:", data.text);
-            //   })
-            //   .catch((error) => {
-            //     console.error("음성 파일 변환 오류:", error);
-            //   });
-
-            // 음성 녹음이 끝나면 다운로드 하는 기능 테스트
-            // const link = document.createElement("a");
-            // link.href = audioURL;
-            // link.style.display = "none";
-            // link.download = "myvoice.mp3";
-            // document.body.appendChild(link);
-            // link.click();
-            // link.remove();
+            formData.append("file", audioBlob, "recording.mpeg");
+            fetchRecord(formData);
+            // const recordData = { diaryId: Id, file: formData.file };
+            // fetchRecord(recordData);
           };
         })
         .catch((error) => {
@@ -161,7 +204,6 @@ const Record = () => {
     }
   };
 
-  const navigate = useNavigate();
   const exit = () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
       navigate("/voice");
@@ -177,20 +219,33 @@ const Record = () => {
       <div style={{ textAlign: "center" }}>
         <Emoticon aiSpeaking={aiSpeaking} voiceRecognized={voiceRecognized} />
       </div>
-      <Timer />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Timer />
+        <StopCircleIcon
+          onClick={() => fetchCreate(Id)}
+          style={{ marginLeft: "3%" }}
+        />
+      </div>
       <div
         style={{ textAlign: "center", marginTop: "15%", fontSize: "1.2rem" }}
       >
         <Mention aiSpeaking={aiSpeaking} voiceRecognized={voiceRecognized} />
       </div>
 
-      {/* <audio controls src={audioURL} /> */}
-
+      {/* 사용자의 음성 녹음 시작을 알리는 효과음 재생 */}
       <audio
         ref={effectAudioElementRef}
         src={PlingSound}
         style={{ display: "none" }}
       />
+
+      {/* AI의 질문 음성 파일 재생 */}
       <audio
         ref={aiAudioElementRef}
         src={aiAudioURL}
