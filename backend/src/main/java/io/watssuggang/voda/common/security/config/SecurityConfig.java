@@ -89,7 +89,9 @@ public class SecurityConfig {
 
 //        configuration.setAllowedOrigins(
 //            Arrays.asList("https://j10a104.p.ssafy.io:5173", "http://localhost:5173"));
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOriginPatterns(
+            Arrays.asList("https://j10a104.p.ssafy.io:5173", "http://localhost:5173",
+                "https://j10a104.p.ssafy.io"));
         configuration.setAllowedMethods(
             Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
