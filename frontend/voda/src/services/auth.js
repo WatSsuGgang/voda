@@ -39,3 +39,13 @@ export const logout = () => {
   const url = "token/logout";
   const response = request(HTTPMethods.DELETE, url);
 };
+
+// 소셜 로그인 요청 함수
+export const socialLogin = (socialType) => {
+  const url = {
+    google: "",
+    kakao: `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`,
+    naver: "",
+  };
+  const response = request(HTTPMethods.GET, url);
+};
