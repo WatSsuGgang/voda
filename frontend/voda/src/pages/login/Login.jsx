@@ -49,16 +49,11 @@ const Login = () => {
   }
 
   function onClickHandler(e) {
-    e.preventDefault();
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      navigate("/pet");
-    } else {
-      // const base_url = import.meta.env.VITE_API_URL;
-      // window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
-      // getIlgoo(e.target.id);
-    }
+    const baseURL = import.meta.env.VITE_API_URL;
+    const authUrl = `${baseURL}/oauth2/authorization/${e.target.id}?redirect_uri=https://j10a104.p.ssafy.io/login-success;`;
+    window.location.href = authUrl;
   }
+
   return (
     <>
       <ImageContainer>
@@ -81,44 +76,37 @@ const Login = () => {
       </ImageContainer>
       <InstructionContainer>SNS로 간편 로그인</InstructionContainer>
       <ButtonContainer>
-        <a href={baseURL + `/oauth2/authorization/google`}>
-          <img
-            src={btn_google}
-            alt=""
-            id="google"
-            // onClick={onClickHandler}
-            style={{
-              width: "3rem",
-            }}
-          />
-        </a>
-        <a href={baseURL + `/oauth2/authorization/kakao`}>
-          <img
-            src={btn_kakao}
-            alt=""
-            id="kakao"
-            // onClick={onClickHandler}
-            style={{
-              width: "3rem",
-            }}
-          />
-        </a>
-        <a href={baseURL + `/oauth2/authorization/naver`}>
-          <img
-            src={btn_naver}
-            alt=""
-            id="naver"
-            // onClick={onClickHandler}
-            style={{
-              width: "3rem",
-              borderRadius: "100%",
-            }}
-          />
-        </a>
+        <img
+          src={btn_google}
+          alt=""
+          id="google"
+          onClick={onClickHandler}
+          style={{
+            width: "3rem",
+          }}
+        />
+        <img
+          src={btn_kakao}
+          alt=""
+          id="kakao"
+          onClick={onClickHandler}
+          style={{
+            width: "3rem",
+          }}
+        />
+        <img
+          src={btn_naver}
+          alt=""
+          id="naver"
+          onClick={onClickHandler}
+          style={{
+            width: "3rem",
+            borderRadius: "100%",
+          }}
+        />
       </ButtonContainer>
     </>
   );
 };
 
 export default Login;
-
