@@ -5,6 +5,7 @@ import CategoryBar from "../../components/shop/CategoryBar";
 import ItemList from "../../components/shop/ItemList";
 import usePetStore from "../../store/petStore";
 import { getItem } from "../../services/item";
+import { CircularProgress } from "@mui/material";
 
 const Page = styled.div`
   display: flex;
@@ -37,12 +38,12 @@ export default function PetShopPage() {
       try {
         const response = await getItem(currentCategory);
         setItems(response.data);
-        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
+    setIsLoading(false);
   }, [currentCategory]);
 
   return (
@@ -51,7 +52,20 @@ export default function PetShopPage() {
         <Header />
         <CategoryBar />
       </TopComponents>
-      <ItemList />
+      {isLoading ? (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <CircularProgress />
+        </div>
+      ) : (
+        <ItemList />
+      )}
     </Page>
   );
 }
