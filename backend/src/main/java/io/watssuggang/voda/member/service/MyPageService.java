@@ -25,6 +25,9 @@ public class MyPageService {
     private final DiaryRepository diaryRepository;
     private final PetRepository petRepository;
 
+    public MemberInfoResponse getMemberInfo(Integer memberId) {
+    }
+
     @Transactional
     public MemberInfoResponse updateMemberInfo(Integer memberId, String newNickname) {
         Member member = memberRepository.findById(memberId)

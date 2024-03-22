@@ -8,5 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberInfoResponse {
 
     private final String nickname;
-
+    private final Integer coins;
+    private final Integer diaryStreak;
 }
