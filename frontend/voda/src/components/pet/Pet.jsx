@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import usePetStore from "../../store/petStore";
-import { Modal, sliderClasses } from "@mui/material";
+import { Modal } from "@mui/material";
 import styled from "styled-components";
 import { editPetName } from "../../services/pet";
 import TextField from "@mui/material/TextField";

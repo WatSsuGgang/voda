@@ -13,7 +13,7 @@ const HeaderComponent = styled.div({
 export default function Header() {
   const { currentCoin } = usePetStore();
   return (
-    <HeaderComponent>
+    <HeaderComponent style={{ zIndex: 99 }}>
       <h3>상점</h3>
       <div
         style={{
