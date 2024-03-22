@@ -134,10 +134,10 @@ public class DiaryServiceImpl implements DiaryService {
             String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
             return new DiaryTtsResponseDto(
                 ttsUrl, reqDto.getDiaryId(), false);
-        } else {
-            return new DiaryTtsResponseDto(
-                null, reqDto.getDiaryId(), true);
         }
+        return new DiaryTtsResponseDto(
+            null, reqDto.getDiaryId(), true);
+
     }
 
 //  public DiaryChatResponseDto chatTest(String prompt) {
