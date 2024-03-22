@@ -3,11 +3,15 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-
+import useUserStore from "../../store/userStore";
 export default function BottomComponent() {
+  const userStore = useUserStore();
+  const month = new Date().getMonth() + 1;
   return (
     <div>
-      <h2>갓소민님의 2월은 어떠셨나요?</h2>
+      <h3>
+        {userStore.nickname}님의 {month}월은 어떠셨나요?
+      </h3>
       <Box
         style={{
           display: "flex",
