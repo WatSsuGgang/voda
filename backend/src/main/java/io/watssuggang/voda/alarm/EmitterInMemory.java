@@ -1,7 +1,6 @@
 package io.watssuggang.voda.alarm;
 
 import java.util.Map;
-import java.util.Objects;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface EmitterInMemory {

@@ -32,6 +32,7 @@ public class MemberController {
     // 마이페이지 유저 정보 GET
     @GetMapping("/ilgoo")
     public ResponseEntity<SecurityUserDto> ilgoo(@CurrentUser SecurityUserDto securityUserDto) {
+
         return ResponseEntity.ok(securityUserDto);
     }
 

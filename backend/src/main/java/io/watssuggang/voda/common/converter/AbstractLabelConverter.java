@@ -17,6 +17,9 @@ public abstract class AbstractLabelConverter<T extends Enum<T> & LabelEnum>
 
     // enum의 이름에서 label명으로 변경하는 메서드
     public String convertToDatabaseColumn(T attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.getLabel();
     }
 

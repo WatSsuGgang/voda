@@ -19,7 +19,7 @@ public class Own {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static Own of(){
+    public static Own of() {
         return new Own();
     }
 

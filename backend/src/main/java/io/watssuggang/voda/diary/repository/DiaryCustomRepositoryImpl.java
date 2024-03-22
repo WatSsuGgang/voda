@@ -48,3 +48,5 @@ public class DiaryCustomRepositoryImpl implements DiaryCustomRepository {
         return diary.diaryEmotion.eq(Emotion.valueOf(emotion));
     }
 }
+
+

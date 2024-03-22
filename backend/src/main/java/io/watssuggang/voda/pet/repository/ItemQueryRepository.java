@@ -24,10 +24,10 @@ public class ItemQueryRepository {
 
     public boolean existByItemNameAndItemCategory(String itemName, String category) {
         return queryFactory
-            .selectOne()
-            .from(getCategory(category))
-            .where(item.itemName.eq(itemName))
-            .fetchFirst() != null;
+                .selectOne()
+                .from(getCategory(category))
+                .where(item.itemName.eq(itemName))
+                .fetchFirst() != null;
     }
 
     public EntityPathBase<? extends Item> getCategory(String category) {

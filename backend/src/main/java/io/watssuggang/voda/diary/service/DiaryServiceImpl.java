@@ -8,22 +8,24 @@ import io.watssuggang.voda.diary.domain.Talk;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.res.*;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.ContentDTO;
-import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
 import io.watssuggang.voda.diary.exception.DiaryNotCreateException;
 import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.diary.repository.TalkRepository;
 import io.watssuggang.voda.diary.util.PromptHolder;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,29 +34,108 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 
+    @Qualifier("chatClient")
     private final WebClient chatClient;
+
+    @Qualifier("sttClient")
+    private final WebClient sttClient;
+
+    @Qualifier("ttsClient")
+    private final WebClient ttsClient;
+
+    @Qualifier("karloClient")
     private final WebClient karloClient;
+
     private final DiaryRepository diaryRepository;
+    private final FileUploadService fileUploadService;
     private final TalkRepository talkRepository;
 
-    private DiaryChatResponseDto getChat(DiaryChatRequestDto dto) {
-        return chatClient.post()
-            .uri("https://api.anthropic.com/v1/messages")
-            .bodyValue(dto)
-            .retrieve()
-            .bodyToMono(DiaryChatResponseDto.class)
-            .block();
-    }
-
-    @Override
-    public DiaryChatResponseDto init() {
+    private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
-        message.add(new MessageDTO("user", PromptHolder.INIT_PROMPT));
+        message.add(new MessageDTO("user", PromptHolder.DEFAULT_PROPMT + text));
         DiaryChatRequestDto reqDto = DiaryChatRequestDto.builder()
             .messages(message)
             .build();
-        return getChat(reqDto);
+        DiaryChatResponseDto chatResDto = chatClient.post()
+            .bodyValue(reqDto)
+            .retrieve()
+            .bodyToMono(DiaryChatResponseDto.class)
+            .block();
+        assert chatResDto != null;
+        return chatResDto.getContent().get(0).getText();
     }
+
+    private String getStt(MultipartFile mp3File) throws IOException {
+        DiarySttResponseDto sttResult = sttClient.post()
+            .bodyValue(mp3File.getBytes())
+            .retrieve()
+            .bodyToMono(DiarySttResponseDto.class)
+            .block();
+        assert sttResult != null;
+        return sttResult.getText();
+    }
+
+    private String getTts(String chat, Integer userId) {
+        byte[] ttsResult = ttsClient.post()
+            .bodyValue(
+                "speaker=nara"
+                    + "&text=" + chat)
+            .retrieve()
+            .bodyToMono(byte[].class)
+            .block();
+        assert ttsResult != null;
+        return fileUploadService.voiceUpload(userId, "audio/mpeg", "voice-ai", "mp3",
+            ttsResult); // ai 발화 s3 bucket 저장
+    }
+
+
+    public DiaryTtsResponseDto init(Integer userId) {
+        Diary diary = Diary.builder()
+            .diaryContent("init")
+            .build();
+        Diary newDiary = diaryRepository.save(diary);
+        String chatRes = getChat(""); //ai 첫 질문 받아옴
+        Talk aiTalk = Talk.builder()
+            .talkSpeaker(Speaker.valueOf("AI"))
+            .talkContent(chatRes)
+            .diary(newDiary)
+            .build();
+        talkRepository.save(aiTalk); //ai 발화 db 저장
+        String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
+        return new DiaryTtsResponseDto(
+            ttsUrl, newDiary.getDiaryId(), false);
+    }
+
+    public DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
+        throws IOException {
+        fileUploadService.voiceUpload(userId, "audio/mpeg", "voice-user", "mp3",
+            reqDto.getFile()); //사용자 발화 s3 bucket 저장
+        String sttRes = getStt(reqDto.getFile()); //사용자 발화 텍스트화
+        Talk userTalk = Talk.builder()
+            .talkSpeaker(Speaker.valueOf("USER"))
+            .talkContent(sttRes)
+            .diary(diaryRepository.findById(reqDto.getDiaryId())
+                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+            .build();
+        talkRepository.save(userTalk); //사용자 발화 db 저장
+        String chatRes = getChat(sttRes); //ai 발화 받아옴
+        Talk aiTalk = Talk.builder()
+            .talkSpeaker(Speaker.valueOf("AI"))
+            .talkContent(chatRes)
+            .diary(diaryRepository.findById(reqDto.getDiaryId())
+                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+            .build();
+        talkRepository.save(aiTalk); //ai 발화 db 저장
+        String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
+        return new DiaryTtsResponseDto(
+            ttsUrl, reqDto.getDiaryId(), false);
+    }
+
+//  public DiaryChatResponseDto chatTest(String prompt) {
+//    DiaryChatResponseDto initChat = getChat(prompt);
+//    return initChat;
+//  }
+
 
     @Override
     public KarloResponse createImage(KarloRequest karloRequest) {

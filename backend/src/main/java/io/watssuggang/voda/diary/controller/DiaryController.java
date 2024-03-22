@@ -2,20 +2,14 @@ package io.watssuggang.voda.diary.controller;
 
 import io.watssuggang.voda.common.security.annotation.CurrentUser;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
-import io.watssuggang.voda.diary.dto.req.TalkListRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
+import io.watssuggang.voda.diary.dto.res.DiaryTtsResponseDto;
 import io.watssuggang.voda.diary.service.DiaryService;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import io.watssuggang.voda.diary.dto.req.KarloRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
-import io.watssuggang.voda.diary.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,15 +23,24 @@ public class DiaryController {
     public final DiaryService diaryService;
 
     @GetMapping("/init")
-    public ResponseEntity<?> init() throws Exception {
-        DiaryChatResponseDto result = diaryService.init();
-        return ResponseEntity.ok(result.getContent().get(0).getText());
+    public ResponseEntity<?> init(@CurrentUser SecurityUserDto userDto) {
+        DiaryTtsResponseDto result = diaryService.init(userDto.getMemberId());
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/answer")
+    public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
+        @RequestBody DiaryAnswerRequestDto reqDto)
+        throws IOException {
+        DiaryTtsResponseDto result = diaryService.answer(reqDto, userDto.getMemberId());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/createImage")
     public ResponseEntity<?> createImageByKarlo(@RequestBody KarloRequest karloRequest) {
         return ResponseEntity.ok(diaryService.createImage(karloRequest));
     }
+
     @PostMapping("/create")
     public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList) {
         System.out.println("일기 생성 컨트롤러 들어옴!!!");

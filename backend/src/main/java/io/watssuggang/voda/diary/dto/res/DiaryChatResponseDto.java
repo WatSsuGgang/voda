@@ -6,6 +6,7 @@ import lombok.*;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class DiaryChatResponseDto {
 
     private String id;
@@ -20,6 +21,7 @@ public class DiaryChatResponseDto {
     @Data
     @Builder
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class UsageDTO {
 
         private Integer inputTokens;
@@ -29,6 +31,7 @@ public class DiaryChatResponseDto {
     @Data
     @Builder
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class ContentDTO {
 
         private String text;

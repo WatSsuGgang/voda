@@ -23,18 +23,18 @@ public class KarloRequest {
     private final Integer priorNumInferenceSteps;
     private final Double priorGuidanceScale;
     private final Integer numInferenceSteps;
-    private final  Double guidanceScale;
+    private final Double guidanceScale;
     private final String scheduler;
     private final Long[] seed;
     private final Boolean nsfwChecker;
 
     @Builder
     public KarloRequest(String version, String prompt, Integer height, Integer width,
-            String negative_prompt, Boolean upscale, Integer scale, String imageFormat,
-            Integer imageQuality, Integer samples, String returnType,
-            Integer priorNumInferenceSteps,
-            Double priorGuidanceScale, Integer numInferenceSteps, Double guidanceScale,
-            String scheduler, Long[] seed, Boolean nsfwChecker) {
+        String negative_prompt, Boolean upscale, Integer scale, String imageFormat,
+        Integer imageQuality, Integer samples, String returnType,
+        Integer priorNumInferenceSteps,
+        Double priorGuidanceScale, Integer numInferenceSteps, Double guidanceScale,
+        String scheduler, Long[] seed, Boolean nsfwChecker) {
         this.version = version;
         this.prompt = prompt;
         this.height = height;
