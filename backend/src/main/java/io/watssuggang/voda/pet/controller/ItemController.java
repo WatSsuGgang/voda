@@ -31,8 +31,8 @@ public class ItemController {
 
     @PostMapping("/buy")
     public ResponseEntity<URI> buyItem(
-            @CurrentUser SecurityUserDto userDto,
-            @RequestBody @Valid ItemBuyRequest buyRequest
+        @CurrentUser SecurityUserDto userDto,
+        @RequestBody @Valid ItemBuyRequest buyRequest
     ) {
         Integer ownId = itemService.buyItem(buyRequest, userDto);
         return ResponseEntity.created(URI.create(String.format("/item/buy/%d", ownId))).build();
@@ -40,8 +40,8 @@ public class ItemController {
 
     @PatchMapping("{item-id}")
     public ResponseEntity<?> updateItem(
-            @RequestBody @Valid ItemUpdateRequest updateRequest,
-            @PathVariable("item-id") Integer itemId
+        @RequestBody @Valid ItemUpdateRequest updateRequest,
+        @PathVariable("item-id") Integer itemId
     ) {
         ItemResponse itemResponse = itemService.updateItem(itemId, updateRequest);
         return ResponseEntity.ok(itemResponse);
@@ -49,9 +49,9 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<?> getItemsByCategory(
-            @Valid @RequestParam(value = "category")
-            @EnumValidator(enumClass = ItemCategory.class, message = "유효하지 않은 카테고리입니다.")
-            String category
+        @Valid @RequestParam(value = "category")
+        @EnumValidator(enumClass = ItemCategory.class, message = "유효하지 않은 카테고리입니다.")
+        String category
     ) {
         List<ItemResponse> itemsByCategory = itemService.getAllItemByCategory(category);
         return ResponseEntity.ok(itemsByCategory);

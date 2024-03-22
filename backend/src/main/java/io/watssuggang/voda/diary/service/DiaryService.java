@@ -1,17 +1,21 @@
 package io.watssuggang.voda.diary.service;
 
-import io.watssuggang.voda.diary.dto.req.KarloRequest;
-import io.watssuggang.voda.diary.dto.req.KarloResponse;
+import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
 import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
+import io.watssuggang.voda.diary.dto.res.DiaryTtsResponseDto;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+
 public interface DiaryService {
 
-    DiaryChatResponseDto init(); //claude 호출
+    DiaryTtsResponseDto init(Integer userId);
+
+    DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
+        throws IOException;
 
     Map<String, Object> getChatList(int id);
 
@@ -23,8 +27,6 @@ public interface DiaryService {
         int memberId);
 
     KarloResponse createImage(KarloRequest karloRequest);
-
-//  String fileToString(File file) throws IOException; //STT 호출
 
 
 }

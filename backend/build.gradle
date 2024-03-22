@@ -60,6 +60,10 @@ dependencies {
 
     //JSON
     implementation 'org.json:json:20210307'
+
+    //AWS
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'commons-io:commons-io:2.15.1'
 }
 
 tasks.named('test') {

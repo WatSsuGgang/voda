@@ -57,7 +57,7 @@ public class ItemService {
 
     public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
         Item item = itemRepository.findById(buyRequest.getItemId())
-                .orElseThrow(ItemNotFoundException::new);
+            .orElseThrow(ItemNotFoundException::new);
         Member member = memberService.findByEmail(userDto.getEmail());
         Own own = Own.of();
         own.purchase(member, item);

@@ -17,16 +17,16 @@ public class NotificationController {
 
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(
-            @AuthenticationPrincipal SecurityUserDto userDto,
-            @RequestHeader(value = "lastEventId", required = false, defaultValue = "") String lastEventId
+        @AuthenticationPrincipal SecurityUserDto userDto,
+        @RequestHeader(value = "lastEventId", required = false, defaultValue = "") String lastEventId
     ) {
         return notificationService.subscribe(userDto.getMemberId(), lastEventId);
     }
 
     @PostMapping("/count")
     public ResponseEntity<Void> sendCount(
-            @AuthenticationPrincipal SecurityUserDto userDto,
-            @RequestHeader(value = "lastEventId", required = false, defaultValue = "") String lastEventId
+        @AuthenticationPrincipal SecurityUserDto userDto,
+        @RequestHeader(value = "lastEventId", required = false, defaultValue = "") String lastEventId
     ) {
         notificationService.count(lastEventId);
         return ResponseEntity.ok().build();

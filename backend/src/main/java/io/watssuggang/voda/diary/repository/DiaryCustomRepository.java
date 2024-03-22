@@ -8,4 +8,5 @@ public interface DiaryCustomRepository {
 
     List<Diary> findDiariesByCondition(LocalDateTime start, LocalDateTime end, String emotion,
         int memberId);
+
 }
