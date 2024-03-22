@@ -16,10 +16,6 @@ const Button = styled.button({
   marginTop: "20vh",
 });
 
-export default function SignupButton({ nickname }) {
-  return (
-    <>
-      <Button>회원가입</Button>
-    </>
-  );
+export default function SignupButton({ onClick }) {
+  return <Button onClick={onClick}>회원가입</Button>;
 }

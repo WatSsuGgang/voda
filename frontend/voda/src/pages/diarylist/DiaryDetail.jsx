@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
-import { useLocation } from "react-router";
+import React, { useRef, useState, useEffect } from "react";
+import { useParams } from "react-router";
 import useStore from "../../store/store";
 import styled from "styled-components";
-import trash from "../../assets/diarylist/trash.svg";
 import save from "../../assets/diarylist/save.svg";
 import playbutton from "../../assets/diarylist/playbutton.svg";
+import { getDiaryDetail } from "../../services/diarylist";
+
 const Title = styled.h3`
   color: #486b73;
 `;
@@ -18,35 +19,62 @@ const Container = styled.div`
   max-height: 62vh;
   overflow: auto;
 `;
+
 const DiaryDetail = () => {
+  const [diary, setDiary] = useState(null); // 초기값을 null로 설정
+  const [loading, setLoading] = useState(true); // 로딩 상태를 관리
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchDiary = async () => {
+      try {
+        const res = await getDiaryDetail(id);
+        setDiary(res.data);
+        setLoading(false); // 다이어리를 가져오면 로딩 상태를 false로 변경
+      } catch (error) {
+        console.error("Error fetching diary:", error);
+      }
+    };
+
+    fetchDiary();
+  }, [id]); // id가 변경될 때마다 다이어리를 다시 가져옴
+
   const store = useStore();
-  const { state } = useLocation();
-  const emotionImageUrl = store.emotions[state.emotion];
-  const deleteDiary = (id) => {
-    // api delete 요청 보내는 로직 구현 예정
+  const emotionImageUrl = store.emotions[diary?.diaryEmotion];
+  const audioContextRef = useRef(null);
+
+  const playVoice = (e) => {
+    e.preventDefault();
+    if (audioContextRef.current) {
+      audioContextRef.current.play();
+    }
   };
 
-  const playVoice = () => {
-    // 음성 파일을 재생시키는 로직 구현 예정
-  };
   const handleDownloadClick = (url) => {
     fetch(url, {
       method: "GET",
     })
-      .then((res) => {
-        return res.blob();
-      })
+      .then((res) => res.blob())
       .then((blob) => {
         const blobUrl = URL.createObjectURL(blob);
         const aTag = document.createElement("a");
         aTag.href = blobUrl;
-        aTag.download = `${state.date}.png`;
+        aTag.download = `${diary.date}.png`;
         aTag.click();
       })
       .catch((e) => {
         console.error(e);
       });
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중일 때 로딩 표시
+  }
+
+  if (!diary) {
+    return <div>Diary not found.</div>; // 다이어리가 없는 경우 메시지 표시
+  }
 
   return (
     <div>
@@ -58,8 +86,8 @@ const DiaryDetail = () => {
         }}
       >
         <Title>
-          {store.nickname}님의 {parseInt(state.date.slice(5, 7))}/
-          {parseInt(state.date.slice(8, 10))}
+          {diary.writerName}님의 {parseInt(diary.createdAt.slice(5, 7))}/
+          {parseInt(diary.createdAt.slice(8, 10))}
           일기
         </Title>
         <img
@@ -76,7 +104,7 @@ const DiaryDetail = () => {
             fontWeight: "bold",
           }}
         >
-          {state.title}
+          {diary.diaryTitle}
         </div>
         {/* 상단 바 -> 사진 저장, 날짜, 게시글 삭제 버튼 */}
         <div
@@ -87,28 +115,43 @@ const DiaryDetail = () => {
             margin: "0 0.8rem",
           }}
         >
-          <img src={save} onClick={() => handleDownloadClick(state.picture)} />
-          <div style={{ display: "flex" }}>
-            {state.date}
-            <img src={trash} style={{ marginLeft: "0.5rem" }} />
+          <div>
+            <img
+              src={save}
+              onClick={() =>
+                handleDownloadClick(
+                  diary.diaryFiles.find((file) => file.fileType === "IMG")
+                    ?.fileUrl
+                )
+              }
+            />
           </div>
+          <div>{diary.createdAt.slice(0, 10)}</div>
         </div>
         {/* 일기 이미지 */}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <img
-            src={state.picture}
+            src={
+              diary.diaryFiles.find((file) => file.fileType === "IMG")?.fileUrl
+            }
             style={{ width: "80%", height: "50%", borderRadius: "10%" }}
           />
         </div>
         {/* 일기 내용 */}
-        <div style={{ padding: "2rem" }}>{state.content}</div>
+        <div style={{ padding: "2rem" }}>{diary.diaryContent}</div>
       </Container>
       {/* 녹음 파일 재생 버튼 */}
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
       >
-        <img src={playbutton} />
+        <img src={playbutton} onClick={playVoice} />
       </div>
+
+      <audio
+        ref={audioContextRef}
+        src={diary.diaryFiles.find((file) => file.fileType === "MP4")?.fileUrl}
+        style={{ display: "none" }}
+      ></audio>
     </div>
   );
 };

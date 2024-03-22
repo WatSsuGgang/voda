@@ -44,7 +44,7 @@ export const request = async (method, url, data = {}) => {
     const status = response.status;
     if (status === HTTPStatusCodes.OK) {
       // 응답코드가 200일 경우 로직
-      console.log(response);
+      // console.log(response);
       return response;
     } else {
       // 응답코드가 200이 아닐 경우 로직
@@ -57,7 +57,8 @@ export const request = async (method, url, data = {}) => {
   } catch (error) {
     // 에러 로직
     console.error(error);
-    return "ERROR!";
+
+    return "error";
   }
 };
 
@@ -89,9 +90,34 @@ export const postData = async (url, data) => {
     const status = response.status;
     if (status === HTTPMethods.OK) {
       // 응답 200일 경우
-      return true;
+      return response;
     } else {
       // 아닐 경우
+      return false;
+    }
+  } catch (error) {
+    // 에러일 경우
+    console.error(error);
+    return false;
+  }
+};
+
+// formdata 전송
+export const formPostData = async (url, data) => {
+  try {
+    const response = await axios.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data", // 'multipart/form-data' 헤더를 설정합니다.
+        Authorization: ACCESS_TOKEN, // 기존의 Authorization 헤더를 유지합니다.
+      },
+    });
+    const status = response.status;
+    if (status === 200) {
+      // 응답 200일 경우
+      return response;
+    } else {
+      // 아닐 경우
+      console.log("현재상태: ", status);
       return false;
     }
   } catch (error) {

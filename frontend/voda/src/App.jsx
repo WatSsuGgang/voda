@@ -1,6 +1,7 @@
-import React from "react"; // eslint-disable-line no-unused-vars
+import React, { useEffect, useState } from "react"; // eslint-disable-line no-unused-vars
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import Start from "./pages/Start";
 // 로그인된 사용자가 볼 수 있는 페이지
 import PetPage from "./pages/pet/PetPage";
 import PetShopPage from "./pages/pet/PetShopPage";
@@ -20,9 +21,7 @@ import Nickname from "./pages/login/Nickname";
 import useStore from "./store/store";
 import LoginSuccess from "./pages/login/LoginSuccess";
 
-// const isLogin = false;
 import styled from "styled-components";
-const isLogin = true;
 
 const Wrapper = styled.div`
   left: 0;
@@ -32,12 +31,16 @@ const Wrapper = styled.div`
 `;
 
 function App() {
-  const accessToken = localStorage.getItem("accessToken");
-  const { isLoggedIn } = useStore();
-  if (accessToken) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    setIsLoggedIn(localStorage.getItem("accessToken") !== null);
+  }, [isLoggedIn]);
+  // const { isLoggedIn } = useStore();
+  if (isLoggedIn) {
     return (
       <div>
         <Routes>
+          <Route path="/" element={<Start />}></Route>
           <Route path="/pet" element={<PetPage />}></Route>
           <Route path="/pet/shop" element={<PetShopPage />}></Route>
           <Route path="/diary" element={<DiaryList />}></Route>
@@ -57,7 +60,8 @@ function App() {
   } else {
     return (
       <Routes>
-        <Route path="/" element={<Introduction />}></Route>
+        <Route path="/" element={<Start />}></Route>
+        <Route path="/intro" element={<Introduction />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/login/nickname" element={<Nickname />}></Route>
         <Route path="/login-success" element={<LoginSuccess />}></Route>

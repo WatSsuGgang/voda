@@ -4,9 +4,11 @@ import { HTTPStatusCodes } from "./api";
 
 // User
 // 펫 정보 (홈 화면)
-export const getPet = () => {
-  const url = "/pet";
-  const response = request(HTTPMethods.GET, url);
+// 임시 memberId
+export const getPet = async (memberId) => {
+  const url = `/pet/${memberId}`;
+  const response = await request(HTTPMethods.GET, url);
+  return response.data;
 };
 
 // User
@@ -18,9 +20,10 @@ export const getPetTalk = (petId) => {
 
 // User
 // 펫 먹이주기
-export const feedPet = (petId) => {
+export const feedPet = async (petId) => {
   const url = `/pet/feed/${petId}`;
-  const response = request(HTTPMethods.PATCH, url);
+  const response = await request(HTTPMethods.PATCH, url);
+  return response.data;
 };
 
 // User
@@ -32,10 +35,11 @@ export const levelUpPet = (petId) => {
 
 // User
 // 펫 닉네임 수정
-export const editPetName = (petId, name) => {
+export const editPetName = async (petId, name) => {
   const url = `/pet/${petId}`;
   const data = { name };
-  const response = request(HTTPMethods.PATCH, url, data);
+  const response = await request(HTTPMethods.PATCH, url, data);
+  return response.data;
 };
 
 // Admin
