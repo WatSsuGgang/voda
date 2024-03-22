@@ -111,6 +111,10 @@ public class DiaryServiceImpl implements DiaryService {
         fileUploadService.voiceUpload(userId, "audio/mpeg", "voice-user", "mp3",
             reqDto.getFile()); //사용자 발화 s3 bucket 저장
         String sttRes = getStt(reqDto.getFile()); //사용자 발화 텍스트화
+        boolean nextAnswer = false;
+        if (sttRes.equals("오늘일기끝") || sttRes.equals("오늘 일기 끝")) {
+            nextAnswer = true;
+        }
         Talk userTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("USER"))
             .talkContent(sttRes)
@@ -118,17 +122,22 @@ public class DiaryServiceImpl implements DiaryService {
                 .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
             .build();
         talkRepository.save(userTalk); //사용자 발화 db 저장
-        String chatRes = getChat(sttRes); //ai 발화 받아옴
-        Talk aiTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("AI"))
-            .talkContent(chatRes)
-            .diary(diaryRepository.findById(reqDto.getDiaryId())
-                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
-            .build();
-        talkRepository.save(aiTalk); //ai 발화 db 저장
-        String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
-        return new DiaryTtsResponseDto(
-            ttsUrl, reqDto.getDiaryId(), false);
+        if (nextAnswer) {
+            String chatRes = getChat(sttRes); //ai 발화 받아옴
+            Talk aiTalk = Talk.builder()
+                .talkSpeaker(Speaker.valueOf("AI"))
+                .talkContent(chatRes)
+                .diary(diaryRepository.findById(reqDto.getDiaryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+                .build();
+            talkRepository.save(aiTalk); //ai 발화 db 저장
+            String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
+            return new DiaryTtsResponseDto(
+                ttsUrl, reqDto.getDiaryId(), false);
+        } else {
+            return new DiaryTtsResponseDto(
+                null, reqDto.getDiaryId(), true);
+        }
     }
 
 //  public DiaryChatResponseDto chatTest(String prompt) {
