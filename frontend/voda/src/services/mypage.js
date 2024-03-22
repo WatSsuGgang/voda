@@ -4,9 +4,11 @@ import { HTTPStatusCodes } from "./api";
 
 // User
 // 내 정보 조회
-export const getUserInfo = () => {
+export const getUserInfo = async () => {
   const url = "/user";
-  const response = request(HTTPMethods.GET, url);
+  const response = await request(HTTPMethods.GET, url);
+  console.log("get User info", response);
+  return response;
 };
 
 // User

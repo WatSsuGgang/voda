@@ -35,4 +35,5 @@ export const buyItem = (data) => {
 export const getItem = (category) => {
   const url = `/item?category=${category}`;
   const response = request(HTTPMethods.GET, url);
+  return response;
 };

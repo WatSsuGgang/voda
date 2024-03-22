@@ -33,14 +33,30 @@ const ButtonContainer = styled.div({
 
 const Login = () => {
   const navigate = useNavigate();
+  const baseURL = import.meta.env.VITE_API_URL;
+
+  async function getIlgoo(target) {
+    const api = import.meta.env.VITE_API_URL;
+    const url = api + `/oauth2/authorization/${target}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  }
 
   function onClickHandler(e) {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      navigate("/");
+      navigate("/pet");
     } else {
-      navigate(`/oauth2/authorization/${e.target.id}`);
+      // const base_url = import.meta.env.VITE_API_URL;
+      // window.location.href = base_url + `/oauth2/authorization/${e.target.id}`;
+      // getIlgoo(e.target.id);
     }
   }
   return (
@@ -65,37 +81,44 @@ const Login = () => {
       </ImageContainer>
       <InstructionContainer>SNS로 간편 로그인</InstructionContainer>
       <ButtonContainer>
-        <img
-          src={btn_google}
-          alt=""
-          id="google"
-          onClick={onClickHandler}
-          style={{
-            width: "3rem",
-          }}
-        />
-        <img
-          src={btn_kakao}
-          alt=""
-          id="kakao"
-          onClick={onClickHandler}
-          style={{
-            width: "3rem",
-          }}
-        />
-        <img
-          src={btn_naver}
-          alt=""
-          id="naver"
-          onClick={onClickHandler}
-          style={{
-            width: "3rem",
-            borderRadius: "100%",
-          }}
-        />
+        <a href={baseURL + `/oauth2/authorization/google`}>
+          <img
+            src={btn_google}
+            alt=""
+            id="google"
+            // onClick={onClickHandler}
+            style={{
+              width: "3rem",
+            }}
+          />
+        </a>
+        <a href={baseURL + `/oauth2/authorization/kakao`}>
+          <img
+            src={btn_kakao}
+            alt=""
+            id="kakao"
+            // onClick={onClickHandler}
+            style={{
+              width: "3rem",
+            }}
+          />
+        </a>
+        <a href={baseURL + `/oauth2/authorization/naver`}>
+          <img
+            src={btn_naver}
+            alt=""
+            id="naver"
+            // onClick={onClickHandler}
+            style={{
+              width: "3rem",
+              borderRadius: "100%",
+            }}
+          />
+        </a>
       </ButtonContainer>
     </>
   );
 };
 
 export default Login;
+
