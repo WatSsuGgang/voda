@@ -36,6 +36,7 @@ const Login = () => {
   const baseURL = import.meta.env.VITE_API_URL;
 
   async function getIlgoo(target) {
+    console.log("getIlgoo Start");
     const api = import.meta.env.VITE_API_URL;
     const url = api + `/oauth2/authorization/${target}`;
     const response = await fetch(url, {
@@ -44,8 +45,8 @@ const Login = () => {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json();
-    console.log(data);
+    // const data = await response.json();
+    // console.log(data);
   }
 
   function onClickHandler(e) {
