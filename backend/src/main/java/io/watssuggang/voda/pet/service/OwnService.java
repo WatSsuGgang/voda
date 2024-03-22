@@ -16,7 +16,7 @@ public class OwnService {
 
     public List<OwnResponse> getAllOwnByMember(Integer memberId) {
         return ownRepository.findAllByMember_MemberId(memberId).stream()
-                .map(own -> OwnResponse.of(own.getItem()))
-                .toList();
+            .map(own -> OwnResponse.of(own.getItem()))
+            .toList();
     }
 }

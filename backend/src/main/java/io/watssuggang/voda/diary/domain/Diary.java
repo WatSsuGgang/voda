@@ -1,10 +1,11 @@
 package io.watssuggang.voda.diary.domain;
 
-import io.watssuggang.voda.common.domain.*;
-import io.watssuggang.voda.common.enums.*;
-import io.watssuggang.voda.member.domain.*;
+import io.watssuggang.voda.common.domain.BaseEntity;
+import io.watssuggang.voda.common.enums.Emotion;
+import io.watssuggang.voda.member.domain.Member;
 import jakarta.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 @Entity

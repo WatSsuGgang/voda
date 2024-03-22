@@ -1,20 +1,15 @@
 package io.watssuggang.voda.diary.controller;
 
-import io.watssuggang.voda.common.security.annotation.*;
-import io.watssuggang.voda.common.security.dto.*;
+import io.watssuggang.voda.common.security.annotation.CurrentUser;
+import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.diary.dto.req.*;
-import io.watssuggang.voda.diary.dto.res.*;
-import io.watssuggang.voda.diary.service.*;
-import java.io.IOException;
-import java.time.*;
-import java.util.*;
-import lombok.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.bind.annotation.*;
-import io.watssuggang.voda.diary.dto.req.KarloRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
+import io.watssuggang.voda.diary.dto.res.DiaryTtsResponseDto;
 import io.watssuggang.voda.diary.service.DiaryService;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,28 +22,29 @@ public class DiaryController {
 
     public final DiaryService diaryService;
 
-  @GetMapping("/init")
-  public ResponseEntity<?> init(@CurrentUser SecurityUserDto userDto) {
-    //    Integer userId = userDto.getMemberId();
-    Integer userId = 1;
-    DiaryTtsResponseDto result = diaryService.init(userId);
-    return ResponseEntity.ok(result);
-  }
+    @GetMapping("/init")
+    public ResponseEntity<?> init(@CurrentUser SecurityUserDto userDto) {
+        //    Integer userId = userDto.getMemberId();
+        Integer userId = 1;
+        DiaryTtsResponseDto result = diaryService.init(userId);
+        return ResponseEntity.ok(result);
+    }
 
-  @PostMapping("/answer")
-  public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
-      @RequestBody DiaryAnswerRequestDto reqDto)
-      throws IOException {
+    @PostMapping("/answer")
+    public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
+        @RequestBody DiaryAnswerRequestDto reqDto)
+        throws IOException {
 //    Integer userId = userDto.getMemberId();
-    Integer userId = 1;
-    DiaryTtsResponseDto result = diaryService.answer(reqDto, userId);
-    return ResponseEntity.ok(result);
-  }
+        Integer userId = 1;
+        DiaryTtsResponseDto result = diaryService.answer(reqDto, userId);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/createImage")
     public ResponseEntity<?> createImageByKarlo(@RequestBody KarloRequest karloRequest) {
         return ResponseEntity.ok(diaryService.createImage(karloRequest));
     }
+
     @PostMapping("/create")
     public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList) {
         System.out.println("일기 생성 컨트롤러 들어옴!!!");

@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 public class DiaryTtsResponseDto {
 
-  private String ttsUrl;
-  private Integer diaryId;
-  private Boolean terminate;
+    private String ttsUrl;
+    private Integer diaryId;
+    private Boolean terminate;
 }

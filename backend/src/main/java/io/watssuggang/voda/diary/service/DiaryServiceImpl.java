@@ -36,14 +36,17 @@ public class DiaryServiceImpl implements DiaryService {
     @Autowired
     @Qualifier("chatClient")
     private WebClient chatClient;
+
+    @Autowired
     @Qualifier("sttClient")
-    @Autowired
     private WebClient sttClient;
+
+    @Autowired
     @Qualifier("ttsClient")
-    @Autowired
     private WebClient ttsClient;
-    @Qualifier("karloClient")
+
     @Autowired
+    @Qualifier("karloClient")
     private WebClient karloClient;
 
     private final DiaryRepository diaryRepository;
@@ -92,7 +95,7 @@ public class DiaryServiceImpl implements DiaryService {
             .block();
         assert ttsResult != null;
         return fileUploadService.voiceUpload(userId, "audio/mpeg", "voice-ai", "mp3",
-            ttsResult);
+            ttsResult); // ai 발화 s3 bucket 저장
     }
 
 
@@ -107,7 +110,7 @@ public class DiaryServiceImpl implements DiaryService {
             .talkContent(chatRes)
             .diary(newDiary)
             .build();
-        talkRepository.save(aiTalk);
+        talkRepository.save(aiTalk); //ai 발화 db 저장
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
         return new DiaryTtsResponseDto(
             ttsUrl, newDiary.getDiaryId(), false);

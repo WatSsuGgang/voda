@@ -1,7 +1,7 @@
 package io.watssuggang.voda.common.enums;
 
-import io.watssuggang.voda.common.converter.*;
-import lombok.*;
+import io.watssuggang.voda.common.converter.AbstractLabelConverter;
+import lombok.Getter;
 
 @Getter
 public enum Speaker implements LabelEnum {

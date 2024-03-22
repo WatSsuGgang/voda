@@ -9,6 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class DiaryAnswerRequestDto {
 
-  private Integer diaryId;
-  private MultipartFile file;
+    private Integer diaryId;
+    private MultipartFile file;
 }

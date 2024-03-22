@@ -1,20 +1,25 @@
 package io.watssuggang.voda.common.security.config;
 
-import io.watssuggang.voda.common.security.filter.*;
-import io.watssuggang.voda.common.security.handler.*;
-import java.util.*;
-import lombok.*;
-import org.springframework.context.annotation.*;
-import org.springframework.security.config.*;
-import org.springframework.security.config.annotation.method.configuration.*;
-import org.springframework.security.config.annotation.web.builders.*;
-import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.security.config.annotation.web.configurers.*;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.*;
-import org.springframework.security.config.http.*;
-import org.springframework.security.web.*;
-import org.springframework.security.web.authentication.*;
-import org.springframework.security.web.util.matcher.*;
+import io.watssuggang.voda.common.security.filter.JwtAuthenticationFilter;
+import io.watssuggang.voda.common.security.filter.JwtExceptionFilter;
+import io.watssuggang.voda.common.security.handler.OAuth2FailureHandler;
+import io.watssuggang.voda.common.security.handler.OAuth2SuccessHandler;
+import java.util.Arrays;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.*;
 
 @RequiredArgsConstructor
