@@ -228,7 +228,7 @@ const Record = () => {
       >
         <Timer />
         <StopCircleIcon
-          onClick={fetchCreate(Id)}
+          onClick={() => fetchCreate(Id)}
           style={{ marginLeft: "3%" }}
         />
       </div>
