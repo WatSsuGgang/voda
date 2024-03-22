@@ -25,9 +25,9 @@ export const deleteItem = () => {
 
 // User
 // 아이템 구매
-export const buyItem = (data) => {
+export const buyItem = async (data) => {
   const url = `/item/buy`;
-  const response = request(HTTPMethods.POST, url, data);
+  const response = await request(HTTPMethods.POST, url, data);
 };
 
 // All

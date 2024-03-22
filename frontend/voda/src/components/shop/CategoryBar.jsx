@@ -39,7 +39,7 @@ export default function CategoryBar() {
   }
 
   return (
-    <Bar>
+    <Bar style={{ zIndex: 99 }}>
       <Button
         onClick={clickHandler}
         id={"food"}
