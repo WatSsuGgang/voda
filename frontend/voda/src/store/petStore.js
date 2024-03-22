@@ -50,7 +50,7 @@ const usePetStore = create((set) => ({
   setStage: (state) => set({ stage: state }),
 
   // 상점 아이템
-  items: null,
+  items: [],
   setItems: (state) => set({ items: state }),
 }));
 

@@ -40,6 +40,7 @@ const PetPage = () => {
         setPetAppearance(response.pet.petAppearance);
         setPetId(response.pet.petId);
         setStage(response.pet.stage);
+        console.log(response);
         setIsLoading(false);
         return response;
       } catch (error) {

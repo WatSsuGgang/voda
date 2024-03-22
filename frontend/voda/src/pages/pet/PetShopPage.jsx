@@ -31,13 +31,13 @@ const TopComponents = styled.div`
 
 export default function PetShopPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const { currentCategory, items, setItems } = usePetStore();
+  const { currentCategory, setItems } = usePetStore();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getItem(currentCategory);
-        console.log(response);
-        setItems(response);
+        setItems(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
