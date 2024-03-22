@@ -1,13 +1,13 @@
 package io.watssuggang.voda.member.dto.res;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@RequiredArgsConstructor
-@Getter
+@Data
+@AllArgsConstructor
+@Builder
 public class MemberInfoResponse {
 
-    private final String nickname;
-    private final Integer coins;
-    private final Integer diaryStreak;
+    private String nickname;
+    private Integer coins;
+    private Integer diaryStreak;
 }

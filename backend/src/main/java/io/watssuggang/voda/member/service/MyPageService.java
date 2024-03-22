@@ -25,16 +25,28 @@ public class MyPageService {
     private final DiaryRepository diaryRepository;
     private final PetRepository petRepository;
 
+    @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(Integer memberId) {
+        Member member = findMemberById(memberId);
+
+        return MemberInfoResponse.builder()
+            .nickname(member.getMemberName())
+            .coins(member.getMemberPoint())
+            .diaryStreak(member.getMemberDiaryCount())
+            .build();
     }
 
     @Transactional
     public MemberInfoResponse updateMemberInfo(Integer memberId, String newNickname) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new RuntimeException("회원 정보 없음"));
+        Member member = findMemberById(memberId);
+
         member.setMemberName(newNickname);
 
-        return new MemberInfoResponse(newNickname);
+        return MemberInfoResponse.builder()
+            .nickname(newNickname)
+            .coins(member.getMemberPoint())
+            .diaryStreak(member.getMemberDiaryCount())
+            .build();
     }
 
     @Transactional
@@ -105,5 +117,10 @@ public class MyPageService {
 
     private DayOfWeek getDayOfWeek(Diary diary) {
         return diary.getCreatedAt().getDayOfWeek();
+    }
+
+    private Member findMemberById(Integer memberId) {
+        return memberRepository.findById(memberId)
+            .orElseThrow(() -> new RuntimeException("회원 정보 없음"));
     }
 }

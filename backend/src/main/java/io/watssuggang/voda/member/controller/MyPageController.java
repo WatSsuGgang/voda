@@ -20,8 +20,7 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping
-    public ResponseEntity<?> getMemberInfo(@CurrentUser SecurityUserDto currentUser)
-        throws Exception {
+    public ResponseEntity<?> getMemberInfo(@CurrentUser SecurityUserDto currentUser) {
         MemberInfoResponse response = myPageService.getMemberInfo(currentUser.getMemberId());
 
         return ResponseEntity.ok(response);
@@ -29,7 +28,7 @@ public class MyPageController {
 
     @PatchMapping
     public ResponseEntity<?> updateMemberInfo(@CurrentUser SecurityUserDto currentUser,
-        UpdateMemberInfoRequest req) throws Exception {
+        UpdateMemberInfoRequest req) {
         MemberInfoResponse response = myPageService.updateMemberInfo(currentUser.getMemberId(),
             req.getNewNickname());
 
@@ -37,16 +36,14 @@ public class MyPageController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteMember(@CurrentUser SecurityUserDto currentUser)
-        throws Exception {
+    public ResponseEntity<?> deleteMember(@CurrentUser SecurityUserDto currentUser) {
         myPageService.deleteMember(currentUser.getMemberId());
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/report")
-    public ResponseEntity<?> getEmotionReport(@CurrentUser SecurityUserDto currentUser)
-        throws Exception {
+    public ResponseEntity<?> getEmotionReport(@CurrentUser SecurityUserDto currentUser) {
         EmotionReportResponse response = myPageService.getEmotionReport(currentUser.getMemberId());
         return ResponseEntity.ok(response);
     }
