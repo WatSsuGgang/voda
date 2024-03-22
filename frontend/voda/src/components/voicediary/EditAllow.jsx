@@ -19,10 +19,13 @@ const editAllow = () => {
   const store = useStore();
   return (
     <Box>
-      <EditDiary>일기 수정</EditDiary>
+      <EditDiary>대화내용 수정</EditDiary>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography>Off</Typography>
-        <Switch defaultChecked onChange={store.changeEditMode} />
+        <Switch
+          defaultChecked={store.editAllow}
+          onChange={store.changeEditMode}
+        />
         <Typography>On</Typography>
       </Stack>
     </Box>

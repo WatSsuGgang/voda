@@ -69,9 +69,9 @@ export const getData = async (url) => {
   try {
     const response = await axios.get(url);
     const status = response.status;
-    if (status === HTTPMethods.OK) {
+    if (status === HTTPStatusCodes.OK) {
       // 응답 200일 경우
-      return true;
+      return response;
     } else {
       // 아닐 경우
       return false;
@@ -88,7 +88,7 @@ export const postData = async (url, data) => {
   try {
     const response = await axios.post(url, data);
     const status = response.status;
-    if (status === HTTPMethods.OK) {
+    if (status === HTTPStatusCodes.OK) {
       // 응답 200일 경우
       return response;
     } else {
@@ -112,7 +112,7 @@ export const formPostData = async (url, data) => {
       },
     });
     const status = response.status;
-    if (status === 200) {
+    if (status === HTTPStatusCodes.OK) {
       // 응답 200일 경우
       return response;
     } else {
@@ -132,7 +132,7 @@ export const deleteData = async (url) => {
   try {
     const response = await axios.delete(url);
     const status = response.status;
-    if (status === HTTPMethods.OK) {
+    if (status === HTTPStatusCodes.OK) {
       // 응답 200일 경우
       return true;
     } else {
@@ -150,7 +150,7 @@ export const putData = async (url, data) => {
   try {
     const response = await axios.put(url, data);
     const status = response.status;
-    if (status === HTTPMethods.OK) {
+    if (status === HTTPStatusCodes.OK) {
       // 응답 200일 경우
       return true;
     } else {
@@ -169,7 +169,7 @@ export const patchData = async () => {
   try {
     const response = await axios.delete(url);
     const status = response.status;
-    if (status === HTTPMethods.OK) {
+    if (status === HTTPStatusCodes.OK) {
       // 응답 200일 경우
       return true;
     } else {
