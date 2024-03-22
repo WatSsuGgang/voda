@@ -8,5 +8,5 @@ public class PromptHolder {
             + "내가 준 문장을 깔끔하게 만들어서 일기를 작성해줘. "
             + "일기의 제목과 일기, 이 일기에서 느껴지는 감정(JOY, ANGER, SADNESS, FEAR, CURIOSITY중에 가장 어울리는 하나)을 정해줘 "
             + "해당 일기를 그림으로 만들기 위한 프롬프트만 영어로 정리해줘."
-            + "위 내용들을 JSON 형식으로 정리해서 답변해줘.";
+            + "위 내용들을 JSON 형식 (title, content, emotion, prompt)으로 정리해서 답변해줘.";
 }

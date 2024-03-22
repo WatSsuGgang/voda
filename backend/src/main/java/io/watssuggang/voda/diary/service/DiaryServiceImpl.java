@@ -12,7 +12,9 @@ import io.watssuggang.voda.diary.exception.DiaryNotCreateException;
 import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
 import io.watssuggang.voda.diary.repository.*;
 import io.watssuggang.voda.diary.util.PromptHolder;
-import java.io.IOException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -82,7 +86,7 @@ public class DiaryServiceImpl implements DiaryService {
                 .bodyToMono(byte[].class)
                 .block();
         assert ttsResult != null;
-        return fileUploadService.voiceUpload(userId, "audio/mpeg", "voice-ai", "mp3",
+        return fileUploadService.fileUpload(userId, "audio/mpeg", "voice-ai", "mp3",
                 ttsResult); // ai 발화 s3 bucket 저장
     }
 
@@ -106,7 +110,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     public DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
             throws IOException {
-        fileUploadService.voiceUpload(userId, "audio/mpeg", "voice-user", "mp3",
+        fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
                 reqDto.getFile()); //사용자 발화 s3 bucket 저장
         String sttRes = getStt(reqDto.getFile()); //사용자 발화 텍스트화
         Talk userTalk = Talk.builder()
@@ -169,7 +173,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     // 다이어리 생성
     @Override
-    public void createDiary(List<TalkRequest> talkList, int diaryId) {
+    public DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId) {
 
         String allAnswers = talkList.stream()
                 .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
@@ -190,7 +194,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         JSONObject jsonObject = new JSONObject(answerText);
         String title = jsonObject.getString("title");
-        String content = jsonObject.getString("diary");
+        String content = jsonObject.getString("content");
         String emotion = jsonObject.getString("emotion");
         String imagePrompt = jsonObject.getString("prompt");
         Diary diary = Diary.builder()
@@ -199,20 +203,44 @@ public class DiaryServiceImpl implements DiaryService {
                 .diaryEmotion(Emotion.valueOf(emotion))
                 .diaryContent(content)
                 .build();
+
         createImage(KarloRequest.of(imagePrompt))
                 .getImages()
                 .forEach(imageResponse -> {
+                    String image = fileUploadService.fileUpload(
+                            diary.getMember().getMemberId(),
+                            MediaType.IMAGE_JPEG_VALUE,
+                            "image",
+                            "jpeg",
+                            getImage(imageResponse));
+
                     DiaryFile savedImage = diaryFileRepository.save(DiaryFile.builder()
                             .fileType(FileType.WEBP)
-                            .fileUrl(imageResponse.getImage())
+                            .fileUrl(image)
                             .build());
                     savedImage.addDiary(diary);
                 });
 
-        // TODO: S3 업로드
-        diaryRepository.save(diary);
+        Diary save = diaryRepository.save(diary);
 
-        // TODO: return 할 일기 response 만들기
+        return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
+    }
+
+    private static byte[] getImage(ImageResponse imageResponse) {
+        try {
+            URL url = new URL(imageResponse.getImage());
+            try (InputStream inputStream = url.openStream();
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+                int bytesRead;
+                byte[] data = new byte[1024];
+                while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, bytesRead);
+                }
+                return buffer.toByteArray();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
