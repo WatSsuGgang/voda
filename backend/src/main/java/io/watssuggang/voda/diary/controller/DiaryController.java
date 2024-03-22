@@ -69,10 +69,11 @@ public class DiaryController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<DiaryDetailResponse>> getList(@RequestParam LocalDateTime start,
-        @RequestParam LocalDateTime end, String emotion,
+    public ResponseEntity<List<DiaryDetailResponse>> getList(
+        @RequestParam(defaultValue = "") LocalDateTime start,
+        @RequestParam(defaultValue = "") LocalDateTime end,
+        @RequestParam(defaultValue = "NONE") String emotion,
         @CurrentUser SecurityUserDto securityUserDto) {
-        System.out.println("다이어리 리스트 가져오기" + start + " " + end + " " + emotion);
 
         List<DiaryDetailResponse> diaryList = diaryService.getDiaryList(start, end, emotion,
             securityUserDto.getMemberId());

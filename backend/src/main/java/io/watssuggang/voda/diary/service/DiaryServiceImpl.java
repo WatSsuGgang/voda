@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,34 +31,24 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 
-    @Autowired
     @Qualifier("chatClient")
-    private WebClient chatClient;
+    private final WebClient chatClient;
 
-    @Autowired
     @Qualifier("sttClient")
-    private WebClient sttClient;
+    private final WebClient sttClient;
 
-    @Autowired
     @Qualifier("ttsClient")
-    private WebClient ttsClient;
+    private final WebClient ttsClient;
 
-    @Autowired
     @Qualifier("karloClient")
-    private WebClient karloClient;
+    private final WebClient karloClient;
 
     private final DiaryRepository diaryRepository;
     private final FileUploadService fileUploadService;
     private final TalkRepository talkRepository;
-
-    public DiaryServiceImpl(DiaryRepository diaryRepository, FileUploadService fileUploadService,
-        TalkRepository talkRepository) {
-        this.diaryRepository = diaryRepository;
-        this.fileUploadService = fileUploadService;
-        this.talkRepository = talkRepository;
-    }
 
     private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
@@ -233,7 +223,7 @@ public class DiaryServiceImpl implements DiaryService {
         String emotion, int memberId) {
 
         List<Diary> filteredDiaryList = diaryRepository.findDiariesByCondition(start, end,
-            Emotion.valueOf(emotion), memberId);
+            emotion, memberId);
 
         List<DiaryDetailResponse> responseList = new ArrayList<>();
 

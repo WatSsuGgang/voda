@@ -31,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
             .memberEmail(signUpRequest.getEmail())
             .userRole("USER")
             .memberDiaryCount(0)
+            .memberPoint(10)
             .build();
 
         Pet pet = Pet.builder()
