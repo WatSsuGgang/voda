@@ -26,7 +26,6 @@ public class WebClientConfig {
     @Value("${Karlo.client-id}")
     private String clientId;
 
-
     private static final HttpClient httpClient = HttpClient.newBuilder()
         .followRedirects(Redirect.NORMAL)
         .connectTimeout(Duration.ofSeconds(20))
