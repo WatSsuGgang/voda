@@ -5,8 +5,8 @@ import { HTTPStatusCodes } from "./api";
 // User
 // 펫 정보 (홈 화면)
 // 임시 memberId
-export const getPet = async () => {
-  const url = "/pet";
+export const getPet = async (id) => {
+  const url = `/pet/${id}`;
   const response = await request(HTTPMethods.GET, url);
   return response.data;
 };
