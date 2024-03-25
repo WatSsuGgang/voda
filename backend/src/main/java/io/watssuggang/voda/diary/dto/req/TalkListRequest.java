@@ -1,6 +1,6 @@
 package io.watssuggang.voda.diary.dto.req;
 
-import java.util.*;
+import java.util.List;
 import lombok.*;
 
 @Getter

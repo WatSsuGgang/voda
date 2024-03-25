@@ -5,7 +5,6 @@ pipeline {
             steps{
             echo 'Remove Docker Process and Image'
 		sh '''if [ "$(docker ps -a -q -f name=docker-backend)" ]; then
-			docker network disconnect bridge docker-backend
 			docker stop docker-backend
 			if [ "$(docker ps -aq -f status=exited -f name=docker-backend)" ]; then
 				docker rm docker-backend
@@ -46,7 +45,6 @@ pipeline {
 		
 		echo 'Docker Run'
 		sh "docker run -d -p 8080:8080 --name docker-backend image-backend"
-		sh "docker network connect voda-network docker-backend"
             }
             post {
                 success {

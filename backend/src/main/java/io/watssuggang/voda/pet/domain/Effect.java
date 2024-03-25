@@ -2,7 +2,8 @@ package io.watssuggang.voda.pet.domain;
 
 
 import io.watssuggang.voda.common.enums.ItemCategory;
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.*;
 
 @Entity
@@ -12,7 +13,7 @@ public class Effect extends Item {
 
     @Builder
     public Effect(String itemImageUrl, Integer itemPrice, String itemName,
-            ItemCategory itemCategory) {
+        ItemCategory itemCategory) {
         super(itemImageUrl, itemPrice, itemName, itemCategory);
     }
 }

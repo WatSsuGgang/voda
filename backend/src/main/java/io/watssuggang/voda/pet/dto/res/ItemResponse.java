@@ -21,7 +21,7 @@ public class ItemResponse {
         this.itemCategory = item.getItemCategory();
     }
 
-    public static ItemResponse of(Item item){
+    public static ItemResponse of(Item item) {
         return new ItemResponse(item);
     }
 }

@@ -1,10 +1,11 @@
 package io.watssuggang.voda.diary.domain;
 
-import io.watssuggang.voda.common.domain.*;
-import io.watssuggang.voda.common.enums.*;
-import io.watssuggang.voda.member.domain.*;
+import io.watssuggang.voda.common.domain.BaseEntity;
+import io.watssuggang.voda.common.enums.Emotion;
+import io.watssuggang.voda.member.domain.Member;
 import jakarta.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -26,24 +27,20 @@ public class Diary extends BaseEntity {
     private Emotion diaryEmotion;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary")
-    List<DiaryFile> diaryFiles = new ArrayList<>();
+    private List<DiaryFile> diaryFiles = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary")
-    List<Talk> diaryTalks = new ArrayList<>();
+    private List<Talk> diaryTalks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
-    Member member;
+    private Member member;
 
     public void addMember(Member member) {
         if (member.getDiaries().contains(this)) {
             member.getDiaries().add(this);
         }
         this.member = member;
-    }
-
-    public void addDiaryFiles(DiaryFile diaryFile) {
-        this.diaryFiles.add(diaryFile);
     }
 
     public void addDiaryTalks(Talk talk) {

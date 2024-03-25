@@ -1,12 +1,12 @@
 package io.watssuggang.voda.member.controller;
 
-import io.watssuggang.voda.common.security.annotation.*;
-import io.watssuggang.voda.common.security.dto.*;
-import io.watssuggang.voda.member.dto.req.*;
-import io.watssuggang.voda.member.service.*;
-import lombok.*;
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
+import io.watssuggang.voda.common.security.annotation.CurrentUser;
+import io.watssuggang.voda.common.security.dto.SecurityUserDto;
+import io.watssuggang.voda.member.dto.req.SignUpRequest;
+import io.watssuggang.voda.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

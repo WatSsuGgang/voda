@@ -2,7 +2,6 @@ package io.watssuggang.voda.alarm;
 
 import io.watssuggang.voda.common.exception.BaseException;
 import io.watssuggang.voda.common.exception.ErrorCode;
-import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -49,7 +48,7 @@ public class NotificationService {
         });
 
         sendToClient(emitter, emitterId,
-                "EventStream Created. [memberId=" + emitterId.split("_")[0] + "] connected !");
+            "EventStream Created. [memberId=" + emitterId.split("_")[0] + "] connected !");
         log.info("first connection EventStream Created");
         return emitter;
     }
@@ -57,9 +56,9 @@ public class NotificationService {
     private void sendToClient(SseEmitter emitter, String emitterId, Object data) {
         try {
             emitter.send(SseEmitter.event()
-                    .id(emitterId)
-                    .name("message")
-                    .data(data));
+                .id(emitterId)
+                .name("message")
+                .data(data));
         } catch (IOException exception) {
             log.info("IOException" + exception.getMessage());
             emitterInMemory.deleteById(emitterId);
@@ -73,18 +72,18 @@ public class NotificationService {
 
     private void sendLostData(Integer memberId, String lastEventId, SseEmitter emitter) {
         Map<String, Object> events =
-                emitterInMemory.findAllEventCacheStartWithById(String.valueOf(memberId));
+            emitterInMemory.findAllEventCacheStartWithById(String.valueOf(memberId));
         events.entrySet().stream()
-                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-                .forEach(entry -> sendToClient(emitter, entry.getKey(), null));
+            .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
+            .forEach(entry -> sendToClient(emitter, entry.getKey(), null));
     }
 
     public void count(String lastEventId) {
         long l = atomicLong.incrementAndGet();
         Map<String, SseEmitter> emitterStartWithById = emitterInMemory.findAllEmitterStartWithById(
-                lastEventId);
+            lastEventId);
         emitterStartWithById.values().forEach(sseEmitter ->
-                sendToClient(sseEmitter, lastEventId, l)
+            sendToClient(sseEmitter, lastEventId, l)
         );
     }
 }

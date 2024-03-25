@@ -3,7 +3,8 @@ package io.watssuggang.voda.pet.dto.req;
 import io.watssuggang.voda.common.enums.PetStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
