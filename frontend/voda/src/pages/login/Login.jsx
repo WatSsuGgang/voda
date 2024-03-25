@@ -5,9 +5,6 @@ import vodaLogoLetter from "/logo_letter.svg";
 import btn_google from "/login_btn/btn_google.svg";
 import btn_naver from "/login_btn/btn_naver.svg";
 import btn_kakao from "/login_btn/btn_kakao.svg";
-// import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { getSocialLoginUrl } from "../../services/auth";
 
 const ImageContainer = styled.div({
   display: "flex",

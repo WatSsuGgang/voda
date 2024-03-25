@@ -18,7 +18,6 @@ import UserReport from "./pages/user/UserReport";
 import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
 import Nickname from "./pages/login/Nickname";
-import useStore from "./store/store";
 import LoginSuccess from "./pages/login/LoginSuccess";
 
 import styled from "styled-components";
@@ -51,10 +50,7 @@ function App() {
           <Route path="/voice" element={<VoiceDiary />}></Route>
           <Route path="/voice/record" element={<Record />}></Route>
           <Route path="/voice/check/:id" element={<CheckChat />}></Route>
-          <Route
-            path="/login-success/:provider"
-            element={<LoginSuccess />}
-          ></Route>
+          <Route path="/login-success/" element={<LoginSuccess />}></Route>
         </Routes>
         <Wrapper>
           <NavBar />
