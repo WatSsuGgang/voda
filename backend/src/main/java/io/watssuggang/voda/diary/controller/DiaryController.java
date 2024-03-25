@@ -32,8 +32,8 @@ public class DiaryController {
 
     @PostMapping("/answer")
     public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
-        @RequestPart("file") MultipartFile file,
-        @RequestPart("diaryId") Integer diaryId)
+        @RequestParam("file") MultipartFile file,
+        @RequestParam("diaryId") Integer diaryId)
         throws IOException {
         return ResponseEntity.ok(diaryService.answer(file, diaryId, userDto.getMemberId()));
     }

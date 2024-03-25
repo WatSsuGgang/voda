@@ -87,7 +87,6 @@ public class DiaryServiceImpl implements DiaryService {
             ttsResult); // ai 발화 s3 bucket 저장
     }
 
-
     public DiaryTtsResponseDto init(Integer userId) {
         Diary diary = Diary.builder()
             .diaryContent("init")
@@ -105,6 +104,7 @@ public class DiaryServiceImpl implements DiaryService {
         return new DiaryTtsResponseDto(
             ttsUrl, newDiary.getDiaryId(), false);
     }
+
     public DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
         throws IOException {
         fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
@@ -131,39 +131,12 @@ public class DiaryServiceImpl implements DiaryService {
         return new DiaryTtsResponseDto(
             ttsUrl, diaryId, false);
     }
-//    public DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
-//        throws IOException {
-//        fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
-//            reqDto.getFile()); //사용자 발화 s3 bucket 저장
-//        String sttRes = getStt(reqDto.getFile()); //사용자 발화 텍스트화
-//        log.info("user chat : " + sttRes);
-//        Talk userTalk = Talk.builder()
-//            .talkSpeaker(Speaker.valueOf("USER"))
-//            .talkContent(sttRes)
-//            .diary(diaryRepository.findById(reqDto.getDiaryId())
-//                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
-//            .build();
-//        talkRepository.save(userTalk); //사용자 발화 db 저장
-//        String chatRes = getChat(sttRes); //ai 발화 받아옴
-//        log.info("ai chat : " + chatRes);
-//        Talk aiTalk = Talk.builder()
-//            .talkSpeaker(Speaker.valueOf("AI"))
-//            .talkContent(chatRes)
-//            .diary(diaryRepository.findById(reqDto.getDiaryId())
-//                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
-//            .build();
-//        talkRepository.save(aiTalk); //ai 발화 db 저장
-//        String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
-//        return new DiaryTtsResponseDto(
-//            ttsUrl, reqDto.getDiaryId(), false);
-//    }
 
 //  public DiaryChatResponseDto chatTest(String prompt) {
 //    DiaryChatResponseDto initChat = getChat(prompt);
 //    return initChat;
 //  }
-
-
+    
     @Override
     public KarloResponse createImage(KarloRequest karloRequest) {
         System.out.println(karloRequest);
