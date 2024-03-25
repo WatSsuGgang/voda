@@ -47,6 +47,12 @@ public class Diary extends BaseEntity {
         this.diaryTalks.add(talk);
     }
 
+    public void updateDiary(String title, Emotion emotion, String content) {
+        this.diarySummary = title;
+        this.diaryEmotion = emotion;
+        this.diaryContent = content;
+    }
+
     @Builder
     public Diary(int diaryId, String diaryContent, String diarySummary, Emotion diaryEmotion,
         Member member) {
