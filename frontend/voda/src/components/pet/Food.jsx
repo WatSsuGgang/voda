@@ -3,7 +3,7 @@ import usePetStore from "../../store/petStore";
 import { feedPet } from "../../services/pet";
 
 export default function Food() {
-  const { currentFood, isFeed, petId } = usePetStore();
+  const { currentFood, isFeed, setIsFeed } = usePetStore();
   function feed() {
     const food = document.getElementById("food");
     food.animate(
@@ -31,7 +31,12 @@ export default function Food() {
     if (!isFeed) {
       feed();
       try {
-        const response = await feedPet(petId);
+        const response = await feedPet();
+        if (response.status === 200) {
+          setIsFeed(true);
+        } else {
+          console.log(response.status);
+        }
       } catch (error) {
         alert("먹이가 없음");
       }
