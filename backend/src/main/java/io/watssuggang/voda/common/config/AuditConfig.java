@@ -6,10 +6,8 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
-//@EnableJpaAuditing
 public class AuditConfig {
 
-    //  @Bean
     public AuditorAware<Integer> auditorProvider() { // 등록자와 수정자를 처리해주는 AuditorAware을 빈으로 등록
         System.out.println("audit bean in");
         return new MemberAwareAudit();
