@@ -17,6 +17,8 @@ public enum ErrorCode {
     DIARY_IMAGE_NOT_CREATED(HttpStatus.INTERNAL_SERVER_ERROR, "일기 이미지 생성에 실패했습니다."),
     DIARY_CONTENT_NOT_CREATED(HttpStatus.INTERNAL_SERVER_ERROR, "일기 내용 생성에 실패했습니다."),
     TALK_READ_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "자신의 대화내용만 볼 수 있습니다.");
+    OWN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "소유한 아이템만 접근 가능합니다."),
+    OWN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 아이템을 소유하지 않았습니다."),
 
     private final HttpStatus status;
     private final String message;
