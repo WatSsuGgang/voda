@@ -1,15 +1,33 @@
 import React from "react";
 import styled from "styled-components";
 import useStore from "../../store/store";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 25% auto;
 `;
+const settings = {
+  dots: true,
+  lazyLoad: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  pauseOnHover: true,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  initialSlide: 0,
+  arrows: false,
+  fade: false,
+  cssEase: "linear",
+};
 const AnalysisDaily = ({ report }) => {
   const store = useStore();
-  const days = Object.keys(report.weekly_statics);
+  const days = Object.keys(report.weeklyStatics);
   const koreanEmotion = {
     joy: "기쁨",
     anger: "화남",
@@ -27,10 +45,9 @@ const AnalysisDaily = ({ report }) => {
     sunday: "일요일",
   };
   return (
-    <Container>
-      {days.map((day, index) => {
-        const emo = report.weekly_statics[day].emotion;
-        return (
+    <Slider {...settings}>
+      {days.map((day, index) => (
+        <Container>
           <div
             key={index}
             style={{
@@ -51,11 +68,11 @@ const AnalysisDaily = ({ report }) => {
               가장 많이 느꼈어요
             </div>
             <img
-              src={store.emotions[emo]}
+              src={store.emotions[report.weeklyStatics[day].emotion]}
               style={{ marginTop: "15%", width: "150px", height: "150px" }}
             />
             <div style={{ fontWeight: "bold", fontSize: "1.4rem" }}>
-              {koreanEmotion[emo.toLowerCase()]}
+              {koreanEmotion[report.weeklyStatics[day].emotion.toLowerCase()]}
             </div>
             <div
               style={{
@@ -65,12 +82,12 @@ const AnalysisDaily = ({ report }) => {
                 textAlign: "center",
               }}
             >
-              {report.weekly_statics[day].summary}
+              {report.weeklyStatics[day].summary}
             </div>
           </div>
-        );
-      })}
-    </Container>
+        </Container>
+      ))}
+    </Slider>
   );
 };
 

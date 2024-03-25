@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import useStore from "../../store/store";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 20% auto;
 `;
+
 const AnalysisEmotion = ({ report }) => {
   const store = useStore();
   const koreanEmotion = {
@@ -20,36 +22,46 @@ const AnalysisEmotion = ({ report }) => {
   let total = 0;
   let maxValue = 0;
   const emotionUrl = [];
-  for (const key in report.emotion_statics) {
-    if (report.emotion_statics[key] >= maxValue) {
-      maxValue = report.emotion_statics[key];
+  for (const key in report.emotionStatics) {
+    if (report.emotionStatics[key] >= maxValue) {
+      maxValue = report.emotionStatics[key];
       frequentEmotion = key;
     }
-    total += report.emotion_statics[key];
+    total += report.emotionStatics[key];
     emotionUrl.push({
       emotion: store.emotions[key.toUpperCase()],
-      value: report.emotion_statics[key],
+      value: report.emotionStatics[key],
     });
   }
 
   return (
     <Container>
       <div
-        style={{ textAlign: "center", fontWeight: "bold", fontSize: "1.4rem" }}
+        style={{
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: "1.4rem",
+          marginBottom: "10%",
+        }}
       >
         가장 많이 느낀 감정은 <br />'{koreanEmotion[frequentEmotion]}'이에요
       </div>
       <div>
         {emotionUrl.map((item, index) => {
+          const percent = Math.round((item.value / total) * 100);
           return (
             <div
               key={index}
-              style={{ display: "flex", margin: "10% 0", alignItems: "center" }}
+              style={{
+                display: "flex",
+                margin: "10% 0",
+                alignItems: "center",
+              }}
             >
-              <img src={item.emotion} alt="emotion" style={{ width: "15%" }} />
+              <img src={item.emotion} alt="emotion" style={{ width: "20%" }} />
               <div
                 style={{
-                  width: `${Math.round((item.value / total) * 100)}%`,
+                  width: `${percent + 20}%`,
                   backgroundColor: "#FFE68E",
                   textAlign: "center",
                   borderRadius: "10px",
@@ -57,9 +69,7 @@ const AnalysisEmotion = ({ report }) => {
                   padding: "1.5% 0",
                 }}
               >
-                <div style={{ fontSize: "0.8rem" }}>
-                  {Math.round((item.value / total) * 100)}%
-                </div>
+                <div style={{ fontSize: "0.8rem" }}>{percent}%</div>
               </div>
             </div>
           );
