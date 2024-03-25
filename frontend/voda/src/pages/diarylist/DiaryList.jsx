@@ -4,6 +4,8 @@ import styled from "styled-components";
 import FilteringBox from "../../components/diary/FilteringBox";
 import FilterdDiaryList from "../../components/diary/FilterdDiaryList";
 import { getDiaryList } from "../../services/diarylist";
+import LodaingSpinner from "../../components/common/LoadingSpinner";
+import useUserStore from "../../store/userStore";
 const Title = styled.h3`
   text-align: center;
 `;
@@ -14,38 +16,43 @@ const Container = styled.div`
 `;
 const DiaryList = () => {
   const store = useStore();
-  const [startDate, setStartDate] = useState("2019-05-30");
-  const [endDate, setEndDate] = useState("2024-03-21");
-  const [emotion, setEmotion] = useState("SADNESS");
+  const userStore = useUserStore();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [emotion, setEmotion] = useState("");
   const [diaryList, setDiaryList] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const getDiaries = async (start, end, emo) => {
     const res = await getDiaryList(start, end, emo);
     setDiaryList(res.data);
+    setLoading(false);
   };
 
   useEffect(() => {
-    const start = startDate + "T00:00:00";
-    const end = endDate + "T23:59:59";
-    const emo = emotion;
-    getDiaries(start, end, emo);
+    getDiaries(startDate, endDate, emotion);
   }, [startDate, endDate, emotion]);
 
   return (
     <div>
-      <Title>{store.nickname}님의 일기를 확인해보세요</Title>
-      <div>
-        <div style={{ marginTop: "5%" }}>
-          <FilteringBox
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            setEmotion={setEmotion}
-          />
+      {loading ? (
+        <LodaingSpinner />
+      ) : (
+        <div>
+          <Title>{userStore.nickname}님의 일기를 확인해보세요</Title>
+          <div>
+            <div style={{ marginTop: "5%" }}>
+              <FilteringBox
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                setEmotion={setEmotion}
+              />
+            </div>
+            <Container>
+              <FilterdDiaryList diaries={diaryList} />
+            </Container>
+          </div>
         </div>
-        <Container>
-          <FilterdDiaryList diaries={diaryList} />
-        </Container>
-      </div>
+      )}
     </div>
   );
 };

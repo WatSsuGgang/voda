@@ -28,7 +28,9 @@ export const deleteUser = () => {
 
 // User
 // 감정 통계 확인
-export const getUserReport = () => {
+export const getUserReport = async () => {
   const url = "/user/report";
-  const response = request(HTTPMethods.GET, url);
+  const response = await request(HTTPMethods.GET, url);
+  console.log("잘 받았습니다", response);
+  return response;
 };
