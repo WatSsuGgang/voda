@@ -33,25 +33,10 @@ const ButtonContainer = styled.div({
 });
 
 const Login = () => {
-  async function deleteCaches() {
-    try {
-      const keys = await window.caches.keys();
-      console.log(keys);
-      await Promise.all(keys.map((key) => caches.delete(key)));
-      console.log("deleted");
-    } catch (err) {
-      console.log("deleteCache err: ", err);
-    }
-  }
-
   const loginHandler = (e) => {
-    const link = getSocialLoginUrl(e.target.id);
-    console.log(link);
-    deleteCaches();
-    window.location.href = link;
-    deleteCaches();
+    const api_url = import.meta.env.VITE_API_URL;
+    window.location.href = api_url + `/oauth2/authorization/${e.target.id}`;
   };
-  const baseURL = import.meta.env.VITE_API_URL;
 
   return (
     <>
@@ -88,7 +73,7 @@ const Login = () => {
           src={btn_kakao}
           alt=""
           id="kakao"
-          // onClick={loginHandler}
+          onClick={loginHandler}
           style={{
             width: "3rem",
           }}
@@ -97,7 +82,7 @@ const Login = () => {
           src={btn_naver}
           alt=""
           id="naver"
-          // onClick={loginHandler}
+          onClick={loginHandler}
           style={{
             width: "3rem",
             borderRadius: "100%",
