@@ -69,10 +69,10 @@ public class DiaryServiceImpl implements DiaryService {
     public Map<String, Object> getChatList(int id, Integer memberId) {
         List<Talk> talks = talkRepository.findAllByDiary_DiaryId(id);
 
-        if (!talks.isEmpty()) {
-            if (!isAuthorized(talks.get(0).getWriter(), memberId)) {
-                throw new DiaryNotCreatedException(ErrorCode.TALK_READ_UNAUTHORIZED);
-            }
+        Optional<Integer> writerId = talks.stream().map(Talk::getWriter).findFirst();
+
+        if (writerId.isPresent() && isUnAuthorized(writerId.get(), memberId)) {
+            throw new DiaryNotCreatedException(ErrorCode.TALK_READ_UNAUTHORIZED);
         }
 
         List<Map<String, String>> talkList = talks.stream()
@@ -142,7 +142,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
 
-        if (!isAuthorized(diary.getWriter(), memberId)) {
+        if (isUnAuthorized(diary.getWriter(), memberId)) {
             throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
         }
 
@@ -159,10 +159,11 @@ public class DiaryServiceImpl implements DiaryService {
         List<Diary> filteredDiaryList = diaryRepository.findDiariesByCondition(start, end,
             emotion, memberId);
 
-        if (!filteredDiaryList.isEmpty()) {
-            if (!isAuthorized(filteredDiaryList.get(0).getWriter(), memberId)) {
-                throw new DiaryNotCreatedException(ErrorCode.DIARY_READ_UNAUTHORIZED);
-            }
+        Optional<Integer> writerId = filteredDiaryList.stream().map(Diary::getWriter).findFirst();
+
+        if (writerId.isPresent() && isUnAuthorized(writerId.get(),
+            memberId)) {
+            throw new DiaryNotCreatedException(ErrorCode.DIARY_READ_UNAUTHORIZED);
         }
 
         for (Diary diary : filteredDiaryList) {
@@ -190,8 +191,8 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     // 자신의 일기를 조회하거나 수정하려고 하는 지 검사
-    private boolean isAuthorized(Integer diaryMemberId, Integer loginMemberId) {
-        return diaryMemberId != null && diaryMemberId.equals(loginMemberId);
+    private boolean isUnAuthorized(Integer diaryMemberId, Integer loginMemberId) {
+        return !diaryMemberId.equals(loginMemberId);
     }
 
 }
