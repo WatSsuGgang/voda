@@ -31,8 +31,13 @@ public enum PetAppearance implements LabelEnum {
     private final String name;
     private final Emotion emotion;
 
+    /**
+     * @param isEqualDiaryCount 찾은 감정의 일기 개수가 전체 일기의 개수와 같은지 확인하는 boolean
+     * @param isEvenHour        현재 시간이 짝수 시간인지 확인하는 boolean
+     * @return 펫의 외형을 반환
+     */
     public static PetAppearance findAppearanceByEmotionAndCount(
-        Emotion emotion, boolean isEqualDiaryCount, boolean isEvenHour
+            Emotion emotion, boolean isEqualDiaryCount, boolean isEvenHour
     ) {
         switch (emotion) {
             case JOY -> {
