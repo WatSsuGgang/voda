@@ -5,6 +5,7 @@ import FilteringBox from "../../components/diary/FilteringBox";
 import FilterdDiaryList from "../../components/diary/FilterdDiaryList";
 import { getDiaryList } from "../../services/diarylist";
 import LodaingSpinner from "../../components/common/LoadingSpinner";
+import useUserStore from "../../store/userStore";
 const Title = styled.h3`
   text-align: center;
 `;
@@ -15,6 +16,7 @@ const Container = styled.div`
 `;
 const DiaryList = () => {
   const store = useStore();
+  const userStore = useUserStore();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [emotion, setEmotion] = useState("");
@@ -26,10 +28,6 @@ const DiaryList = () => {
     setLoading(false);
   };
 
-  // useEffect(() => {
-  //   getDiaries(startDate, endDate, emotion);
-  // }, []);
-
   useEffect(() => {
     getDiaries(startDate, endDate, emotion);
   }, [startDate, endDate, emotion]);
@@ -40,7 +38,7 @@ const DiaryList = () => {
         <LodaingSpinner />
       ) : (
         <div>
-          <Title>{store.nickname}님의 일기를 확인해보세요</Title>
+          <Title>{userStore.nickname}님의 일기를 확인해보세요</Title>
           <div>
             <div style={{ marginTop: "5%" }}>
               <FilteringBox
