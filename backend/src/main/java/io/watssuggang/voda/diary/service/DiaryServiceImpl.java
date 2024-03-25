@@ -94,6 +94,7 @@ public class DiaryServiceImpl implements DiaryService {
             .build();
         Diary newDiary = diaryRepository.save(diary);
         String chatRes = getChat(""); //ai 첫 질문 받아옴
+        log.info("init chat : " + chatRes);
         Talk aiTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("AI"))
             .talkContent(chatRes)
@@ -110,6 +111,7 @@ public class DiaryServiceImpl implements DiaryService {
         fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
             reqDto.getFile()); //사용자 발화 s3 bucket 저장
         String sttRes = getStt(reqDto.getFile()); //사용자 발화 텍스트화
+        log.info("user chat : " + sttRes);
         Talk userTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("USER"))
             .talkContent(sttRes)
@@ -118,6 +120,7 @@ public class DiaryServiceImpl implements DiaryService {
             .build();
         talkRepository.save(userTalk); //사용자 발화 db 저장
         String chatRes = getChat(sttRes); //ai 발화 받아옴
+        log.info("ai chat : " + chatRes);
         Talk aiTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("AI"))
             .talkContent(chatRes)
