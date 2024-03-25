@@ -30,7 +30,7 @@ public class ItemQueryRepository {
                 .fetchFirst() != null;
     }
 
-    public EntityPathBase<? extends Item> getCategory(String category) {
+    private EntityPathBase<? extends Item> getCategory(String category) {
         switch (ItemCategory.valueOf(category.toUpperCase())) {
             case EFFECT -> {
                 return item.as(QEffect.class);
