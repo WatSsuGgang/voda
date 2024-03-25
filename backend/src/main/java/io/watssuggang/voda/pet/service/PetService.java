@@ -1,7 +1,6 @@
 package io.watssuggang.voda.pet.service;
 
 import io.watssuggang.voda.common.enums.*;
-import io.watssuggang.voda.common.exception.BaseException;
 import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.common.util.DateUtil;
@@ -38,8 +37,9 @@ public class PetService {
     /**
      * 펫에게 먹이를 준다. 5의 경험치가 올라간다.
      */
-    public PetResponse feed(Integer petId) {
-        Pet pet = getVerifyPetByPetId(petId);
+    public PetResponse feed(SecurityUserDto userDto) {
+        Pet pet = getVerifyPetByMemberId(userDto.getMemberId());
+        validatePet(userDto.getMemberId(), pet.getMember().getMemberId());
 
         if (DateUtil.AfterTodayMidNight(pet.getPetLastFeed())) {
             throw new PetException(ErrorCode.ALREADY_COMPLETED_FEED);
@@ -52,8 +52,9 @@ public class PetService {
     /**
      * 펫을 레벨업한다. 레벨업한 펫이 단계가 올라가는 경우, 다른 형태로 변화한다.
      */
-    public PetResponse levelUp(Integer petId) {
-        Pet pet = getVerifyPetByPetId(petId);
+    public PetResponse levelUp(SecurityUserDto userDto) {
+        Pet pet = getVerifyPetByMemberId(userDto.getMemberId());
+        validatePet(userDto.getMemberId(), pet.getMember().getMemberId());
 
         Byte beforePetStage = pet.getPetStage();
         Optional<Byte> levelUpStage = pet.levelUp();
@@ -62,7 +63,7 @@ public class PetService {
 
             if (beforePetStage != status) {
                 if (status == 3) {
-                    PetAppearance evolution = evolution(petId);
+                    PetAppearance evolution = evolution(pet.getPetId());
                     pet.updateAppearance(evolution);
                 } else if (status == 2) {
                     pet.updateAppearance(PetAppearance.CHICK);
@@ -121,8 +122,14 @@ public class PetService {
         }).orElseThrow(() -> new DiaryException(ErrorCode.DIARY_NOT_FOUND));
     }
 
-    public PetResponse update(Integer petId, PetUpdateRequest updateRequest) {
-        Pet pet = getVerifyPetByPetId(petId);
+    /**
+     * 펫의 이름을 바꾸는 메서드
+     */
+    public PetResponse update(
+            SecurityUserDto userDto,
+            PetUpdateRequest updateRequest
+    ) {
+        Pet pet = getVerifyPetByMemberId(userDto.getMemberId());
 
         Optional.of(updateRequest.getName())
                 .ifPresent(pet::updateName);
@@ -133,11 +140,11 @@ public class PetService {
     /**
      * PetId로 현재 펫의 상태를 가져온다. 오늘 남은 일기 횟수, 먹이 섭취 여부, 농담으로 랜덤한 대사를 반환한다.
      */
-    public PetTalkResponse getTalk(SecurityUserDto userDto, Integer petId) {
-        Pet verifyPet = getVerifyPetByPetId(petId);
-        validatePet(userDto.getMemberId(), verifyPet.getMember().getMemberId());
+    public PetTalkResponse getTalk(SecurityUserDto userDto) {
+        Pet verifyPet = getVerifyPetByMemberId(userDto.getMemberId());
 
-        int count = diaryRepository.countDiaryByPetIdAndAfterToday(petId, DateUtil.getTodayDate());
+        int count = diaryRepository.countDiaryByPetIdAndAfterToday(verifyPet.getPetId(),
+                DateUtil.getTodayDate());
 
         List<PetStatus> petStatuses = new ArrayList<>(List.of(PetStatus.JOKE));
         if (DateUtil.AfterTodayMidNight(verifyPet.getPetLastFeed())) {
