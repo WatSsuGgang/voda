@@ -5,6 +5,7 @@ import styled from "styled-components";
 import save from "../../assets/diarylist/save.svg";
 import playbutton from "../../assets/diarylist/playbutton.svg";
 import { getDiaryDetail } from "../../services/diarylist";
+import LodaingSpinner from "../../components/common/LoadingSpinner";
 
 const Title = styled.h3`
   color: #486b73;
@@ -69,7 +70,7 @@ const DiaryDetail = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // 로딩 중일 때 로딩 표시
+    return <LodaingSpinner />; // 로딩 중일 때 로딩 표시
   }
 
   if (!diary) {
