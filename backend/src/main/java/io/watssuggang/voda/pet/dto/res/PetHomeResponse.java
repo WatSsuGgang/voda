@@ -7,14 +7,17 @@ import lombok.Getter;
 public class PetHomeResponse {
 
     private final PetResponse pet;
-    private final List<OwnResponse> owned;
+    private final List<OwnResponse> using;
 
-    private PetHomeResponse(PetResponse pet, List<OwnResponse> owned) {
+    private PetHomeResponse(PetResponse pet, List<OwnResponse> using) {
         this.pet = pet;
-        this.owned = owned;
+        this.using = using;
     }
 
-    public static PetHomeResponse of(PetResponse pet, List<OwnResponse> owned) {
-        return new PetHomeResponse(pet, owned);
+    public static PetHomeResponse of(
+            PetResponse pet,
+            List<OwnResponse> using
+    ) {
+        return new PetHomeResponse(pet, using);
     }
 }

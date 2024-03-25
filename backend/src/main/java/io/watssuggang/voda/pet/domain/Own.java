@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.domain;
 
+import io.watssuggang.voda.common.enums.ItemStatus;
 import io.watssuggang.voda.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +19,8 @@ public class Own {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @Column(columnDefinition = "char(2)")
+    private ItemStatus itemStatus = ItemStatus.OWNED;
 
     public static Own of() {
         return new Own();
@@ -29,5 +32,9 @@ public class Own {
         }
         this.item = item;
         this.member = member;
+    }
+
+    public void use() {
+        itemStatus = ItemStatus.USING;
     }
 }

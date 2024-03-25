@@ -9,7 +9,7 @@ import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
 import io.watssuggang.voda.diary.dto.res.*;
 import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto.ContentDTO;
-import io.watssuggang.voda.diary.exception.DiaryNotCreatedException;
+import io.watssuggang.voda.diary.exception.DiaryException;
 import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
 import io.watssuggang.voda.diary.repository.*;
 import io.watssuggang.voda.diary.util.PromptHolder;
@@ -156,7 +156,7 @@ public class DiaryServiceImpl implements DiaryService {
         Optional<Integer> writerId = talks.stream().map(Talk::getWriter).findFirst();
 
         if (writerId.isPresent() && isUnAuthorized(writerId.get(), memberId)) {
-            throw new DiaryNotCreatedException(ErrorCode.TALK_READ_UNAUTHORIZED);
+            throw new DiaryException(ErrorCode.TALK_READ_UNAUTHORIZED);
         }
 
         List<Map<String, String>> talkList = talks.stream()
@@ -198,7 +198,7 @@ public class DiaryServiceImpl implements DiaryService {
         String answerText = completedDiary != null ? completedDiary.getText() : null;
 
         if (answerText == null) {
-            throw new DiaryNotCreatedException(ErrorCode.DIARY_CONTENT_NOT_CREATED);
+            throw new DiaryException(ErrorCode.DIARY_CONTENT_NOT_CREATED);
         }
 
         log.info("---Claude의 답변---");
@@ -264,7 +264,7 @@ public class DiaryServiceImpl implements DiaryService {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
 
         if (isUnAuthorized(diary.getWriter(), memberId)) {
-            throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
+            throw new DiaryException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
         }
 
         return DiaryDetailResponse.of(diary);
@@ -284,7 +284,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         if (writerId.isPresent() && isUnAuthorized(writerId.get(),
             memberId)) {
-            throw new DiaryNotCreatedException(ErrorCode.DIARY_READ_UNAUTHORIZED);
+            throw new DiaryException(ErrorCode.DIARY_READ_UNAUTHORIZED);
         }
 
         for (Diary diary : filteredDiaryList) {
