@@ -6,7 +6,8 @@ import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.domain.DiaryFile;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 public class DailyDiaryResDto {
@@ -17,17 +18,17 @@ public class DailyDiaryResDto {
         this.diaries = new ArrayList<>();
 
         for (Diary diary : diaries) {
-            List<DiaryFile> imgList = diary.getDiaryFiles().stream()
-                .filter(diaryFile -> diaryFile.getFileType().equals(FileType.IMG)).toList();
-
             this.diaries.add(new DailyDiaryInfo(
-                imgList.isEmpty() ? "" : imgList.get(0).getFileUrl(),
+                diary.getDiaryFiles().stream()
+                    .filter(diaryFile -> diaryFile.getFileType().equals(FileType.IMG))
+                    .map(DiaryFile::getFileUrl)
+                    .findFirst()
+                    .orElse(""),
                 diary.getDiaryEmotion()));
         }
     }
 
     @Getter
-    @Builder
     @AllArgsConstructor
     public static class DailyDiaryInfo {
 
