@@ -5,38 +5,38 @@ import { HTTPStatusCodes } from "./api";
 // User
 // 펫 정보 (홈 화면)
 // 임시 memberId
-export const getPet = async (id) => {
-  const url = `/pet/${id}`;
+export const getPet = async () => {
+  const url = `/pet`;
   const response = await request(HTTPMethods.GET, url);
   return response.data;
 };
 
 // User
 // 펫 대화
-export const getPetTalk = (petId) => {
-  const url = `/pet/talk/${petId}`;
+export const getPetTalk = () => {
+  const url = `/pet/talk/`;
   const response = request(HTTPMethods.GET, url);
 };
 
 // User
 // 펫 먹이주기
-export const feedPet = async (petId) => {
-  const url = `/pet/feed/${petId}`;
+export const feedPet = async () => {
+  const url = `/pet/feed/`;
   const response = await request(HTTPMethods.PATCH, url);
-  return response.data;
+  return response;
 };
 
 // User
 // 펫 레벨업
-export const levelUpPet = (petId) => {
-  const url = `/pet/levelup/${petId}`;
+export const levelUpPet = () => {
+  const url = `/pet/levelup/`;
   const response = request(HTTPMethods.PATCH, url);
 };
 
 // User
 // 펫 닉네임 수정
-export const editPetName = async (petId, name) => {
-  const url = `/pet/${petId}`;
+export const editPetName = async (name) => {
+  const url = `/pet`;
   const data = { name };
   const response = await request(HTTPMethods.PATCH, url, data);
   return response.data;
