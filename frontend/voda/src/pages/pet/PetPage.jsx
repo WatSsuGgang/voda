@@ -29,7 +29,7 @@ const PetPage = () => {
 
     const fetchData = async () => {
       try {
-        const response = await getPet();
+        const response = await getPet(2);
         setOwned(response.owned);
         setEmotion(response.pet.emotion);
         setExp(response.pet.exp);
