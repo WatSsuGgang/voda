@@ -13,7 +13,7 @@ import { CircularProgress } from "@mui/material";
 const PetPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {
-    setOwned,
+    setUsing,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -29,20 +29,19 @@ const PetPage = () => {
 
     const fetchData = async () => {
       try {
-        const response = await getPet();
-        setOwned(response.owned);
-        setEmotion(response.pet.emotion);
-        setExp(response.pet.exp);
-        setIsEvolution(response.pet.isEvolution);
-        setIsFeed(response.pet.isFeed);
-        setLevel(response.pet.level);
-        setName(response.pet.name);
-        setPetAppearance(response.pet.petAppearance);
-        setPetId(response.pet.petId);
-        setStage(response.pet.stage);
+        const data = await getPet();
+        setUsing(data.using);
+        setEmotion(data.pet.emotion);
+        setExp(data.pet.exp);
+        setIsEvolution(data.pet.isEvolution);
+        setIsFeed(data.pet.isFeed);
+        setLevel(data.pet.level);
+        setName(data.pet.name);
+        setPetAppearance(data.pet.petAppearance);
+        setPetId(data.pet.petId);
+        setStage(data.pet.stage);
         setIsLoading(false);
-        console.log(response);
-        return response;
+        console.log(data);
       } catch (error) {
         console.error(error);
       }

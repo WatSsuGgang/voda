@@ -1,9 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import usePetShopStore from "../../store/petStore";
+import useUserStore from "../../store/userStore";
 
 export default function TopBar() {
-  const { currentCoin } = usePetShopStore();
+  const { coin } = useUserStore();
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const navigate = useNavigate();
   function onClickShop() {
     navigate("/pet/shop");
@@ -26,15 +27,15 @@ export default function TopBar() {
         }}
       >
         <img
-          src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Coin.png"
+          src={`${EMOJI_URL}/Objects/Coin.png`}
           alt="Coin"
           width="40rem"
           height="40rem"
         />
-        <h3>{currentCoin}</h3>
+        <h3>{coin}</h3>
       </div>
       <img
-        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Magic%20Wand.png"
+        src={`${EMOJI_URL}/Activities/Magic%20Wand.png`}
         alt="Magic Wand"
         width="40rem"
         height="40rem"

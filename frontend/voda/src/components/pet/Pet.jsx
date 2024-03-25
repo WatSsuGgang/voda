@@ -25,15 +25,14 @@ const ModalForm = styled.div`
 `;
 
 export default function Pet() {
-  const { name, setName, stage, petAppearance } = usePetStore();
+  const { name, setName, stage, petAppearance, using } = usePetStore();
   const [newName, setNewName] = useState("");
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const base_url =
-    "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/";
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const pet_map = {
     1: { 달걀: "Food/Egg.png" },
     2: { 병아리: "Animals/Hatching%20Chick.png" },
@@ -54,14 +53,6 @@ export default function Pet() {
       "검은 고양이": "Animals/Black%20Cat.png",
       까마귀: "Animals/Black%20Bird.png",
     },
-  };
-
-  const effect = {
-    url: [
-      "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Star.png",
-      "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Cloud%20with%20Rain.png",
-      "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Hourglass%20Done.png",
-    ],
   };
 
   function newNameChangeHandler(e) {
@@ -92,15 +83,15 @@ export default function Pet() {
           gap: "1rem",
         }}
       >
-        <img
-          src={effect.url[1]}
+        {/* <img
+          src={using.effect.imgURl}
           style={{
             width: "5rem",
             height: "5rem",
           }}
-        />
+        /> */}
         <img
-          src={base_url + pet_map[stage][petAppearance]}
+          src={`${EMOJI_URL}/${pet_map[stage][petAppearance]}`}
           style={{
             width: "12rem",
             height: "12rem",
