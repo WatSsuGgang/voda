@@ -30,11 +30,11 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
   const [end, setEnd] = useState("");
   const [emo, setEmo] = useState("");
   const handleStartDateChange = (event) => {
-    const date = formatDate(event.$y, event.$M + 1, event.$D);
+    const date = formatDate(event.$y, event.$M + 1, event.$D) + "T00:00:00";
     setStart(date);
   };
   const handleEndDateChange = (event) => {
-    const date = formatDate(event.$y, event.$M + 1, event.$D);
+    const date = formatDate(event.$y, event.$M + 1, event.$D) + "T23:59:59";
     setEnd(date);
   };
   const handleEmotionChange = (event) => {

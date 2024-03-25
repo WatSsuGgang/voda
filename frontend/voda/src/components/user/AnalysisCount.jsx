@@ -18,7 +18,7 @@ const AnalysisCount = ({ report }) => {
           marginBottom: "5%",
         }}
       >
-        이번달 일기는 <br />총 {report.diary_counts}번 기록했어요
+        이번달 일기는 <br />총 {report.diaryCount}번 기록했어요
       </div>
       <img
         src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Writing%20Hand%20Medium-Light%20Skin%20Tone.png"

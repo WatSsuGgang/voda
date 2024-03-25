@@ -14,39 +14,39 @@ const usePetStore = create((set) => ({
   setOwned: (state) => set({ owned: state }),
 
   // 펫 감정
-  emotion: null,
+  emotion: "",
   setEmotion: (state) => set({ emotion: state }),
 
   // 펫 경험치
-  exp: null,
+  exp: "",
   setExp: (state) => set({ exp: state }),
 
   // 펫 진화중?
-  isEvolution: null,
+  isEvolution: "",
   setIsEvolution: (state) => set({ isEvolution: state }),
 
   // 펫 밥 먹었는지
-  isFeed: null,
+  isFeed: "",
   setIsFeed: (state) => set({ isFeed: state }),
 
   // 펫 레벨
-  level: null,
+  level: "",
   setLevel: (state) => set({ level: state }),
 
   // 펫 이름
-  name: null,
+  name: "",
   setName: (state) => set({ name: state }),
 
   // 펫 외형?
-  petAppearance: null,
+  petAppearance: "",
   setPetAppearance: (state) => set({ petAppearance: state }),
 
   // 펫id
-  petId: null,
+  petId: "",
   setPetId: (state) => set({ petId: state }),
 
   // 펫 진화단계?
-  stage: null,
+  stage: "",
   setStage: (state) => set({ stage: state }),
 
   // 상점 아이템
