@@ -1,5 +1,7 @@
 package io.watssuggang.voda.member.controller;
 
+import io.watssuggang.voda.common.security.annotation.CurrentUser;
+import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.member.dto.req.UpdateMemberInfoRequest;
 import io.watssuggang.voda.member.dto.res.EmotionReportResponse;
 import io.watssuggang.voda.member.dto.res.MemberInfoResponse;
@@ -8,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-// TODO: JWT를 이용한 로그인 구현이 완료된 후, 각 메소드에서 Authentication 객체를 통해 유저를 특정 지을 것
 
 @RestController
 @RequiredArgsConstructor
@@ -20,39 +20,31 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping
-    public ResponseEntity<?> getMemberInfo() throws Exception {
-        // TODO: jwt에 있는 값을 바로 리턴하고, 필요 시 Authentication에서 id을 읽어와서 동작하도록 수정
-        String nickname = "nickname";
+    public ResponseEntity<?> getMemberInfo(@CurrentUser SecurityUserDto currentUser) {
+        MemberInfoResponse response = myPageService.getMemberInfo(currentUser.getMemberId());
 
-        return ResponseEntity.ok(nickname);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateMemberInfo(UpdateMemberInfoRequest req) throws Exception {
-        // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
-        Integer memberId = 0;
-        MemberInfoResponse response = myPageService.updateMemberInfo(memberId,
+    public ResponseEntity<?> updateMemberInfo(@CurrentUser SecurityUserDto currentUser,
+        UpdateMemberInfoRequest req) {
+        MemberInfoResponse response = myPageService.updateMemberInfo(currentUser.getMemberId(),
             req.getNewNickname());
 
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteMember() throws Exception {
-        // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
-        Integer memberId = 0;
-
-        myPageService.deleteMember(memberId);
+    public ResponseEntity<?> deleteMember(@CurrentUser SecurityUserDto currentUser) {
+        myPageService.deleteMember(currentUser.getMemberId());
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/report")
-    public ResponseEntity<?> getEmotionReport() throws Exception {
-        // TODO: Authentication에서 id를 읽어와서 동작하도록 수정
-        Integer memberId = 1;
-
-        EmotionReportResponse response = myPageService.getEmotionReport(memberId);
+    public ResponseEntity<?> getEmotionReport(@CurrentUser SecurityUserDto currentUser) {
+        EmotionReportResponse response = myPageService.getEmotionReport(currentUser.getMemberId());
         return ResponseEntity.ok(response);
     }
 }
