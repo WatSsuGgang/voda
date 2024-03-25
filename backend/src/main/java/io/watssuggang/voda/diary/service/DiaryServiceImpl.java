@@ -111,7 +111,7 @@ public class DiaryServiceImpl implements DiaryService {
             file); //사용자 발화 s3 bucket 저장
         String sttRes = getStt(file); //사용자 발화 텍스트화
         log.info("user chat : " + sttRes);
-        if (sttRes.trim().replaceAll("\\s+", "").equals("오늘일기끝")) {
+        if (sttRes.trim().replaceAll("\\s+", "").contains("오늘일기끝")) {
             return new DiaryTtsResponseDto(
                 null, diaryId, false);
         }
