@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/diary")
@@ -31,9 +32,10 @@ public class DiaryController {
 
     @PostMapping("/answer")
     public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
-        @RequestBody DiaryAnswerRequestDto reqDto)
+        @RequestPart("file") MultipartFile file,
+        @RequestPart("diaryId") Integer diaryId)
         throws IOException {
-        return ResponseEntity.ok(diaryService.answer(reqDto, userDto.getMemberId()));
+        return ResponseEntity.ok(diaryService.answer(file, diaryId, userDto.getMemberId()));
     }
 
     @PostMapping("/createImage")

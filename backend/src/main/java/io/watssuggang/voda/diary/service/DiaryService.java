@@ -7,14 +7,17 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public interface DiaryService {
 
     DiaryTtsResponseDto init(Integer userId);
 
-    DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
-        throws IOException;
+//    DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
+//        throws IOException;
+DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
+    throws IOException;
 
     Map<String, Object> getChatList(int id, Integer memberId);
 
