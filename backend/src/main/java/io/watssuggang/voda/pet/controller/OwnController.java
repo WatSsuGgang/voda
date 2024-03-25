@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.controller;
 
+import io.watssuggang.voda.common.security.annotation.CurrentUser;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.pet.dto.res.OwnResponse;
 import io.watssuggang.voda.pet.service.OwnService;
@@ -18,7 +19,7 @@ public class OwnController {
 
     @PatchMapping("/use/{own-id}")
     public ResponseEntity<OwnResponse> useItem(
-            @AuthenticationPrincipal SecurityUserDto userDto,
+            @CurrentUser SecurityUserDto userDto,
             @PathVariable(name = "own-id") Integer ownId
     ) {
         OwnResponse ownResponse = ownService.usingItem(userDto, ownId);
@@ -27,7 +28,7 @@ public class OwnController {
 
     @PatchMapping("/unuse")
     public ResponseEntity<?> unUseItems(
-            @AuthenticationPrincipal SecurityUserDto userDto,
+            @CurrentUser SecurityUserDto userDto,
             @RequestBody List<Integer> ownIds
     ) {
         ownService.unUseItems(userDto, ownIds);

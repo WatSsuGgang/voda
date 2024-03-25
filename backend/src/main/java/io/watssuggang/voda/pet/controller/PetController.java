@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.controller;
 
+import io.watssuggang.voda.common.security.annotation.CurrentUser;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
 import io.watssuggang.voda.pet.dto.req.PetUpdateRequest;
@@ -23,7 +24,7 @@ public class PetController {
 
     @GetMapping
     public ResponseEntity<PetHomeResponse> getPetHomeInfo(
-            @AuthenticationPrincipal SecurityUserDto userDto
+            @CurrentUser SecurityUserDto userDto
     ) {
         PetHomeResponse response = petService.getPetHomeInfo(userDto.getMemberId());
         return ResponseEntity.ok(response);
@@ -31,7 +32,7 @@ public class PetController {
 
     @GetMapping("/talk")
     public ResponseEntity<PetTalkResponse> getPetTalk(
-            @AuthenticationPrincipal SecurityUserDto userDto
+            @CurrentUser SecurityUserDto userDto
     ) {
         PetTalkResponse talk = petService.getTalk(userDto);
         return ResponseEntity.ok(talk);
@@ -46,7 +47,7 @@ public class PetController {
 
     @PatchMapping("/feed")
     public ResponseEntity<PetResponse> feed(
-            @AuthenticationPrincipal SecurityUserDto userDto
+            @CurrentUser SecurityUserDto userDto
     ) {
         PetResponse feed = petService.feed(userDto);
         return ResponseEntity.ok(feed);
@@ -54,7 +55,7 @@ public class PetController {
 
     @PatchMapping("/levelup")
     public ResponseEntity<PetResponse> levelUp(
-            @AuthenticationPrincipal SecurityUserDto userDto
+            @CurrentUser SecurityUserDto userDto
     ) {
         PetResponse petResponse = petService.levelUp(userDto);
         return ResponseEntity.ok(petResponse);
@@ -62,7 +63,7 @@ public class PetController {
 
     @PatchMapping
     public ResponseEntity<PetResponse> updateInfo(
-            @AuthenticationPrincipal SecurityUserDto userDto,
+            @CurrentUser SecurityUserDto userDto,
             @RequestBody @Valid PetUpdateRequest updateRequest
     ) {
         PetResponse petResponse = petService.update(userDto, updateRequest);
