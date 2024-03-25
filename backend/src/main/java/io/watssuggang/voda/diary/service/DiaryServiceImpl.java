@@ -195,7 +195,7 @@ public class DiaryServiceImpl implements DiaryService {
             .orElseThrow(DiaryNotFoundException::new);
 
         if (isUnAuthorized(existedDiary.getWriter(), memberId)) {
-            throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
+            throw new DiaryException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
         }
 
         String allAnswers = talkList.stream()
