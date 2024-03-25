@@ -8,7 +8,6 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import SignupButton from "../../components/login/SignupButton";
-import { cleanString } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils";
 
 const ImageContainer = styled.div({
   display: "flex",
@@ -36,16 +35,19 @@ export default function Nickname() {
   const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
 
+  // 닉네임 입력할 때 nickname 바인딩
   function onChangeHandler(e) {
     setNickname(e.target.value);
   }
 
+  // x 버튼으로 입력한 닉네임 초기화(지우기)
   function onClickClearHandler() {
     setNickname("");
   }
 
+  // 닉네임 길이가 0이면 닉네임 입력하라고 alert
   function onClickSignUpHandler() {
-    console.log("버튼");
+    // 닉네임을 제대로 입력했으면 email, provider, nickname 담아서 post 요청
     if (nickname.length > 0) {
       const data = {
         email: localStorage.getItem("email"),

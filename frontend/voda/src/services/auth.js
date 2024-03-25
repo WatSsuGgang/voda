@@ -39,33 +39,3 @@ export const logout = () => {
   const url = "token/logout";
   const response = request(HTTPMethods.DELETE, url);
 };
-
-// 소셜 로그인 요청 함수
-export const getSocialLoginUrl = (socialType) => {
-  const secret = {
-    google: {
-      clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      redirectUri: "https://j10a104.p.ssafy.io/login-success",
-    },
-    kakao: {
-      clientId: import.meta.env.VITE_KAKAO_CLIENT_ID,
-      redirectUri: "https://j10a104.p.ssafy.io/login-success",
-    },
-    naver: {
-      clientId: import.meta.env.VITE_NAVER_CLIENT_ID,
-      redirectUri: "https://j10a104.p.ssafy.io/login-success",
-    },
-  };
-  const base_uri = import.meta.env.VITE_API_URL;
-  const url = {
-    // google: `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${secret[socialType].clientId}&scope=openid%20profile%20email&redirect_uri=${secret[socialType].redirectUri}`,
-    // kakao: `https://kauth.kakao.com/oauth/authorize?client_id=${secret[socialType].clientId}&redirect_uri=${secret[socialType].redirectUri}&response_type=code`,
-    // naver: `https://nid.naver.com/oauth2.0/authorize?client_id=${secret[socialType].clientId}&response_type=code&redirect_uri=${secret[socialType].redirectUri}&state=test`,
-    google: `${base_uri}/oauth2/authorization/google?redirect_uri=${secret[socialType].redirectUri}`,
-    // kakao: `https://kauth.kakao.com/oauth/authorize?client_id=${secret[socialType].clientId}&redirect_uri=${secret[socialType].redirectUri}&response_type=code`,
-    // naver: `https://nid.naver.com/oauth2.0/authorize?client_id=${secret[socialType].clientId}&response_type=code&redirect_uri=${secret[socialType].redirectUri}&state=test`,
-  };
-
-  return url[socialType];
-  // request(HTTPMethods.GET, url[socialType]);
-};
