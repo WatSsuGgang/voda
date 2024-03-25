@@ -29,7 +29,7 @@ const PetPage = () => {
 
     const fetchData = async () => {
       try {
-        const response = await getPet(2);
+        const response = await getPet();
         setOwned(response.owned);
         setEmotion(response.pet.emotion);
         setExp(response.pet.exp);
@@ -41,6 +41,7 @@ const PetPage = () => {
         setPetId(response.pet.petId);
         setStage(response.pet.stage);
         setIsLoading(false);
+        console.log(response);
         return response;
       } catch (error) {
         console.error(error);

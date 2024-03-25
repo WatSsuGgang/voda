@@ -25,7 +25,7 @@ const ModalForm = styled.div`
 `;
 
 export default function Pet() {
-  const { name, setName, petId, stage, petAppearance } = usePetStore();
+  const { name, setName, stage, petAppearance } = usePetStore();
   const [newName, setNewName] = useState("");
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -72,7 +72,7 @@ export default function Pet() {
   async function newNameSubmitHandler(e) {
     e.preventDefault();
     if (newName.length > 0) {
-      const response = await editPetName(petId, newName);
+      const response = await editPetName(newName);
       setName(response.name);
       setNewName("");
       handleCloseModal();
