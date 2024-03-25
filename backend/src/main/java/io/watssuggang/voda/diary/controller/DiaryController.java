@@ -3,6 +3,9 @@ package io.watssuggang.voda.diary.controller;
 import io.watssuggang.voda.common.security.annotation.CurrentUser;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.diary.dto.req.*;
+import io.watssuggang.voda.diary.dto.req.KarloRequest;
+import io.watssuggang.voda.diary.dto.req.TalkListRequest;
+import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
 import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
 import io.watssuggang.voda.diary.service.DiaryService;
 import java.io.IOException;
@@ -39,15 +42,23 @@ public class DiaryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList) {
-        return ResponseEntity.ok(diaryService.createDiary(talkList.getTalk_list(),
-                talkList.getDiaryId()));
+    public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList,
+        @CurrentUser SecurityUserDto userDto) {
+
+        System.out.println("일기 생성 컨트롤러 들어옴!!!");
+
+        diaryService.createDiary(talkList.getTalk_list(), talkList.getDiaryId(),
+            userDto.getMemberId());
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/talk/{id}")
-    public ResponseEntity<Map<String, Object>> getTalkList(@PathVariable int id) {
+    public ResponseEntity<Map<String, Object>> getTalkList(@PathVariable int id,
+        @CurrentUser SecurityUserDto userDto) {
         System.out.println("채팅 리스트 받기");
-        Map<String, Object> chatList = diaryService.getChatList(id);
+
+        Map<String, Object> chatList = diaryService.getChatList(id, userDto.getMemberId());
 
         return ResponseEntity.ok(chatList);
     }
@@ -65,13 +76,13 @@ public class DiaryController {
 
     @GetMapping("/list")
     public ResponseEntity<List<DiaryDetailResponse>> getList(
-            @RequestParam(defaultValue = "") LocalDateTime start,
-            @RequestParam(defaultValue = "") LocalDateTime end,
-            @RequestParam(defaultValue = "NONE") String emotion,
-            @CurrentUser SecurityUserDto securityUserDto) {
+        @RequestParam(defaultValue = "") LocalDateTime start,
+        @RequestParam(defaultValue = "") LocalDateTime end,
+        @RequestParam(defaultValue = "NONE") String emotion,
+        @CurrentUser SecurityUserDto userDto) {
 
         List<DiaryDetailResponse> diaryList = diaryService.getDiaryList(start, end, emotion,
-                securityUserDto.getMemberId());
+            userDto.getMemberId());
 
         return ResponseEntity.ok(diaryList);
     }
