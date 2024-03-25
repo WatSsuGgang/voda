@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import usePetStore from "../../store/petStore";
+import useUserStore from "../../store/userStore";
 import { Modal } from "@mui/material";
 import { Button } from "@mui/material";
 import ItemContainer from "./ItemContainer";
@@ -35,6 +36,8 @@ const ModalBox = styled.div`
 export default function ItemList() {
   const [openModal, setOpenModal] = useState(false);
   const [modalItem, setModalItem] = useState({});
+  const { items, currentCategory, setCurrentCategory } = usePetStore();
+  const { coin } = useUserStore();
 
   const handleModalItemChange = (item) => {
     setModalItem(item);
@@ -44,10 +47,8 @@ export default function ItemList() {
     setOpenModal(true);
   };
   const handleCloseModal = () => setOpenModal(false);
-  const { items, setItems, owned, currentCategory, setCurrentCategory } =
-    usePetStore();
-  const imgBaseURL =
-    "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/";
+
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   useEffect(() => {
     window.scrollTo(0, 0);
     setCurrentCategory(currentCategory);
@@ -69,8 +70,12 @@ export default function ItemList() {
   }
 
   async function handleBuyItem() {
-    await buyItem({ itemId: modalItem.itemId });
-    handleCloseModal();
+    if (coin >= modalItem.price) {
+      await buyItem({ itemId: modalItem.itemId, price: modalItem.price });
+      handleCloseModal();
+    } else {
+      alert("돈이 모라자요");
+    }
   }
 
   return (

@@ -18,44 +18,8 @@ const CustomBox = styled.div({
 });
 
 const User = () => {
-  const url = import.meta.env.VITE_REACT_APP_SPRING_API;
-  const accessToken = localStorage.getItem("accessToken");
-  const config = {
-    headers: {
-      Authorization: accessToken,
-    },
-  };
-  const ilgooRefresh = async () => {
-    console.log("일구refresh 들어왔어요");
-    console.log("토큰: " + config.headers.Authorization);
-    const response = await axios.post(url + "/token/refresh", {}, config);
-    console.log("ilgooRefresh response", response);
-    const refreshAccessToken = response.data.accessToken;
-    if (response.status === 200) {
-      alert("갱신 성공");
-      console.log("response 200:", refreshAccessToken);
-      localStorage.setItem("accessToken", refreshAccessToken);
-      ilgooGet();
-    } else if (response.status === 400) {
-      alert("갱신 실패!");
-      localStorage.removeItem("accessToken");
-      window.location.href = "/login";
-    }
-  };
-
-  const ilgooGet = async () => {
-    try {
-      const response = await axios.get(url + "/auth/ilgoo", config);
-      console.log("ilgooGet", response);
-      console.log("response status:", response.status);
-    } catch (error) {
-      console.log("일구refresh 들어갑니다");
-      ilgooRefresh();
-    }
-  };
   return (
     <CustomBox>
-      <button onClick={ilgooGet}>일구</button>
       <TopComponent />
       <BottomComponent />
     </CustomBox>

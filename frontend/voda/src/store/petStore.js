@@ -1,17 +1,13 @@
 import { create } from "zustand";
 
 const usePetStore = create((set) => ({
-  currentCoin: 10,
-  currentFood: "Candy",
-  currentEffect: "cloud rain",
-
   // 상점 탭 (간식/효과)
   currentCategory: "food",
   setCurrentCategory: (category) => set({ currentCategory: category }),
 
   // ?
-  owned: [],
-  setOwned: (state) => set({ owned: state }),
+  using: [],
+  setUsing: (state) => set({ using: state }),
 
   // 펫 감정
   emotion: "",
