@@ -1,21 +1,23 @@
 import React, { useEffect } from "react"; // eslint-disable-line no-unused-vars
 import Calendar from "../../components/calendar/Calendar";
-import { getMonth } from "../../services/calendar";
 
 const CalendarPage = () => {
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getMonth();
-      console.log(response);
-    };
-    fetchData();
-  }, []);
-
   return (
-    <>
-      <h2>감정 캘린더</h2>
+    <div
+      style={{
+        width: "85%",
+        margin: "0 auto",
+      }}
+    >
+      <h2
+        style={{
+          margin: "0 auto",
+        }}
+      >
+        감정 캘린더
+      </h2>
       <Calendar />
-    </>
+    </div>
   );
 };
 
