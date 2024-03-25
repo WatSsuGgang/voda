@@ -121,7 +121,7 @@ const DiaryDetail = () => {
               src={save}
               onClick={() =>
                 handleDownloadClick(
-                  diary.diaryFiles.find((file) => file.fileType === "IMG")
+                  diary.diaryFiles.find((file) => file.fileType === "WEBP")
                     ?.fileUrl
                 )
               }
@@ -133,7 +133,7 @@ const DiaryDetail = () => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <img
             src={
-              diary.diaryFiles.find((file) => file.fileType === "IMG")?.fileUrl
+              diary.diaryFiles.find((file) => file.fileType === "WEBP")?.fileUrl
             }
             style={{ width: "80%", height: "50%", borderRadius: "10%" }}
           />
