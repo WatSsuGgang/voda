@@ -13,6 +13,9 @@ import io.watssuggang.voda.diary.exception.DiaryNotCreatedException;
 import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
 import io.watssuggang.voda.diary.repository.*;
 import io.watssuggang.voda.diary.util.PromptHolder;
+import io.watssuggang.voda.member.domain.Member;
+import io.watssuggang.voda.member.exception.MemberNotFoundException;
+import io.watssuggang.voda.member.repository.MemberRepository;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -48,6 +51,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final FileUploadService fileUploadService;
     private final DiaryFileRepository diaryFileRepository;
     private final TalkRepository talkRepository;
+    private final MemberRepository memberRepository;
 
     private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
@@ -182,10 +186,15 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId,
         Integer memberId) {
 
-        // 생성하려고 하는 일기가 없는 일기일 경우 예외 던지기
-//        if (!isAuthorized(existedDiary.getWriter(), memberId)) {
-//            throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
-//        }
+        Member writer = memberRepository.findById(memberId)
+            .orElseThrow(MemberNotFoundException::new);
+
+        Diary existedDiary = diaryRepository.findById(diaryId)
+            .orElseThrow(DiaryNotFoundException::new);
+
+        if (isUnAuthorized(existedDiary.getWriter(), memberId)) {
+            throw new DiaryNotCreatedException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
+        }
 
         String allAnswers = talkList.stream()
             .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
@@ -209,18 +218,16 @@ public class DiaryServiceImpl implements DiaryService {
         String content = jsonObject.getString("content");
         String emotion = jsonObject.getString("emotion");
         String imagePrompt = jsonObject.getString("prompt");
-        Diary diary = Diary.builder()
-            .diaryId(diaryId)
-            .diarySummary(title)
-            .diaryEmotion(Emotion.valueOf(emotion))
-            .diaryContent(content)
-            .build();
+
+        existedDiary.updateDiary(title, Emotion.valueOf(emotion), content);
+
+        existedDiary.addMember(writer);
 
         createImage(KarloRequest.of(imagePrompt))
             .getImages()
             .forEach(imageResponse -> {
                 String image = fileUploadService.fileUpload(
-                    diary.getMember().getMemberId(),
+                    existedDiary.getMember().getMemberId(),
                     MediaType.IMAGE_JPEG_VALUE,
                     "image",
                     "jpeg",
@@ -230,10 +237,10 @@ public class DiaryServiceImpl implements DiaryService {
                     .fileType(FileType.WEBP)
                     .fileUrl(image)
                     .build());
-                savedImage.addDiary(diary);
+                savedImage.addDiary(existedDiary);
             });
 
-        Diary save = diaryRepository.save(diary);
+        Diary save = diaryRepository.save(existedDiary);
 
         return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
     }
