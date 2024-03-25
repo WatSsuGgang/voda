@@ -6,7 +6,7 @@ import io.watssuggang.voda.diary.dto.req.MonthlyDiariesReqDto;
 import io.watssuggang.voda.diary.dto.res.DailyDiaryResDto;
 import io.watssuggang.voda.diary.dto.res.MonthlyDiariesResDto;
 import io.watssuggang.voda.diary.service.CalendarService;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +30,8 @@ public class CalendarController {
 
     @GetMapping("/{date}")
     public ResponseEntity<?> getDailyDiary(@CurrentUser SecurityUserDto currentUser,
-        @PathVariable @DateTimeFormat(pattern = "yyMMdd") LocalDateTime date) {
+        @PathVariable @DateTimeFormat(pattern = "yyMMdd") LocalDate date) {
         DailyDiaryResDto response = calendarService.getDailyDiary(currentUser.getMemberId(), date);
-
         return ResponseEntity.ok(response);
     }
 

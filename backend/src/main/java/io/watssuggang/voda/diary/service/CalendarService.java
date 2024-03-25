@@ -1,8 +1,10 @@
 package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.diary.domain.Diary;
+import io.watssuggang.voda.diary.dto.res.DailyDiaryResDto;
 import io.watssuggang.voda.diary.dto.res.MonthlyDiariesResDto;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,8 @@ public class CalendarService {
         month = checkValidMonth(month);
         year = checkValidYear(year);
 
-        List<Diary> diaries = diaryRepository.findAllByMemberAndCreatedAtGivenDate(memberId, month,
+        List<Diary> diaries = diaryRepository.findAllByMemberAndCreatedAtGivenMonthAndYear(memberId,
+            month,
             year);
 
         return new MonthlyDiariesResDto(year, month, diaries);
@@ -41,5 +44,12 @@ public class CalendarService {
         }
 
         return year;
+    }
+
+    public DailyDiaryResDto getDailyDiary(Integer memberId, LocalDate date) {
+        List<Diary> diaries = diaryRepository.findAllByMemberAndCreatedAtGivenDate(memberId,
+            date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+
+        return new DailyDiaryResDto(diaries);
     }
 }
