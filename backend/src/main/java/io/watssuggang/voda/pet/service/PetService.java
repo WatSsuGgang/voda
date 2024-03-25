@@ -3,6 +3,7 @@ package io.watssuggang.voda.pet.service;
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.diary.domain.Diary;
+import io.watssuggang.voda.diary.exception.DiaryException;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.pet.domain.Pet;
 import io.watssuggang.voda.pet.domain.PetTalk;
@@ -103,7 +104,7 @@ public class PetService {
                 highestEmotionCount == diaries.size(),
                 LocalDateTime.now().getHour() % 2 == 0
             );
-        }).orElseThrow(RuntimeException::new);
+        }).orElseThrow(() -> new DiaryException(ErrorCode.DIARY_NOT_FOUND));
     }
 
     public PetResponse update(Integer petId, PetUpdateRequest updateRequest) {
