@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberAwareAudit implements AuditorAware<Integer> {
- 
+
     @Override
     public Optional<Integer> getCurrentAuditor() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -17,7 +17,11 @@ public class MemberAwareAudit implements AuditorAware<Integer> {
             return Optional.empty();
         }
         Object principal = auth.getPrincipal();
-        System.out.println(principal);
+        System.out.println("audit principal : "+principal.toString());
+        if(auth == null || !auth.isAuthenticated()
+            || auth.getPrincipal().equals("anonymousUser")) {
+            return Optional.empty();
+        }
         return Optional.of(((SecurityUserDto) principal).getMemberId());
 
     }
