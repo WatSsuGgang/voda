@@ -1,6 +1,7 @@
 package io.watssuggang.voda.diary.service;
 
-import io.watssuggang.voda.diary.dto.req.*;
+import io.watssuggang.voda.diary.dto.req.KarloRequest;
+import io.watssuggang.voda.diary.dto.req.KarloResponse;
 import io.watssuggang.voda.diary.dto.req.TalkListRequest.TalkRequest;
 import io.watssuggang.voda.diary.dto.res.*;
 import java.io.IOException;
@@ -14,10 +15,8 @@ public interface DiaryService {
 
     DiaryTtsResponseDto init(Integer userId);
 
-//    DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
-//        throws IOException;
-DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
-    throws IOException;
+    DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
+        throws IOException;
 
     Map<String, Object> getChatList(int id, Integer memberId);
 
