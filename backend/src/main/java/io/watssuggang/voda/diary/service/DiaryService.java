@@ -16,14 +16,14 @@ public interface DiaryService {
     DiaryTtsResponseDto answer(DiaryAnswerRequestDto reqDto, Integer userId)
         throws IOException;
 
-    Map<String, Object> getChatList(int id);
+    Map<String, Object> getChatList(int id, Integer memberId);
 
-    DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId);
+    DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId, Integer memberId);
 
-    DiaryDetailResponse getDiaryDetail(int memberId, int id);
+    DiaryDetailResponse getDiaryDetail(Integer memberId, int id);
 
     List<DiaryDetailResponse> getDiaryList(LocalDateTime start, LocalDateTime end, String emotion,
-        int memberId);
+        Integer memberId);
 
     KarloResponse createImage(KarloRequest karloRequest);
 
