@@ -55,8 +55,9 @@ const FilterdDiaryList = ({ diaries }) => {
   const diaryList = diaries.map((diary) => {
     const emotionImageUrl = store.emotions[diary.diaryEmotion];
     const imageFile = diary.diaryFiles.filter(
-      (file) => file.fileType === "IMG"
+      (file) => file.fileType === "WEBP"
     );
+    console.log(imageFile[0]);
     return (
       <div key={diary.diaryId}>
         <div
@@ -64,7 +65,7 @@ const FilterdDiaryList = ({ diaries }) => {
           style={{ display: "flex", alignItems: "center", padding: "0.5rem" }}
         >
           <img
-            src={imageFile.fileUrl}
+            src={imageFile.length > 0 ? imageFile[0].fileUrl : ""}
             style={{
               width: "25vw",
               height: "10vh",

@@ -52,8 +52,8 @@ export const createDiary = (id, data) => {
 // User
 // 대화 내용 확인
 // data = {"talk_list": [{"question": "질문1"},{"answer": "질문1에 대한 답변"},{"question": "질문2"},{"answer": "질문2에 대한 답변"},...]}
-export const getTalkList = (id) => {
+export const getTalkList = async (id) => {
   const url = `/diary/talk/${id}`;
-  const response = getData(url);
+  const response = await getData(url);
   return response;
 };

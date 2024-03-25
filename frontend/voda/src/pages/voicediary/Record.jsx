@@ -119,11 +119,11 @@ const Record = () => {
   // 일기 생성 요청 보내는 함수
   const fetchCreate = async (diaryId) => {
     try {
-      const talkRes = await fetchTalkList(diaryId);
-      const res = await createDiary(diaryId, talkRes);
-      console.log("일기 생성:", res);
       window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
       navigate("/pet");
+      const talkRes = await fetchTalkList(diaryId);
+      const res = await createDiary(diaryId, talkRes.data);
+      console.log("일기 생성:", res);
     } catch (err) {
       console.error(err);
     }
@@ -133,19 +133,18 @@ const Record = () => {
     try {
       const res = await recordDiary(data);
       console.log("응답옴:", res.data);
-      setAiAudioURL(res.data);
-      // // 만약 terminate가 true이면 일기를 종료해야 된다.
-      // if (res.terminate) {
-      //   // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
-      //   if (store.editAllow) {
-      //     navigate(`/voice/check/${Id}`);
-      //   } else {
-      //     // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
-      //     fetchCreate(diaryData);
-      //   }
-      // } else {
-      //   setAiAudioURL(res.ttsUrl);
-      // }
+      // 만약 terminate가 true이면 일기를 종료해야 된다.
+      if (res.data.terminate) {
+        // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
+        if (store.editAllow) {
+          navigate(`/voice/check/${Id}`);
+        } else {
+          // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
+          fetchCreate(Id);
+        }
+      } else {
+        setAiAudioURL(res.data.ttsUrl);
+      }
     } catch (err) {
       console.error(err);
     }
