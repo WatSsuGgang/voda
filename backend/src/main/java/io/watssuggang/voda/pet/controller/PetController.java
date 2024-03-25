@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.controller;
 
+import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
 import io.watssuggang.voda.pet.dto.req.PetUpdateRequest;
 import io.watssuggang.voda.pet.dto.res.*;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,15 +21,20 @@ public class PetController {
 
     private final PetService petService;
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity<?> getPetHomeInfo(@PathVariable("member-id") Integer memberId) {
-        PetHomeResponse response = petService.getPetHomeInfo(memberId);
+    @GetMapping
+    public ResponseEntity<PetHomeResponse> getPetHomeInfo(
+            @AuthenticationPrincipal SecurityUserDto userDto
+    ) {
+        PetHomeResponse response = petService.getPetHomeInfo(userDto.getMemberId());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/talk/{pet-id}")
-    public ResponseEntity<?> getPetTalk(@PathVariable("pet-id") Integer petId) {
-        PetTalkResponse talk = petService.getTalk(petId);
+    public ResponseEntity<PetTalkResponse> getPetTalk(
+            @AuthenticationPrincipal SecurityUserDto userDto,
+            @PathVariable("pet-id") Integer petId
+    ) {
+        PetTalkResponse talk = petService.getTalk(userDto, petId);
         return ResponseEntity.ok(talk);
     }
 
@@ -52,8 +59,8 @@ public class PetController {
 
     @PatchMapping("{pet-id}")
     public ResponseEntity<?> updateInfo(
-        @PathVariable("pet-id") Integer petId,
-        @RequestBody PetUpdateRequest updateRequest
+            @PathVariable("pet-id") Integer petId,
+            @RequestBody PetUpdateRequest updateRequest
     ) {
         PetResponse petResponse = petService.update(petId, updateRequest);
         return ResponseEntity.ok(petResponse);
