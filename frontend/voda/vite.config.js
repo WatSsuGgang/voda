@@ -7,11 +7,14 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      srcDir: './',
+      filename: 'voda-sw.js',
+      injectRegister: 'script',
+      registerType: "prompt",
       devOptions: {
         enabled: true,
       },
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
+      includeAssets: ['**/*.(js|css|svg|ico|png'],
     }),
   ],
 
@@ -19,7 +22,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "./index.html",
-        sw: "./sw.js",
+        sw: "./voda-sw.js",
       },
     },
   },
