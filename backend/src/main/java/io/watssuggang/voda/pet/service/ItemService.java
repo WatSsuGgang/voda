@@ -9,6 +9,7 @@ import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.dto.req.*;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
 import io.watssuggang.voda.pet.exception.ItemException;
+import io.watssuggang.voda.pet.exception.OwnException;
 import io.watssuggang.voda.pet.repository.*;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -45,7 +46,8 @@ public class ItemService {
      * 카테고리별로 모든 아이템을 조회하는 메서드
      */
     public List<ItemResponse> getAllItemByCategory(SecurityUserDto userDto, String category) {
-        List<? extends Item> findUnBoughtItem = itemQueryRepository.findAllItemByCategory(userDto.getMemberId(), category);
+        List<? extends Item> findUnBoughtItem = itemQueryRepository.findAllItemByCategory(
+                userDto.getMemberId(), category);
 
         return findUnBoughtItem.stream()
                 .map(ItemResponse::of)
@@ -54,15 +56,24 @@ public class ItemService {
 
     /**
      * 사용자가 아이템을 구매하는 메서드
+     *
      * @return 생성된 ItemId
      */
     public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
         Item verifyItem = getVerifyItem(buyRequest.getItemId());
         Member member = memberService.findByEmail(userDto.getEmail());
+        verifyBuy(userDto.getMemberId(), verifyItem.getItemId());
+
         Own own = Own.of();
         own.purchase(member, verifyItem);
 
         return ownRepository.save(own).getOwnedId();
+    }
+
+    private void verifyBuy(Integer memberId, Integer itemId) {
+        if (ownRepository.existsByMember_MemberIdAndItem_ItemId(memberId, itemId)) {
+            throw new OwnException(ErrorCode.ALREADY_COMPLETE_OWN);
+        }
     }
 
     private void verifyExistItemName(String itemName, String category) {

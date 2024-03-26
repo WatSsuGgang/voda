@@ -23,6 +23,7 @@ public enum ErrorCode {
     UNAUTHORIZED_PET(HttpStatus.UNAUTHORIZED, "소유하지 않은 펫입니다."),
     PET_TALK_NOT_FOUND(HttpStatus.NOT_FOUND, "펫 대사가 존재하지 않습니다."),
     PET_CANT_LEVEL_UP(HttpStatus.BAD_REQUEST, "레벨업할 수 없는 상태입니다."),
+    ALREADY_COMPLETE_OWN(HttpStatus.CONFLICT, "이미 소유한 아이템입니다."),
     ALREADY_COMPLETED_FEED(HttpStatus.CONFLICT, "이미 먹이를 줬습니다.");
 
     private final HttpStatus status;
