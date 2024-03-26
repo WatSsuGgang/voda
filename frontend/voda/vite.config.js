@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+//import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       //selfDestroying: true, //임시용 나중에 삭제해야됨
       strategies: 'injectManifest',
-      srcDir: '/',
+      srcDir: 'src',
       filename: 'voda-sw.js',
       manifest: 'src/pwa-manifest.json',
       manifestFilename: 'pwa-manifest.json',
