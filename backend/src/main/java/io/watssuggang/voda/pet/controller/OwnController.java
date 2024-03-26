@@ -7,7 +7,6 @@ import io.watssuggang.voda.pet.service.OwnService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,11 +26,11 @@ public class OwnController {
     }
 
     @PatchMapping("/unuse")
-    public ResponseEntity<?> unUseItems(
+    public ResponseEntity<Void> unUseItems(
             @CurrentUser SecurityUserDto userDto,
             @RequestBody List<Integer> ownIds
     ) {
         ownService.unUseItems(userDto, ownIds);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
