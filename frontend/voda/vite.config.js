@@ -17,8 +17,6 @@ export default defineConfig({
       registerType: "prompt",
       //registerType: "autoUpdate",
       includeAssets: ['**/*.(js|css|svg|ico|png'],
-      swSrc: 'voda-sw.js',
-      swDest: 'dist/voda-sw.js',
       devOptions: {
         enabled: true,
       },
