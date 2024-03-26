@@ -8,10 +8,11 @@ export default defineConfig({
     react(),
     VitePWA({
       selfDestroying: true, //임시용 나중에 삭제해야됨
-      srcDir: './',
-      filename: 'voda-sw.js',
-      injectRegister: 'script',
-      registerType: "prompt",
+      // srcDir: './',
+      // filename: 'voda-sw.js',
+      // injectRegister: 'script',
+      // registerType: "prompt",
+      registerType: "autoUpdate",
       devOptions: {
         enabled: true,
       },
