@@ -5,18 +5,21 @@ import { VitePWA } from "vite-plugin-pwa";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    //react(),
     VitePWA({
-      selfDestroying: true, //임시용 나중에 삭제해야됨
-      // srcDir: './',
-      // filename: 'voda-sw.js',
-      // injectRegister: 'script',
-      // registerType: "prompt",
-      registerType: "autoUpdate",
+      //selfDestroying: true, //임시용 나중에 삭제해야됨
+      strategies: 'injectManifest',
+      srcDir: '/',
+      filename: 'voda-sw.js',
+      manifest: 'src/pwa-manifest.json',
+      manifestFilename: 'pwa-manifest.json',
+      injectRegister: 'script',
+      registerType: "prompt",
+      //registerType: "autoUpdate",
+      includeAssets: ['**/*.(js|css|svg|ico|png'],
       devOptions: {
         enabled: true,
       },
-      includeAssets: ['**/*.(js|css|svg|ico|png'],
     }),
   ],
 

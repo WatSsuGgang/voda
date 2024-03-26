@@ -1,6 +1,7 @@
 {
   "name": "VODA",
   "short_name": "VODA",
+  "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#ffffff",
