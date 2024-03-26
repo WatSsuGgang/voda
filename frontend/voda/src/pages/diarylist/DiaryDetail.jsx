@@ -5,6 +5,7 @@ import styled from "styled-components";
 import save from "../../assets/diarylist/save.svg";
 import playbutton from "../../assets/diarylist/playbutton.svg";
 import { getDiaryDetail } from "../../services/diarylist";
+import LodaingSpinner from "../../components/common/LoadingSpinner";
 
 const Title = styled.h3`
   color: #486b73;
@@ -69,7 +70,7 @@ const DiaryDetail = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // 로딩 중일 때 로딩 표시
+    return <LodaingSpinner />; // 로딩 중일 때 로딩 표시
   }
 
   if (!diary) {
@@ -120,7 +121,7 @@ const DiaryDetail = () => {
               src={save}
               onClick={() =>
                 handleDownloadClick(
-                  diary.diaryFiles.find((file) => file.fileType === "IMG")
+                  diary.diaryFiles.find((file) => file.fileType === "WEBP")
                     ?.fileUrl
                 )
               }
@@ -132,7 +133,7 @@ const DiaryDetail = () => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <img
             src={
-              diary.diaryFiles.find((file) => file.fileType === "IMG")?.fileUrl
+              diary.diaryFiles.find((file) => file.fileType === "WEBP")?.fileUrl
             }
             style={{ width: "80%", height: "50%", borderRadius: "10%" }}
           />
