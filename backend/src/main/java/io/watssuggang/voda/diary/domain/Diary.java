@@ -47,6 +47,17 @@ public class Diary extends BaseEntity {
         this.diaryTalks.add(talk);
     }
 
+    public void addFile(DiaryFile file) {
+        if (diaryFiles == null) {
+            diaryFiles = new ArrayList<>();
+        }
+
+        if (!diaryFiles.contains(file)) {
+            diaryFiles.add(file);
+            file.setDiary(this);
+        }
+    }
+
     @Builder
     public Diary(int diaryId, String diaryContent, String diarySummary, Emotion diaryEmotion,
         Member member) {
