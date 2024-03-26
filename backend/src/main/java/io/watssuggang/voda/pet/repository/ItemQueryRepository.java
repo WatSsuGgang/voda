@@ -1,7 +1,9 @@
 package io.watssuggang.voda.pet.repository;
 
 import static io.watssuggang.voda.pet.domain.QItem.item;
+import static io.watssuggang.voda.pet.domain.QOwn.own;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.watssuggang.voda.common.enums.ItemCategory;
@@ -16,10 +18,19 @@ public class ItemQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<? extends Item> findAllItemByCategory(String category) {
+    public List<? extends Item> findAllItemByCategory(Integer memberId, String category) {
         return queryFactory
                 .selectFrom(getCategory(category))
+                .where(item.itemId.notIn(
+                        queryFactory.select(own.item.itemId)
+                                .from(own)
+                                .where(eqOwnMemberId(memberId))
+                ))
                 .fetch();
+    }
+
+    private static BooleanExpression eqOwnMemberId(Integer memberId) {
+        return own.member.memberId.eq(memberId);
     }
 
     public boolean existByItemNameAndItemCategory(String itemName, String category) {

@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.service;
 
+import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.service.MemberService;
@@ -7,8 +8,7 @@ import io.watssuggang.voda.pet.domain.Item;
 import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.dto.req.*;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
-import io.watssuggang.voda.pet.exception.DuplicateItemNameException;
-import io.watssuggang.voda.pet.exception.ItemNotFoundException;
+import io.watssuggang.voda.pet.exception.ItemException;
 import io.watssuggang.voda.pet.repository.*;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -34,34 +34,45 @@ public class ItemService {
     }
 
     public ItemResponse updateItem(Integer itemId, ItemUpdateRequest updateRequest) {
-        Item findItem = itemRepository.findById(itemId)
-            .orElseThrow(ItemNotFoundException::new);
+        Item verifyItem = getVerifyItem(itemId);
 
-        findItem.update(updateRequest);
+        verifyItem.update(updateRequest);
 
-        return ItemResponse.of(findItem);
+        return ItemResponse.of(verifyItem);
+    }
+
+    /**
+     * 카테고리별로 모든 아이템을 조회하는 메서드
+     */
+    public List<ItemResponse> getAllItemByCategory(SecurityUserDto userDto, String category) {
+        List<? extends Item> findUnBoughtItem = itemQueryRepository.findAllItemByCategory(userDto.getMemberId(), category);
+
+        return findUnBoughtItem.stream()
+                .map(ItemResponse::of)
+                .toList();
+    }
+
+    /**
+     * 사용자가 아이템을 구매하는 메서드
+     * @return 생성된 ItemId
+     */
+    public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
+        Item verifyItem = getVerifyItem(buyRequest.getItemId());
+        Member member = memberService.findByEmail(userDto.getEmail());
+        Own own = Own.of();
+        own.purchase(member, verifyItem);
+
+        return ownRepository.save(own).getOwnedId();
     }
 
     private void verifyExistItemName(String itemName, String category) {
         if (itemQueryRepository.existByItemNameAndItemCategory(itemName, category)) {
-            throw new DuplicateItemNameException();
+            throw new ItemException(ErrorCode.DUPLICATE_ITEM_NAME);
         }
     }
 
-    public List<ItemResponse> getAllItemByCategory(String category) {
-        List<? extends Item> findAllItem = itemQueryRepository.findAllItemByCategory(category);
-
-        return findAllItem.stream().map(ItemResponse::of)
-            .toList();
-    }
-
-    public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
-        Item item = itemRepository.findById(buyRequest.getItemId())
-            .orElseThrow(ItemNotFoundException::new);
-        Member member = memberService.findByEmail(userDto.getEmail());
-        Own own = Own.of();
-        own.purchase(member, item);
-
-        return ownRepository.save(own).getOwnedId();
+    private Item getVerifyItem(Integer itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND));
     }
 }
