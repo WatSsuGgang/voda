@@ -174,12 +174,17 @@ public class PetService {
         return petTalkRepository.save(petTalk).getPetTalkId();
     }
 
+    /**
+     * 펫화면에서 보이는 사용중인 아이템 정보를 가져오는 메서드
+     *
+     * @return 펫 정보, 사용중인 아이템에 대해 반환
+     */
     public PetHomeResponse getPetHomeInfo(Integer memberId) {
-        Pet pet = getVerifyPetByMemberId(memberId);
-
+        Pet verifyPet = getVerifyPetByMemberId(memberId);
+        Map<String, OwnResponse> usingItem = ownService.getUsingItemByMember(memberId);
         return PetHomeResponse.of(
-                PetResponse.of(pet),
-                ownService.getAllUsingItemByMember(memberId)
+                PetResponse.of(verifyPet),
+                usingItem
         );
     }
 

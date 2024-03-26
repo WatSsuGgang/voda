@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.service;
 
+import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.service.MemberService;
@@ -7,8 +8,9 @@ import io.watssuggang.voda.pet.domain.Item;
 import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.dto.req.*;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
-import io.watssuggang.voda.pet.exception.DuplicateItemNameException;
-import io.watssuggang.voda.pet.exception.ItemNotFoundException;
+import io.watssuggang.voda.pet.dto.res.StoreResponse;
+import io.watssuggang.voda.pet.exception.ItemException;
+import io.watssuggang.voda.pet.exception.OwnException;
 import io.watssuggang.voda.pet.repository.*;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -26,7 +28,7 @@ public class ItemService {
     private final MemberService memberService;
 
     public ItemResponse createItem(ItemRequest postRequest) {
-        verifyExistItemName(postRequest.getName(), postRequest.getCategory());
+        validExistItem(postRequest.getName(), postRequest.getCategory());
 
         Item createdItem = itemRepository.save(Item.toEntity(postRequest));
 
@@ -34,34 +36,59 @@ public class ItemService {
     }
 
     public ItemResponse updateItem(Integer itemId, ItemUpdateRequest updateRequest) {
-        Item findItem = itemRepository.findById(itemId)
-            .orElseThrow(ItemNotFoundException::new);
+        Item verifyItem = getVerifyItem(itemId);
 
-        findItem.update(updateRequest);
+        verifyItem.update(updateRequest);
 
-        return ItemResponse.of(findItem);
+        return ItemResponse.of(verifyItem);
     }
 
-    private void verifyExistItemName(String itemName, String category) {
-        if (itemQueryRepository.existByItemNameAndItemCategory(itemName, category)) {
-            throw new DuplicateItemNameException();
+    /**
+     * 카테고리별로 모든 아이템을 조회하는 메서드
+     * @return 소유한 아이템, 진열된 아이템을 포함하여 StoreResponse 반환
+     */
+    public StoreResponse getAllItemByCategory(SecurityUserDto userDto, String category) {
+        List<? extends Item> itemNotInOwn = itemQueryRepository.findAllItemNotInOwn(
+                userDto.getMemberId(), category);
+        List<? extends Item> itemInOwn = itemQueryRepository.findAllItemInOwn(
+                userDto.getMemberId(), category);
+
+        return StoreResponse.of(
+                itemInOwn.stream().map(ItemResponse::of).toList(),
+                itemNotInOwn.stream().map(ItemResponse::of).toList()
+        );
+    }
+
+    /**
+     * 사용자가 아이템을 구매하는 메서드
+     *
+     * @return 생성된 ItemId
+     */
+    public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
+        Item verifyItem = getVerifyItem(buyRequest.getItemId());
+        Member member = memberService.findByEmail(userDto.getEmail());
+        validBuyItem(userDto.getMemberId(), verifyItem.getItemId());
+
+        Own own = Own.of();
+        own.purchase(member, verifyItem);
+
+        return ownRepository.save(own).getOwnedId();
+    }
+
+    private void validBuyItem(Integer memberId, Integer itemId) {
+        if (ownRepository.existsByMember_MemberIdAndItem_ItemId(memberId, itemId)) {
+            throw new OwnException(ErrorCode.ALREADY_COMPLETE_OWN);
         }
     }
 
-    public List<ItemResponse> getAllItemByCategory(String category) {
-        List<? extends Item> findAllItem = itemQueryRepository.findAllItemByCategory(category);
-
-        return findAllItem.stream().map(ItemResponse::of)
-            .toList();
+    private void validExistItem(String itemName, String category) {
+        if (itemQueryRepository.existByItemNameAndItemCategory(itemName, category)) {
+            throw new ItemException(ErrorCode.DUPLICATE_ITEM_NAME);
+        }
     }
 
-    public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
-        Item item = itemRepository.findById(buyRequest.getItemId())
-            .orElseThrow(ItemNotFoundException::new);
-        Member member = memberService.findByEmail(userDto.getEmail());
-        Own own = Own.of();
-        own.purchase(member, item);
-
-        return ownRepository.save(own).getOwnedId();
+    private Item getVerifyItem(Integer itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND));
     }
 }

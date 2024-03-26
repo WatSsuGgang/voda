@@ -6,10 +6,10 @@ import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.common.validator.EnumValidator;
 import io.watssuggang.voda.pet.dto.req.*;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
+import io.watssuggang.voda.pet.dto.res.StoreResponse;
 import io.watssuggang.voda.pet.service.ItemService;
 import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemResponse> createItem(
-        @RequestBody @Valid ItemRequest postRequest
+            @RequestBody @Valid ItemRequest postRequest
     ) {
         ItemResponse item = itemService.createItem(postRequest);
         return ResponseEntity.ok(item);
@@ -31,8 +31,8 @@ public class ItemController {
 
     @PostMapping("/buy")
     public ResponseEntity<URI> buyItem(
-        @CurrentUser SecurityUserDto userDto,
-        @RequestBody @Valid ItemBuyRequest buyRequest
+            @CurrentUser SecurityUserDto userDto,
+            @RequestBody @Valid ItemBuyRequest buyRequest
     ) {
         Integer ownId = itemService.buyItem(buyRequest, userDto);
         return ResponseEntity.created(URI.create(String.format("/item/buy/%d", ownId))).build();
@@ -40,20 +40,21 @@ public class ItemController {
 
     @PatchMapping("{item-id}")
     public ResponseEntity<?> updateItem(
-        @RequestBody @Valid ItemUpdateRequest updateRequest,
-        @PathVariable("item-id") Integer itemId
+            @RequestBody @Valid ItemUpdateRequest updateRequest,
+            @PathVariable("item-id") Integer itemId
     ) {
         ItemResponse itemResponse = itemService.updateItem(itemId, updateRequest);
         return ResponseEntity.ok(itemResponse);
     }
 
     @GetMapping
-    public ResponseEntity<?> getItemsByCategory(
-        @Valid @RequestParam(value = "category")
-        @EnumValidator(enumClass = ItemCategory.class, message = "유효하지 않은 카테고리입니다.")
-        String category
+    public ResponseEntity<StoreResponse> getItemsByCategory(
+            @CurrentUser SecurityUserDto userDto,
+            @Valid @RequestParam(value = "category")
+            @EnumValidator(enumClass = ItemCategory.class, message = "유효하지 않은 카테고리입니다.")
+            String category
     ) {
-        List<ItemResponse> itemsByCategory = itemService.getAllItemByCategory(category);
+        StoreResponse itemsByCategory = itemService.getAllItemByCategory(userDto, category);
         return ResponseEntity.ok(itemsByCategory);
     }
 }

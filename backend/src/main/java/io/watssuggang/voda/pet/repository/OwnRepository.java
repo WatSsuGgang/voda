@@ -9,6 +9,8 @@ public interface OwnRepository extends JpaRepository<Own, Integer> {
 
     List<Own> findAllByMember_MemberIdAndItemStatus(Integer memberId, ItemStatus itemStatus);
 
+    boolean existsByMember_MemberIdAndItem_ItemId(Integer memberId, Integer itemId);
+
     @Modifying
     @Query(value = "UPDATE Own o "
             + "SET o.itemStatus =:itemStatus "
