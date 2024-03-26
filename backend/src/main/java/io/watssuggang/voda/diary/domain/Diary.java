@@ -52,6 +52,7 @@ public class Diary extends BaseEntity {
             this.diaryFiles.add(file);
             file.setDiary(this);
         }
+    }
 
     public void updateDiary(String title, Emotion emotion, String content) {
         this.diarySummary = title;
@@ -69,3 +70,4 @@ public class Diary extends BaseEntity {
         this.member = member;
     }
 }
+

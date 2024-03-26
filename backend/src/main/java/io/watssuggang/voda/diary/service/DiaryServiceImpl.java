@@ -91,7 +91,7 @@ public class DiaryServiceImpl implements DiaryService {
             ttsResult); // ai 발화 s3 bucket 저장
     }
 
-    @Transactional
+
     public void addFileToDiary(int diaryId, FileType fileType, String fileUrl) {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
         DiaryFile newFile = DiaryFile.builder()
