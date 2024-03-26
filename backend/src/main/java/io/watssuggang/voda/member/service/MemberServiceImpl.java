@@ -16,10 +16,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findByEmail(String uid) {
-        Member member = memberRepository.findByMemberEmail(uid)
-            .orElseThrow(MemberNotFoundException::new);
 
-        return member;
+        return memberRepository.findByMemberEmail(uid)
+            .orElseThrow(MemberNotFoundException::new);
     }
 
     @Override

@@ -3,9 +3,7 @@ package io.watssuggang.voda.diary.controller;
 import io.watssuggang.voda.common.security.annotation.CurrentUser;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.diary.dto.req.*;
-import io.watssuggang.voda.diary.dto.req.KarloRequest;
-import io.watssuggang.voda.diary.dto.req.TalkListRequest;
-import io.watssuggang.voda.diary.dto.res.DiaryChatResponseDto;
+import io.watssuggang.voda.diary.dto.res.DiaryCreateResponse;
 import io.watssuggang.voda.diary.dto.res.DiaryDetailResponse;
 import io.watssuggang.voda.diary.service.DiaryService;
 import java.io.IOException;
@@ -49,10 +47,11 @@ public class DiaryController {
 
         System.out.println("일기 생성 컨트롤러 들어옴!!!");
 
-        diaryService.createDiary(talkList.getTalk_list(), talkList.getDiaryId(),
+        DiaryCreateResponse response = diaryService.createDiary(talkList.getTalk_list(),
+            talkList.getDiaryId(),
             userDto.getMemberId());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/talk/{id}")
@@ -67,11 +66,11 @@ public class DiaryController {
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<DiaryDetailResponse> getDiaryDetail(@CurrentUser SecurityUserDto userDto,
-            @PathVariable int id) {
+        @PathVariable int id) {
         System.out.println("일기 상세 정보 받기");
 
         DiaryDetailResponse diaryDetailResponse = diaryService.getDiaryDetail(userDto.getMemberId(),
-                id);
+            id);
 
         return ResponseEntity.ok(diaryDetailResponse);
     }
