@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      selfDestroying: true, //임시용 나중에 삭제해야됨
       srcDir: './',
       filename: 'voda-sw.js',
       injectRegister: 'script',
