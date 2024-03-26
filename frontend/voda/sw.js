@@ -6,6 +6,7 @@ self.addEventListener("install", (event) => {
     event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE)));
 });
 
+// CACHE_NAME이 변경되면 오래된 캐시 삭제
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         caches.keys().then((keyList) =>
@@ -18,6 +19,7 @@ self.addEventListener("activate", (event) => {
     );
 });
 
+// 요청에 실패하면 오프라인 페이지 표시
 self.addEventListener("fetch", (event) => {
     if ("navigate" !== event.request.mode) return;
 
