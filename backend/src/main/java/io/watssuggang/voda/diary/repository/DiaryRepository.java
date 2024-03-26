@@ -1,6 +1,7 @@
 package io.watssuggang.voda.diary.repository;
 
 import io.watssuggang.voda.diary.domain.Diary;
+import io.watssuggang.voda.member.domain.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer>, DiaryCus
     @Query("SELECT d FROM Diary d WHERE d.member.memberId = :memberId AND DAY(d.createdAt) = :day AND MONTH(d.createdAt) = :month AND YEAR(d.createdAt) = :year")
     List<Diary> findAllByMemberAndCreatedAtGivenDate(Integer memberId, Integer day, Integer month,
         Integer year);
+
+    Diary findByMemberAndCreatedAtLast(Member member);
 }

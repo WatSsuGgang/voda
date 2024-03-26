@@ -57,6 +57,10 @@ public class Member extends BaseEntity {
         this.pointLogs.add(pointLog);
     }
 
+    public void increaseMemberDiaryCount() {
+        ++memberDiaryCount;
+    }
+
     public void addPet(Pet pet) {
         this.pet = pet;
         pet.addPet(this);
