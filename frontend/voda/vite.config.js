@@ -9,9 +9,9 @@ export default defineConfig({
     VitePWA({
       //selfDestroying: true, //임시용 나중에 삭제해야됨
       strategies: 'injectManifest',
-      srcDir: 'src',
+      srcDir: '/',
       filename: 'voda-sw.js',
-      manifest: 'src/pwa-manifest.json',
+      manifest: '/pwa-manifest.json',
       manifestFilename: 'pwa-manifest.json',
       injectRegister: 'script',
       registerType: "prompt",
