@@ -8,4 +8,6 @@ public interface MemberService {
     Member findByEmail(String uid);
 
     Integer signUp(SignUpRequest signUpRequest);
+
+    void updateMemberCount();
 }
