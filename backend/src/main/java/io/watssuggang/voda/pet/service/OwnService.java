@@ -8,8 +8,8 @@ import io.watssuggang.voda.pet.dto.res.OwnResponse;
 import io.watssuggang.voda.pet.exception.OwnException;
 import io.watssuggang.voda.pet.repository.OwnRepository;
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +21,23 @@ public class OwnService {
     private final OwnRepository ownRepository;
 
     /**
-     * 회원 ID로 사용중인 모든 아이템을 가져오는 메서드
+     * 회원 ID로 현재 사용중인 아이템에 대한 정보를 반환하는 메서드
+     *
+     * @return
+     * <p>key- 아이템 카테고리를 소문자로 둔 값</p>
+     * value- 아이템 정보
      */
-    public List<OwnResponse> getAllUsingItemByMember(Integer memberId) {
-        return ownRepository.findAllByMember_MemberIdAndItemStatus(memberId, ItemStatus.USING)
-                .stream()
-                .map(OwnResponse::of)
-                .toList();
+    public Map<String, OwnResponse> getUsingItemByMember(Integer memberId) {
+        List<Own> owns = ownRepository.findAllByMember_MemberIdAndItemStatus(
+                memberId,
+                ItemStatus.USING
+        );
+
+        return owns.stream()
+                .collect(Collectors.toMap(
+                        own -> own.getItem().getItemCategory().name().toLowerCase(),
+                        OwnResponse::of
+                ));
     }
 
     public OwnResponse usingItem(SecurityUserDto userDto, Integer ownId) {
