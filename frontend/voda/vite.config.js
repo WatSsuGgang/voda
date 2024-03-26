@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      selfDestroying: true,
       registerType: "autoUpdate",
       devOptions: {
         enabled: true,
@@ -48,4 +47,13 @@ export default defineConfig({
       },
     }),
   ],
+
+  build: {
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+        sw: "./sw.js",
+      },
+    },
+  },
 });
