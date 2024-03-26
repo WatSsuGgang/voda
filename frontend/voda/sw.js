@@ -19,13 +19,13 @@ self.addEventListener("activate", (event) => {
     );
 });
 
-// 요청에 실패하면 오프라인 페이지 표시
+// Service Worker가 fetch 이벤트 핸들러에서 로그인 URI를 필터링하여 처리하지 않도록
 self.addEventListener("fetch", (event) => {
-    if ("navigate" !== event.request.mode) return;
-
+  if (!event.request.url.startsWith(self.location.origin + '/api/v1/oauth2')) {
     event.respondWith(
-        fetch(event.request).catch(() =>
-            caches.open(CACHE_NAME).then((cache) => cache.match("/offline.html"))
-        )
+      caches.match(event.request).then(function(response) {
+        return response || fetch(event.request);
+      })
     );
+  }
 });
