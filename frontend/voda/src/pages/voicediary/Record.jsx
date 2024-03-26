@@ -32,16 +32,16 @@ const Record = () => {
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
-  let Id = null;
+  const [Id, setId] = useState("");
   // 처음 화면을 렌더링 할 때, ai 질문 음성 파일을 임시로 설정해줌. 추후, init api 요청으로 바꿀 예정
   useEffect(() => {
     // api init api 요청. 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
     const fetchAudioUrl = async () => {
       try {
         const res = await initDiary();
-        console.log("최초 응답:", res);
-        setAiAudioURL(res.data);
-        Id = res.diaryId;
+        console.log("최초 응답:", res.data);
+        setAiAudioURL(res.data.ttsUrl);
+        setId(res.data.diaryId);
       } catch (err) {
         console.error(err);
       }
@@ -119,11 +119,11 @@ const Record = () => {
   // 일기 생성 요청 보내는 함수
   const fetchCreate = async (diaryId) => {
     try {
-      const talkRes = await fetchTalkList(diaryId);
-      const res = await createDiary(diaryId, talkRes);
-      console.log("일기 생성:", res);
       window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
       navigate("/pet");
+      const talkRes = await fetchTalkList(diaryId);
+      const res = await createDiary(diaryId, talkRes.data);
+      console.log("일기 생성:", res);
     } catch (err) {
       console.error(err);
     }
@@ -132,20 +132,19 @@ const Record = () => {
   const fetchRecord = async (data) => {
     try {
       const res = await recordDiary(data);
-      console.log("응답옴:", res);
-      setAiAudioURL(res.data);
-      // // 만약 terminate가 true이면 일기를 종료해야 된다.
-      // if (res.terminate) {
-      //   // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
-      //   if (store.editAllow) {
-      //     navigate(`/voice/check/${Id}`);
-      //   } else {
-      //     // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
-      //     fetchCreate(diaryData);
-      //   }
-      // } else {
-      //   setAiAudioURL(res.ttsUrl);
-      // }
+      console.log("응답옴:", res.data);
+      // 만약 terminate가 true이면 일기를 종료해야 된다.
+      if (res.data.terminate) {
+        // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
+        if (store.editAllow) {
+          navigate(`/voice/check/${Id}`);
+        } else {
+          // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
+          fetchCreate(Id);
+        }
+      } else {
+        setAiAudioURL(res.data.ttsUrl);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -178,13 +177,12 @@ const Record = () => {
           };
 
           mediaRecorder.onstop = () => {
-            // 서버로 오디오 파일 전송
+            // // 서버로 오디오 파일 전송
             const audioBlob = new Blob(chunks, { type: "audio/mpeg" });
             const formData = new FormData();
+            formData.append("diaryId", Id);
             formData.append("file", audioBlob, "recording.mpeg");
             fetchRecord(formData);
-            // const recordData = { diaryId: Id, file: formData.file };
-            // fetchRecord(recordData);
           };
         })
         .catch((error) => {
