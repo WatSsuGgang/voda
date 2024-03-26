@@ -59,7 +59,8 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = memberRepository.findAll();
 
         members.forEach(member -> {
-            LocalDate lastDiaryDate = diaryRepository.findByMemberAndCreatedAtLast(member)
+            LocalDate lastDiaryDate = diaryRepository.findByMemberAndCreatedAtLast(
+                    member.getMemberId())
                 .getCreatedAt().toLocalDate();
 
             if (now.minusDays(1).equals(lastDiaryDate)) {
