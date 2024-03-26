@@ -3,12 +3,7 @@ import Calendar from "../../components/calendar/Calendar";
 
 const CalendarPage = () => {
   return (
-    <div
-      style={{
-        width: "85%",
-        margin: "0 auto",
-      }}
-    >
+    <div>
       <h2
         style={{
           margin: "0 auto",
