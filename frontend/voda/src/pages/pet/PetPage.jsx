@@ -13,7 +13,8 @@ import { CircularProgress } from "@mui/material";
 const PetPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {
-    setUsing,
+    setUsingFoodImgURl,
+    setUsingEffectImgURl,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -30,7 +31,8 @@ const PetPage = () => {
     const fetchData = async () => {
       try {
         const data = await getPet();
-        setUsing(data.using);
+        setUsingFoodImgURl(data.map.food.item.imgURl);
+        setUsingEffectImgURl(data.map.effect.item.imgURl);
         setEmotion(data.pet.emotion);
         setExp(data.pet.exp);
         setIsEvolution(data.pet.isEvolution);

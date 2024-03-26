@@ -6,7 +6,7 @@ export default function Food() {
   const {
     isFeed,
     setIsFeed,
-    using,
+    usingFoodImgURl,
     setPetId,
     setIsEvolution,
     setName,
@@ -39,7 +39,6 @@ export default function Food() {
       1000
     );
   }
-
   async function clickHandler(e) {
     if (!isFeed) {
       feedAnimation();
@@ -54,6 +53,7 @@ export default function Food() {
         setExp(data.exp);
         setEmotion(data.emotion);
         setIsFeed(data.isFeed);
+        console.log(data);
       } catch (error) {
         alert("먹이가 없음");
       }
@@ -63,7 +63,7 @@ export default function Food() {
     <>
       <img
         id="food"
-        src={`${EMOJI_URL}/${using.food.imgURl}`}
+        src={`${EMOJI_URL}/${usingFoodImgURl}`}
         onClick={clickHandler}
         style={
           isFeed

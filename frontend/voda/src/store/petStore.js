@@ -5,9 +5,13 @@ const usePetStore = create((set) => ({
   currentCategory: "food",
   setCurrentCategory: (category) => set({ currentCategory: category }),
 
-  // ?
-  using: [],
-  setUsing: (state) => set({ using: state }),
+  // 사용중인 간식
+  usingFoodImgURl: "",
+  setUsingFoodImgURl: (state) => set({ usingFoodImgURl: state }),
+
+  // 사용중인 효과
+  usingEffectImgURl: "",
+  setUsingEffectImgURl: (state) => set({ usingEffectImgURl: state }),
 
   // 펫 감정
   emotion: "",
