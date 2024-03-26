@@ -27,7 +27,7 @@ public class ItemService {
     private final MemberService memberService;
 
     public ItemResponse createItem(ItemRequest postRequest) {
-        verifyExistItemName(postRequest.getName(), postRequest.getCategory());
+        validExistItem(postRequest.getName(), postRequest.getCategory());
 
         Item createdItem = itemRepository.save(Item.toEntity(postRequest));
 
@@ -76,7 +76,7 @@ public class ItemService {
         }
     }
 
-    private void verifyExistItemName(String itemName, String category) {
+    private void validExistItem(String itemName, String category) {
         if (itemQueryRepository.existByItemNameAndItemCategory(itemName, category)) {
             throw new ItemException(ErrorCode.DUPLICATE_ITEM_NAME);
         }
