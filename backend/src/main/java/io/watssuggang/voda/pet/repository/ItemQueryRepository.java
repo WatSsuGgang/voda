@@ -18,15 +18,24 @@ public class ItemQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<? extends Item> findAllItemByCategory(Integer memberId, String category) {
+    public List<? extends Item> findAllItemNotInOwn(Integer memberId, String category) {
         return queryFactory
                 .selectFrom(getCategory(category))
                 .where(item.itemId.notIn(
                         queryFactory.select(own.item.itemId)
                                 .from(own)
                                 .where(eqOwnMemberId(memberId))
-                ))
-                .fetch();
+                )).fetch();
+    }
+
+    public List<? extends Item> findAllItemInOwn(Integer memberId, String category) {
+        return queryFactory
+                .selectFrom(getCategory(category))
+                .where(item.itemId.in(
+                        queryFactory.select(own.item.itemId)
+                                .from(own)
+                                .where(eqOwnMemberId(memberId))
+                )).fetch();
     }
 
     private static BooleanExpression eqOwnMemberId(Integer memberId) {

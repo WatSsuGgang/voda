@@ -8,6 +8,7 @@ import io.watssuggang.voda.pet.domain.Item;
 import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.dto.req.*;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
+import io.watssuggang.voda.pet.dto.res.StoreResponse;
 import io.watssuggang.voda.pet.exception.ItemException;
 import io.watssuggang.voda.pet.exception.OwnException;
 import io.watssuggang.voda.pet.repository.*;
@@ -44,14 +45,18 @@ public class ItemService {
 
     /**
      * 카테고리별로 모든 아이템을 조회하는 메서드
+     * @return 소유한 아이템, 진열된 아이템을 포함하여 StoreResponse 반환
      */
-    public List<ItemResponse> getAllItemByCategory(SecurityUserDto userDto, String category) {
-        List<? extends Item> findUnBoughtItem = itemQueryRepository.findAllItemByCategory(
+    public StoreResponse getAllItemByCategory(SecurityUserDto userDto, String category) {
+        List<? extends Item> itemNotInOwn = itemQueryRepository.findAllItemNotInOwn(
+                userDto.getMemberId(), category);
+        List<? extends Item> itemInOwn = itemQueryRepository.findAllItemInOwn(
                 userDto.getMemberId(), category);
 
-        return findUnBoughtItem.stream()
-                .map(ItemResponse::of)
-                .toList();
+        return StoreResponse.of(
+                itemInOwn.stream().map(ItemResponse::of).toList(),
+                itemNotInOwn.stream().map(ItemResponse::of).toList()
+        );
     }
 
     /**

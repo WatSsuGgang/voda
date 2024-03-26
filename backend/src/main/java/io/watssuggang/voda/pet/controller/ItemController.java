@@ -6,10 +6,10 @@ import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.common.validator.EnumValidator;
 import io.watssuggang.voda.pet.dto.req.*;
 import io.watssuggang.voda.pet.dto.res.ItemResponse;
+import io.watssuggang.voda.pet.dto.res.StoreResponse;
 import io.watssuggang.voda.pet.service.ItemService;
 import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,13 +48,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getItemsByCategory(
+    public ResponseEntity<StoreResponse> getItemsByCategory(
             @CurrentUser SecurityUserDto userDto,
             @Valid @RequestParam(value = "category")
             @EnumValidator(enumClass = ItemCategory.class, message = "유효하지 않은 카테고리입니다.")
             String category
     ) {
-        List<ItemResponse> itemsByCategory = itemService.getAllItemByCategory(userDto, category);
+        StoreResponse itemsByCategory = itemService.getAllItemByCategory(userDto, category);
         return ResponseEntity.ok(itemsByCategory);
     }
 }
