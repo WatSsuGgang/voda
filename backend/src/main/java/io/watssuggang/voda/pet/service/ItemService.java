@@ -62,7 +62,7 @@ public class ItemService {
     public Integer buyItem(ItemBuyRequest buyRequest, SecurityUserDto userDto) {
         Item verifyItem = getVerifyItem(buyRequest.getItemId());
         Member member = memberService.findByEmail(userDto.getEmail());
-        verifyBuy(userDto.getMemberId(), verifyItem.getItemId());
+        validBuyItem(userDto.getMemberId(), verifyItem.getItemId());
 
         Own own = Own.of();
         own.purchase(member, verifyItem);
@@ -70,7 +70,7 @@ public class ItemService {
         return ownRepository.save(own).getOwnedId();
     }
 
-    private void verifyBuy(Integer memberId, Integer itemId) {
+    private void validBuyItem(Integer memberId, Integer itemId) {
         if (ownRepository.existsByMember_MemberIdAndItem_ItemId(memberId, itemId)) {
             throw new OwnException(ErrorCode.ALREADY_COMPLETE_OWN);
         }
