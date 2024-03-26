@@ -92,13 +92,12 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Transactional
     public void addFileToDiary(int diaryId, FileType fileType, String fileUrl) {
-        Diary diary = entityManager.find(Diary.class, diaryId);
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
         DiaryFile newFile = DiaryFile.builder()
             .fileType(fileType) // 새 파일의 타입 설정
             .fileUrl(fileUrl) // 새 파일의 URL 설정
             .build();
         diary.addFile(newFile);
-        entityManager.persist(newFile);
     }
 
     public DiaryTtsResponseDto init(Integer userId) {
@@ -138,8 +137,7 @@ public class DiaryServiceImpl implements DiaryService {
         Talk userTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("USER"))
             .talkContent(sttRes)
-            .diary(diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
             .build();
         talkRepository.save(userTalk); //사용자 발화 db 저장
         String chatRes = getChat(sttRes); //ai 발화 받아옴
@@ -147,8 +145,7 @@ public class DiaryServiceImpl implements DiaryService {
         Talk aiTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("AI"))
             .talkContent(chatRes)
-            .diary(diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
             .build();
         talkRepository.save(aiTalk); //ai 발화 db 저장
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화

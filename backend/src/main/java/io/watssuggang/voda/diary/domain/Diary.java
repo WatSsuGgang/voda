@@ -48,10 +48,6 @@ public class Diary extends BaseEntity {
     }
 
     public void addFile(DiaryFile file) {
-        if (diaryFiles == null) {
-            diaryFiles = new ArrayList<>();
-        }
-
         if (!diaryFiles.contains(file)) {
             diaryFiles.add(file);
             file.setDiary(this);
