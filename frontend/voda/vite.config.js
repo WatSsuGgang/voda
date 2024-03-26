@@ -10,10 +10,12 @@ export default defineConfig({
       //selfDestroying: true, //임시용 나중에 삭제해야됨
       strategies: 'injectManifest',
       srcDir: '/',
+      swSrc: 'voda-sw.js',
+      swDest: 'dist/voda-sw.js',
       filename: 'voda-sw.js',
       manifest: '/pwa-manifest.json',
       manifestFilename: 'pwa-manifest.json',
-      injectRegister: 'script',
+      injectRegister: 'none',   // 스크립트 자동 삽입 비활성화
       registerType: "prompt",
       //registerType: "autoUpdate",
       includeAssets: ['**/*.(js|css|svg|ico|png'],
