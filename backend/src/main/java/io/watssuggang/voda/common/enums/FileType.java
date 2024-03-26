@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 @Getter
 public enum FileType implements LabelEnum {
-    IMG("01"), GIF("02"), MP4("03"), WEBP("04");
+    IMG("01"), GIF("02"), MP3("03"), WEBP("04");
 
     private final String label;
 

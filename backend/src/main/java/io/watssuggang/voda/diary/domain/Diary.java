@@ -47,6 +47,12 @@ public class Diary extends BaseEntity {
         this.diaryTalks.add(talk);
     }
 
+    public void addFile(DiaryFile file) {
+        if (!diaryFiles.contains(file)) {
+            this.diaryFiles.add(file);
+            file.setDiary(this);
+        }
+
     public void updateDiary(String title, Emotion emotion, String content) {
         this.diarySummary = title;
         this.diaryEmotion = emotion;

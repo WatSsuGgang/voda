@@ -91,6 +91,16 @@ public class DiaryServiceImpl implements DiaryService {
             ttsResult); // ai 발화 s3 bucket 저장
     }
 
+    @Transactional
+    public void addFileToDiary(int diaryId, FileType fileType, String fileUrl) {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
+        DiaryFile newFile = DiaryFile.builder()
+            .fileType(fileType) // 새 파일의 타입 설정
+            .fileUrl(fileUrl) // 새 파일의 URL 설정
+            .build();
+        diary.addFile(newFile);
+    }
+
     public DiaryTtsResponseDto init(Integer userId) {
         Diary diary = Diary.builder()
             .diaryContent("init")
@@ -105,25 +115,30 @@ public class DiaryServiceImpl implements DiaryService {
             .build();
         talkRepository.save(aiTalk); //ai 발화 db 저장
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
+        addFileToDiary(newDiary.getDiaryId(), FileType.MP3, ttsUrl); //ttsUrl db 저장
         return new DiaryTtsResponseDto(
             ttsUrl, newDiary.getDiaryId(), false);
     }
 
     public DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
         throws IOException {
-        fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
+        String sttUrl = fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
             file); //사용자 발화 s3 bucket 저장
+        addFileToDiary(diaryId, FileType.MP3, sttUrl); //sttUrl db 저장
         String sttRes = getStt(file); //사용자 발화 텍스트화
         log.info("user chat : " + sttRes);
         if (sttRes.trim().replaceAll("\\s+", "").contains("오늘일기끝")) {
             return new DiaryTtsResponseDto(
                 null, diaryId, false);
         }
+        if (sttRes.equals("")) {
+            return new DiaryTtsResponseDto(
+                null, diaryId, false); //TODO: "말씀이 잘 안들려요" 음성 제작해서 넣기
+        }
         Talk userTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("USER"))
             .talkContent(sttRes)
-            .diary(diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
             .build();
         talkRepository.save(userTalk); //사용자 발화 db 저장
         String chatRes = getChat(sttRes); //ai 발화 받아옴
@@ -131,11 +146,11 @@ public class DiaryServiceImpl implements DiaryService {
         Talk aiTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("AI"))
             .talkContent(chatRes)
-            .diary(diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary not found")))
+            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
             .build();
         talkRepository.save(aiTalk); //ai 발화 db 저장
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
+        addFileToDiary(diaryId, FileType.MP3, ttsUrl); //ttsUrl db 저장
         return new DiaryTtsResponseDto(
             ttsUrl, diaryId, false);
     }
