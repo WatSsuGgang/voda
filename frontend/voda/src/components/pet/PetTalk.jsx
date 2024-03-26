@@ -25,7 +25,7 @@ export default function PetTalk(props) {
 
   return (
     <>
-      <Chatbox>{talk}</Chatbox>
+      <Chatbox>{"talk"}</Chatbox>
     </>
   );
 }

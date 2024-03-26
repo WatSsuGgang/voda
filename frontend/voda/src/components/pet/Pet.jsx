@@ -25,7 +25,7 @@ const ModalForm = styled.div`
 `;
 
 export default function Pet() {
-  const { name, setName, stage, petAppearance, using } = usePetStore();
+  const { name, setName, stage, petAppearance } = usePetStore();
   const [newName, setNewName] = useState("");
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const [openModal, setOpenModal] = useState(false);
