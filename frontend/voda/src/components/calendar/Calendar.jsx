@@ -12,6 +12,7 @@ const Calendar = () => {
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 현재 월의 일 수
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // 현재 월의 첫 날의 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+  const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDay(); // 현재 월의 마지막 날의 요일
 
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -39,7 +40,7 @@ const Calendar = () => {
     // 첫 주의 빈 칸을 채웁니다.
     for (let i = 0; i < firstDayOfMonth; i++) {
       calendarDays.push(
-        <div key={`empty-${i}`} className="calendar-day"></div>
+        <div key={`empty-start-${i}`} className="calendar-day"></div>
       );
     }
     // 날짜를 추가합니다.
@@ -53,6 +54,12 @@ const Calendar = () => {
         >
           {i}
         </div>
+      );
+    }
+    // 말일 이후의 빈 칸을 채웁니다.
+    for (let i = 0; i < 6 - lastDayOfMonth; i++) {
+      calendarDays.push(
+        <div key={`empty-end-${i}`} className="calendar-day"></div>
       );
     }
     return <div className="calendar">{calendarDays}</div>;
