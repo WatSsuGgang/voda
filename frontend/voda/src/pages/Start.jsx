@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getUserInfo } from "../services/mypage";
-import useUserStore from "../store/userStore";
+import { useUserStore } from "../store/userStore";
 
 export default function Start() {
   const userStore = useUserStore();

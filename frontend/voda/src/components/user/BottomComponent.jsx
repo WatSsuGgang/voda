@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import useUserStore from "../../store/userStore";
+import { useUserStore } from "../../store/userStore";
 export default function BottomComponent() {
   const userStore = useUserStore();
   const month = new Date().getMonth() + 1;

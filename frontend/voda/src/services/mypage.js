@@ -17,6 +17,7 @@ export const getUserInfo = async () => {
 export const editUserInfo = (data) => {
   const url = "/user";
   const response = request(HTTPMethods.PATCH, url, data);
+  return response;
 };
 
 // User
