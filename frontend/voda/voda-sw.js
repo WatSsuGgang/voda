@@ -38,4 +38,4 @@ self.addEventListener("fetch", (event) => {
 // 추가: 매니페스트를 프리캐시하고 라우팅
 self.__WB_MANIFEST = [].concat(self.__WB_MANIFEST || []);
 
-precacheAndRoute(self.__WB_MANIFEST);
+// precacheAndRoute(self.__WB_MANIFEST);
