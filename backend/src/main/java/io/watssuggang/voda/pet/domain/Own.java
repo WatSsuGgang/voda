@@ -37,4 +37,8 @@ public class Own {
     public void use() {
         itemStatus = ItemStatus.USING;
     }
+
+    public void owned() {
+        itemStatus = ItemStatus.OWNED;
+    }
 }

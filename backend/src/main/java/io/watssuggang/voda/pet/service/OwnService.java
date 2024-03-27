@@ -23,8 +23,7 @@ public class OwnService {
     /**
      * 회원 ID로 현재 사용중인 아이템에 대한 정보를 반환하는 메서드
      *
-     * @return
-     * <p>key- 아이템 카테고리를 소문자로 둔 값</p>
+     * @return <p>key- 아이템 카테고리를 소문자로 둔 값</p>
      * value- 아이템 정보
      */
     public Map<String, OwnResponse> getUsingItemByMember(Integer memberId) {
@@ -40,9 +39,19 @@ public class OwnService {
                 ));
     }
 
+    /**
+     * @apiNote 장착한 같은 카테고리의 아이템이 있으면 해제하고 소유한 현재 아이템을 장착하는 메서드
+     */
     public OwnResponse usingItem(SecurityUserDto userDto, Integer ownId) {
         Own verifiedOwn = verifyOwned(ownId);
         validateOwnedItem(userDto.getMemberId(), verifiedOwn.getMember().getMemberId());
+
+        ownRepository.findByMember_MemberIdAndItem_ItemCategoryAndItemStatus(
+                userDto.getMemberId(),
+                verifiedOwn.getItem().getItemCategory(),
+                ItemStatus.USING
+        ).ifPresent(Own::owned);
+
         verifiedOwn.use();
         return OwnResponse.of(verifiedOwn);
     }
