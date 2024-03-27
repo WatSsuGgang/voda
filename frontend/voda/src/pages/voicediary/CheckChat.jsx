@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { createDiary } from "../../services/voicediary"; // 대화 내역 불러오는 API 함수
 import { useNavigate } from "react-router-dom";
 import { getTalkList } from "../../services/voicediary";
+import LodaingSpinner from "../../components/common/LoadingSpinner";
+
 const Title = styled.h3`
   color: 486B73;
   text-align: center;
@@ -15,24 +17,22 @@ const CheckChat = () => {
   const navigate = useNavigate();
   const diaryId = useParams();
   const [messages, setMessages] = useState([]);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const res = await getTalkList(diaryId);
-  //     console.log("응답", res.data.talk_list);
-  //     setMessages(res.data.talk_list);
-  //   };
-  //   fetchData();
-  // }, []);
-  const handleChildDataChange = (dataFromChild) => {
-    setMessages(dataFromChild);
-    console.log("messages", messages);
+  const [loading, setLoading] = useState(true);
+  const fetchData = async () => {
+    const res = await getTalkList(diaryId.id);
+    setMessages(res.data.talk_list);
+    setLoading(false);
   };
-  const handleSubmit = async () => {
-    await createDiary(diaryId.id, messages);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSubmit = () => {
     window.alert(
       "일기를 생성중입니다. 일기 생성이 완료되면 알림을 보내드릴게요"
     );
     navigate("/pet");
+    createDiary(diaryId.id, messages);
   };
 
   const exit = () => {
@@ -42,22 +42,34 @@ const CheckChat = () => {
   };
   return (
     <div>
-      <div style={{ marginTop: "10%", display: "flex", justifyContent: "end" }}>
-        <LogoutIcon onClick={exit} />
-      </div>
-      <Title>대화 내용을 수정할 수 있어요</Title>
-      <ChatBox onChildDataChange={handleChildDataChange} diaryId={diaryId.id} />
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "4vh" }}
-      >
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          style={{ backgroundColor: "#6C8CAC" }}
-        >
-          확인
-        </Button>
-      </div>
+      {loading ? (
+        <LodaingSpinner />
+      ) : (
+        <div>
+          <div
+            style={{ marginTop: "10%", display: "flex", justifyContent: "end" }}
+          >
+            <LogoutIcon onClick={exit} />
+          </div>
+          <Title>대화 내용을 수정할 수 있어요</Title>
+          <ChatBox messages={messages} onChildDataChange={setMessages} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "4vh",
+            }}
+          >
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              style={{ backgroundColor: "#6C8CAC" }}
+            >
+              확인
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
