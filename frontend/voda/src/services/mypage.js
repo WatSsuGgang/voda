@@ -14,9 +14,9 @@ export const getUserInfo = async () => {
 // User
 // 유저 정보 수정 (닉네임)
 // data = { new_nickname }
-export const editUserInfo = (data) => {
+export const editUserInfo = async (data) => {
   const url = "/user";
-  const response = request(HTTPMethods.PATCH, url, data);
+  const response = await request(HTTPMethods.PATCH, url, data);
   return response;
 };
 
