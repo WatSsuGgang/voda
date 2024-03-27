@@ -3,6 +3,8 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.exception.ErrorCode;
+import io.watssuggang.voda.common.security.dto.SecurityUserDto;
+import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.diary.domain.*;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
@@ -16,6 +18,10 @@ import io.watssuggang.voda.diary.util.PromptHolder;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.exception.MemberNotFoundException;
 import io.watssuggang.voda.member.repository.MemberRepository;
+import io.watssuggang.voda.pet.domain.Pet;
+import io.watssuggang.voda.pet.dto.res.PetResponse;
+import io.watssuggang.voda.pet.exception.PetException;
+import io.watssuggang.voda.pet.repository.PetRepository;
 import jakarta.transaction.Transactional;
 import java.io.*;
 import java.net.URL;
@@ -54,6 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final DiaryFileRepository diaryFileRepository;
     private final TalkRepository talkRepository;
     private final MemberRepository memberRepository;
+    private final PetRepository petRepository;
 
     private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
@@ -261,7 +268,10 @@ public class DiaryServiceImpl implements DiaryService {
             });
 
         Diary save = diaryRepository.save(existedDiary);
-
+        // 펫의 Exp 올려주기
+        Pet pet = petRepository.findByMember_MemberId(memberId)
+            .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
+        pet.updateExp((byte) 5);
         return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
     }
 
