@@ -102,8 +102,10 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     public DiaryTtsResponseDto init(Integer userId) {
+        Member member = memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
         Diary diary = Diary.builder()
             .diaryContent("init")
+            .member(member)
             .build();
         Diary newDiary = diaryRepository.save(diary);
         String chatRes = getChat(""); //ai 첫 질문 받아옴

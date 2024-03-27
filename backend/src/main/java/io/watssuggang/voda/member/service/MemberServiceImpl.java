@@ -1,5 +1,6 @@
 package io.watssuggang.voda.member.service;
 
+import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.dto.req.SignUpRequest;
@@ -9,11 +10,13 @@ import io.watssuggang.voda.pet.domain.Pet;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -59,9 +62,11 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = memberRepository.findAll();
 
         members.forEach(member -> {
-            LocalDate lastDiaryDate = diaryRepository.findByMemberAndCreatedAtLast(
-                    member.getMemberId())
-                .getCreatedAt().toLocalDate();
+            Diary diary = diaryRepository.findByMemberAndCreatedAtLast(member.getMemberId());
+            if (diary == null) {
+                return;
+            }
+            LocalDate lastDiaryDate = diary.getCreatedAt().toLocalDate();
 
             if (now.minusDays(1).equals(lastDiaryDate)) {
                 member.increaseMemberDiaryCount();
