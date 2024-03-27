@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useUserStore from "../../store/userStore";
 
 export default function TopBar() {
-  const { coin } = useUserStore();
+  const { coins } = useUserStore();
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const navigate = useNavigate();
   function onClickShop() {
@@ -32,7 +32,7 @@ export default function TopBar() {
           width="40rem"
           height="40rem"
         />
-        <h3>{coin}</h3>
+        <h3>{coins}</h3>
       </div>
       <img
         src={`${EMOJI_URL}/Activities/Magic%20Wand.png`}

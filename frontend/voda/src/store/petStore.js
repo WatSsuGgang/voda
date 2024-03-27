@@ -1,17 +1,14 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-const usePetStore = create((set) => ({
+export const usePetStore = create((set) => ({
   // 상점 탭 (간식/효과)
   currentCategory: "food",
   setCurrentCategory: (category) => set({ currentCategory: category }),
 
-  // 사용중인 간식
-  usingFoodImgURl: "",
-  setUsingFoodImgURl: (state) => set({ usingFoodImgURl: state }),
-
-  // 사용중인 효과
-  usingEffectImgURl: "",
-  setUsingEffectImgURl: (state) => set({ usingEffectImgURl: state }),
+  // 사용중인 아이템, 이펙트
+  using: "",
+  setUsing: (state) => set({ using: state }),
 
   // 펫 감정
   emotion: "",
@@ -50,8 +47,25 @@ const usePetStore = create((set) => ({
   setStage: (state) => set({ stage: state }),
 
   // 상점 아이템
-  items: [],
-  setItems: (state) => set({ items: state }),
+
+  // 구매한 아이템
+  boughtItems: [],
+  setBoughtItems: (state) => set({ boughtItems: state }),
+
+  // 구매 안한 아이템
+  displayItems: [],
+  setDisplayItems: (state) => set({ displayItems: state }),
 }));
 
-export default usePetStore;
+export const usePetPersistStore = create(
+  persist(
+    (set, get) => ({
+      usingId: "",
+      setUsingId: (state) => set({ usingId: state }),
+    }),
+    {
+      name: "using-id-storage",
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+);
