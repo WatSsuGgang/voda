@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import useUserStore from "../../store/userStore";
+import { useUserStore } from "../../store/userStore";
 import { getUserReport } from "../../services/mypage";
 import LoadingReport from "../../components/user/LoadingReport";
 import Analysis from "../../components/user/Analysis";

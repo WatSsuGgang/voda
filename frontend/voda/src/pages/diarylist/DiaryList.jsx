@@ -5,7 +5,7 @@ import FilteringBox from "../../components/diary/FilteringBox";
 import FilterdDiaryList from "../../components/diary/FilterdDiaryList";
 import { getDiaryList } from "../../services/diarylist";
 import LodaingSpinner from "../../components/common/LoadingSpinner";
-import useUserStore from "../../store/userStore";
+import { useUserStore } from "../../store/userStore";
 const Title = styled.h3`
   text-align: center;
 `;

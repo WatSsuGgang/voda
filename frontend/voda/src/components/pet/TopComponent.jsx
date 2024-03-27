@@ -1,5 +1,5 @@
 import React from "react";
-import useUserStore from "../../store/userStore";
+import { useUserStore } from "../../store/userStore";
 
 export default function TopComponent() {
   const { nickname, diaryStreak } = useUserStore();
