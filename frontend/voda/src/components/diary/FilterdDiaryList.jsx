@@ -57,7 +57,6 @@ const FilterdDiaryList = ({ diaries }) => {
     const imageFile = diary.diaryFiles.filter(
       (file) => file.fileType === "WEBP"
     );
-    console.log(imageFile[0]);
     return (
       <div key={diary.diaryId}>
         <div

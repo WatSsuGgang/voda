@@ -47,6 +47,7 @@ const DiaryDetail = () => {
 
   const playVoice = (e) => {
     e.preventDefault();
+    console.log("클릭함", e);
     if (audioContextRef.current) {
       audioContextRef.current.play();
     }
