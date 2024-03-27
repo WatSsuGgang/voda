@@ -16,6 +16,7 @@ export const getPet = async () => {
 export const getPetTalk = () => {
   const url = `/pet/talk/`;
   const response = request(HTTPMethods.GET, url);
+  return response.data;
 };
 
 // User
@@ -23,7 +24,7 @@ export const getPetTalk = () => {
 export const feedPet = async () => {
   const url = `/pet/feed/`;
   const response = await request(HTTPMethods.PATCH, url);
-  return response;
+  return response.data;
 };
 
 // User
@@ -39,7 +40,6 @@ export const editPetName = async (name) => {
   const url = `/pet`;
   const data = { name };
   const response = await request(HTTPMethods.PATCH, url, data);
-  return response.data;
 };
 
 // Admin

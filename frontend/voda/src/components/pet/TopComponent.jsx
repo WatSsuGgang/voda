@@ -1,6 +1,8 @@
 import React from "react";
+import useUserStore from "../../store/userStore";
 
 export default function TopComponent() {
+  const { nickname, diaryStreak } = useUserStore();
   return (
     <div
       style={{
@@ -12,8 +14,8 @@ export default function TopComponent() {
         gap: "1rem",
       }}
     >
-      <h4 style={{ margin: 0 }}>갓소민님</h4>
-      <h3 style={{ margin: 0 }}>오늘 일기 쓰면 1일째</h3>
+      <h4 style={{ margin: 0 }}>{nickname}님</h4>
+      <h3 style={{ margin: 0 }}>일기 쓴지 {diaryStreak}일째</h3>
     </div>
   );
 }

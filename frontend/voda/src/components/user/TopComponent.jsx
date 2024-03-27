@@ -7,31 +7,10 @@ import { useNavigate } from "react-router-dom";
 import useUserStore from "../../store/userStore";
 
 export default function TopComponent() {
-  const navigate = useNavigate();
   const userStore = useUserStore();
   const handleLogout = async () => {
     localStorage.removeItem("accessToken");
     window.location.replace("/");
-    // navigate("/login");
-    // const accessToken = localStorage.getItem("accessToken");
-    // const url = import.meta.env.VITE_API_URL;
-    // const data = {};
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: accessToken,
-    //   },
-    // };
-    // const response = await axios.post(url + "/token/logout", data, config);
-    // console.log(response);
-    // if (response.status === 200) {
-    //   window.alert("로그아웃 성공");
-    //   localStorage.removeItem("accessToken");
-    //   isLoggedIn(false);
-    //   window.location.href = "/login";
-    // } else {
-    //   window.alert("로그아웃 실패");
-    // }
   };
   return (
     <div>
