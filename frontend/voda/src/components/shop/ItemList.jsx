@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
-import useUserStore from "../../store/userStore";
+import { useUserStore } from "../../store/userStore";
 import { Modal } from "@mui/material";
 import { Button } from "@mui/material";
 import ItemContainer from "./ItemContainer";

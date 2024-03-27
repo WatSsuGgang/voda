@@ -1,5 +1,5 @@
 import React from "react";
-import useUserStore from "../../store/userStore";
+import { useUserStore } from "../../store/userStore";
 import styled from "styled-components";
 
 const HeaderComponent = styled.div({
