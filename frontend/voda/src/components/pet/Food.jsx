@@ -55,7 +55,7 @@ export default function Food() {
         setIsFeed(data.isFeed);
         console.log(data);
       } catch (error) {
-        alert("먹이가 없음");
+        console.log(error);
       }
     }
   }

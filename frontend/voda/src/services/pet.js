@@ -22,7 +22,7 @@ export const getPetTalk = () => {
 // User
 // 펫 먹이주기
 export const feedPet = async () => {
-  const url = `/pet/feed/`;
+  const url = `/pet/feed`;
   const response = await request(HTTPMethods.PATCH, url);
   return response.data;
 };
