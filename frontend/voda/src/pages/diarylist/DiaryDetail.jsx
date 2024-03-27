@@ -24,7 +24,8 @@ const Container = styled.div`
 const DiaryDetail = () => {
   const [diary, setDiary] = useState(null); // 초기값을 null로 설정
   const [loading, setLoading] = useState(true); // 로딩 상태를 관리
-
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const [audioFiles, setAudioFiles] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
@@ -33,6 +34,10 @@ const DiaryDetail = () => {
         const res = await getDiaryDetail(id);
         setDiary(res.data);
         setLoading(false); // 다이어리를 가져오면 로딩 상태를 false로 변경
+        const audioUrl = res.data.diaryFiles.filter((file) => {
+          return file.fileType === "MP3";
+        });
+        setAudioFiles(audioUrl);
       } catch (error) {
         console.error("Error fetching diary:", error);
       }
@@ -48,8 +53,10 @@ const DiaryDetail = () => {
   const playVoice = (e) => {
     e.preventDefault();
     console.log("클릭함", e);
-    if (audioContextRef.current) {
+    if (audioContextRef.current && audioFiles.length > 0) {
+      audioContextRef.current.src = audioFiles[currentAudioIndex]?.fileUrl;
       audioContextRef.current.play();
+      setCurrentAudioIndex((prevIndex) => (prevIndex + 1) % audioFiles.length);
     }
   };
 
@@ -151,7 +158,12 @@ const DiaryDetail = () => {
 
       <audio
         ref={audioContextRef}
-        src={diary.diaryFiles.find((file) => file.fileType === "MP4")?.fileUrl}
+        src={diary.diaryFiles[currentAudioIndex]?.fileUrl}
+        onEnded={() =>
+          setCurrentAudioIndex(
+            (prevIndex) => (prevIndex + 1) % audioFiles.length
+          )
+        }
         style={{ display: "none" }}
       ></audio>
     </div>
