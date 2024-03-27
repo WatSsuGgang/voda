@@ -1,6 +1,6 @@
 import { create } from "zustand";
 const useUserStore = create((set) => ({
-  nickname: "신진호",
+  nickname: "",
   coins: 0,
   diaryStreak: 0,
   setUserInfo: (userinfo) => {
