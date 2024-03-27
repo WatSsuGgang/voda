@@ -1,131 +1,88 @@
-import React from "react"; // eslint-disable-line no-unused-vars
-import dayjs from "dayjs";
-import Badge from "@mui/material/Badge";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { PickersDay } from "@mui/x-date-pickers/PickersDay";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-import { getMonth } from "../../services/calendar";
-import "dayjs/locale/ko";
+// Calendar.js
 
-function getRandomNumber(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
-}
+import React, { useState } from "react";
+import "./styles.css"; // styles.css 파일 import
+import CalendarDetail from "./CalendarDetail";
 
-/**
- * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
- * ⚠️ No IE11 support
- */
+const Calendar = () => {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showDetail, setShowDetail] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-function emotionBadge(number) {
-  const emotions = {
-    0: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Grinning%20Squinting%20Face.png",
-    1: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Enraged%20Face.png",
-    2: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Loudly%20Crying%20Face.png",
-    3: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Fearful%20Face.png",
-    4: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Nerd%20Face.png",
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 현재 월의 일 수
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // 현재 월의 첫 날의 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+
+  const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+
+  const handleDateClick = (date) => {
+    setSelectedDate(date.toDateString());
+    setShowDetail(true);
   };
-  return (
-    <img
-      src={emotions[number]}
-      alt=""
-      style={{
-        width: "1rem",
-        height: "1rem",
-      }}
-    />
-  );
-}
 
-function fakeFetch(date, { signal }) {
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      const daysInMonth = date.daysInMonth();
-      const daysToHighlight = [1, 2, 3].map(() =>
-        getRandomNumber(1, daysInMonth)
-      );
-
-      resolve({ daysToHighlight });
-    }, 500);
-
-    signal.onabort = () => {
-      clearTimeout(timeout);
-      reject(new DOMException("aborted", "AbortError"));
-    };
-  });
-}
-
-const now = new Date();
-const initialValue = dayjs(now.toString());
-
-function ServerDay(props) {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
-  const emotionsToShow = getRandomNumber(0, 4);
-  const isSelected =
-    !props.outsideCurrentMonth &&
-    highlightedDays.indexOf(props.day.date()) >= 0;
-
-  return (
-    <Badge
-      key={props.day.toString()}
-      overlap="circular"
-      badgeContent={isSelected ? emotionBadge(emotionsToShow) : undefined}
-      // color="primary"
-    >
-      <PickersDay
-        {...other}
-        outsideCurrentMonth={outsideCurrentMonth}
-        day={day}
-      />
-    </Badge>
-  );
-}
-
-export default function DateCalendarServerRequest() {
-  const requestAbortController = React.useRef(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
-
-  const fetchHighlightedDays = (date) => {};
-
-  React.useEffect(() => {
-    fetchHighlightedDays(initialValue);
-    // abort request on unmount
-    return () => requestAbortController.current?.abort();
-  }, []);
-
-  const handleMonthChange = (date) => {
-    if (requestAbortController.current) {
-      // make sure that you are aborting useless requests
-      // because it is possible to switch between months pretty quickly
-      requestAbortController.current.abort();
+  const handlePrevMonth = () => {
+    setCurrentMonth((prevMonth) => prevMonth - 1);
+    if (currentMonth === 0) {
+      setCurrentYear((prevYear) => prevYear - 1);
     }
+  };
 
-    setIsLoading(true);
-    setHighlightedDays([]);
-    fetchHighlightedDays(date);
+  const handleNextMonth = () => {
+    setCurrentMonth((nextMonth) => nextMonth + 1);
+    if (currentMonth === 11) {
+      setCurrentYear((nextYear) => nextYear + 1);
+    }
+  };
+
+  const renderCalendar = () => {
+    const calendarDays = [];
+    // 첫 주의 빈 칸을 채웁니다.
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      calendarDays.push(
+        <div key={`empty-${i}`} className="calendar-day"></div>
+      );
+    }
+    // 날짜를 추가합니다.
+    for (let i = 1; i <= daysInMonth; i++) {
+      const date = new Date(currentYear, currentMonth, i);
+      calendarDays.push(
+        <div
+          key={i}
+          className="calendar-day"
+          onClick={() => handleDateClick(date)}
+        >
+          {i}
+        </div>
+      );
+    }
+    return <div className="calendar">{calendarDays}</div>;
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-      <DateCalendar
-        defaultValue={initialValue}
-        loading={isLoading}
-        onMonthChange={handleMonthChange}
-        renderLoading={() => <DayCalendarSkeleton />}
-        slots={{
-          day: ServerDay,
-        }}
-        slotProps={{
-          day: {
-            highlightedDays,
-          },
-        }}
-        showDaysOutsideCurrentMonth
-
-        // views={["year", "month", "day"]}
-      />
-    </LocalizationProvider>
+    <div className="calendar-wrapper">
+      <div className="calendar-header">
+        <button onClick={handlePrevMonth}>&lt;</button>
+        <h2>
+          {currentYear}년 {currentMonth + 1}월
+        </h2>
+        <button onClick={handleNextMonth}>&gt;</button>
+      </div>
+      <div className="weekdays">
+        {weekdays.map((day, index) => (
+          <div key={index} className="weekday">
+            {day}
+          </div>
+        ))}
+      </div>
+      {renderCalendar()}
+      {showDetail && (
+        <CalendarDetail
+          selectedDate={selectedDate}
+          closeModal={() => setShowDetail(false)}
+        />
+      )}
+    </div>
   );
-}
+};
+
+export default Calendar;
