@@ -98,6 +98,7 @@ public class DiaryServiceImpl implements DiaryService {
             .fileType(fileType) // 새 파일의 타입 설정
             .fileUrl(fileUrl) // 새 파일의 URL 설정
             .build();
+        diaryFileRepository.save(newFile);
         diary.addFile(newFile);
     }
 
@@ -131,7 +132,7 @@ public class DiaryServiceImpl implements DiaryService {
         log.info("user chat : " + sttRes);
         if (sttRes.trim().replaceAll("\\s+", "").contains("오늘일기끝")) {
             return new DiaryTtsResponseDto(
-                null, diaryId, false);
+                null, diaryId, true);
         }
         if (sttRes.equals("")) {
             return new DiaryTtsResponseDto(
