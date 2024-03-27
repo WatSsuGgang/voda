@@ -1,5 +1,5 @@
 import React from "react";
-import usePetStore from "../../store/petStore";
+import useUserStore from "../../store/userStore";
 import styled from "styled-components";
 
 const HeaderComponent = styled.div({
@@ -11,7 +11,7 @@ const HeaderComponent = styled.div({
 });
 
 export default function Header() {
-  const { currentCoin } = usePetStore();
+  const { coins } = useUserStore();
   return (
     <HeaderComponent style={{ zIndex: 99 }}>
       <h3>상점</h3>
@@ -29,7 +29,7 @@ export default function Header() {
           width="40rem"
           height="40rem"
         />
-        <h3>{currentCoin}</h3>
+        <h3>{coins}</h3>
       </div>
     </HeaderComponent>
   );

@@ -124,7 +124,7 @@ const Record = () => {
       window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
       navigate("/pet");
       const talkRes = await fetchTalkList(diaryId);
-      const res = await createDiary(diaryId, talkRes.data);
+      const res = await createDiary(diaryId, talkRes.data.talk_list);
       console.log("일기 생성:", res);
     } catch (err) {
       console.error(err);

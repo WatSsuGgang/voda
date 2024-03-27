@@ -8,61 +8,38 @@ const PriceContainer = styled.div`
   align-items: center;
 `;
 
-{
-  /* <ItemCostContainer>
-              {item.own ? (
-                <>
-                  {item.applied ? (
-                    <>
-                      <img
-                        src={`${imgBaseURL}Symbols/Check%20Mark.png`}
-                        alt="Check Mark"
-                        width="20rem"
-                        height="20rem"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <p style={{ margin: "0", overflow: "hidden" }}>
-                        {"보유중"}
-                      </p>
-                    </>
-                  )}
-                </>
-              ) : (
-                <>
-                  <img
-                    src={`${imgBaseURL}Objects/Coin.png`}
-                    alt="Coin"
-                    width="20rem"
-                    height="20rem"
-                  />
-                  <p style={{ margin: "0", overflow: "hidden" }}>{item.cost}</p>
-                </>
-              )}
-              <>
-                <img
-                  src={`${imgBaseURL}Objects/Coin.png`}
-                  alt="Coin"
-                  width="20rem"
-                  height="20rem"
-                />
-                <p style={{ margin: "0", overflow: "hidden" }}>{item.price}</p>
-              </>
-            </ItemCostContainer> */
-}
-
-export default function ItemPriceContainer({ price }) {
-  const imgBaseURL =
-    "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/";
-
-  const coinImgURL = `${imgBaseURL}Objects/Coin.png`;
-  return (
-    <PriceContainer>
-      <>
+export default function ItemPriceContainer({
+  using = false,
+  bought = false,
+  price,
+}) {
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
+  const coinImgURL = `${EMOJI_URL}/Objects/Coin.png`;
+  if (!bought) {
+    return (
+      <PriceContainer>
         <img src={coinImgURL} alt="Coin" width="20rem" height="20rem" />
         <p style={{ margin: "0", overflow: "hidden" }}>{price}</p>
-      </>
-    </PriceContainer>
-  );
+      </PriceContainer>
+    );
+  } else {
+    if (!using) {
+      return (
+        <PriceContainer>
+          <p style={{ margin: "0", overflow: "hidden" }}>{"보유중"}</p>
+        </PriceContainer>
+      );
+    } else {
+      return (
+        <PriceContainer>
+          <img
+            src={`${EMOJI_URL}/Symbols/Check%20Mark.png`}
+            alt="Check Mark"
+            width="20rem"
+            height="20rem"
+          />
+        </PriceContainer>
+      );
+    }
+  }
 }

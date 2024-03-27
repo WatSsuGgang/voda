@@ -32,8 +32,16 @@ export const buyItem = async (data) => {
 
 // All
 // 상점 아이템 조회
-export const getItem = (category) => {
+export const getItem = async (category) => {
   const url = `/item?category=${category}`;
-  const response = request(HTTPMethods.GET, url);
+  const response = await request(HTTPMethods.GET, url);
+  return response;
+};
+
+// User
+// 소유한 아이템 장착
+export const applyItem = async (ownId) => {
+  const url = `/own/use/${ownId}`;
+  const response = await request(HTTPMethods.PATCH, url);
   return response;
 };
