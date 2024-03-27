@@ -8,7 +8,6 @@ export default defineConfig({
       strategies: 'injectManifest',  // 직접 sw.js를 넣어주는 방식
       srcDir: '/',
       filename: 'voda-sw.js',
-      selfDestroying: true,
       registerType: "autoUpdate",
       devOptions: {
         enabled: true,
