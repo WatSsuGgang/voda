@@ -28,7 +28,7 @@ public class MyPageController {
 
     @PatchMapping
     public ResponseEntity<?> updateMemberInfo(@CurrentUser SecurityUserDto currentUser,
-        UpdateMemberInfoRequest req) {
+        @RequestBody UpdateMemberInfoRequest req) {
         MemberInfoResponse response = myPageService.updateMemberInfo(currentUser.getMemberId(),
             req.getNewNickname());
 
