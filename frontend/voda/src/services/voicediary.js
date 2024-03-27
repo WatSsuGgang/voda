@@ -27,7 +27,7 @@ export const recordDiary = async (data) => {
 export const createDiary = (id, data) => {
   const transformedData = [];
   let currentItem = {};
-  data.talk_list.forEach((item) => {
+  data.forEach((item) => {
     if (item.question) {
       if (Object.keys(currentItem).length !== 0) {
         transformedData.push(currentItem);
