@@ -54,10 +54,21 @@ const DiaryDetail = () => {
     e.preventDefault();
     console.log("클릭함", e);
     if (audioFiles.length > 0) {
-      for (let i = 0; i < audioFiles.length; i++) {
-        const audio = new Audio(audioFiles[i]?.fileUrl);
-        audio.play();
-      }
+      const playNextAudio = (currentIndex) => {
+        if (currentIndex < audioFiles.length - 1) {
+          const nextAudio = new Audio(audioFiles[currentIndex + 1]?.fileUrl);
+          nextAudio.onended = () => {
+            playNextAudio(currentIndex + 1);
+          };
+          nextAudio.play();
+        }
+      };
+
+      const firstAudio = new Audio(audioFiles[0]?.fileUrl);
+      firstAudio.onended = () => {
+        playNextAudio(0);
+      };
+      firstAudio.play();
     }
   };
 
