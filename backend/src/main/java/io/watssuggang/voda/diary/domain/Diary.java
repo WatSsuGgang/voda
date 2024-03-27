@@ -49,7 +49,7 @@ public class Diary extends BaseEntity {
 
     public void addFile(DiaryFile file) {
         if (!diaryFiles.contains(file)) {
-            this.diaryFiles.add(file);
+            diaryFiles.add(file);
             file.setDiary(this);
         }
     }

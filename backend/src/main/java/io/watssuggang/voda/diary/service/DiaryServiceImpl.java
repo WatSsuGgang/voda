@@ -16,6 +16,7 @@ import io.watssuggang.voda.diary.util.PromptHolder;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.exception.MemberNotFoundException;
 import io.watssuggang.voda.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class DiaryServiceImpl implements DiaryService {
 
     @Qualifier("chatClient")
@@ -103,10 +105,8 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     public DiaryTtsResponseDto init(Integer userId) {
-        Member member = memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
         Diary diary = Diary.builder()
             .diaryContent("init")
-            .member(member)
             .build();
         Diary newDiary = diaryRepository.save(diary);
         String chatRes = getChat(""); //ai 첫 질문 받아옴
