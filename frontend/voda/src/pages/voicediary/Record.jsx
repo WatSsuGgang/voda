@@ -33,6 +33,7 @@ const Record = () => {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const [Id, setId] = useState("");
+
   // 처음 화면을 렌더링 할 때, ai 질문 음성 파일을 임시로 설정해줌. 추후, init api 요청으로 바꿀 예정
   useEffect(() => {
     // api init api 요청. 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
@@ -119,6 +120,7 @@ const Record = () => {
   // 일기 생성 요청 보내는 함수
   const fetchCreate = async (diaryId) => {
     try {
+      stopRecording();
       window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
       navigate("/pet");
       const talkRes = await fetchTalkList(diaryId);
