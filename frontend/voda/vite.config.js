@@ -5,9 +5,10 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     VitePWA({
-      strategies: 'injectManifest',  // 직접 sw.js를 넣어주는 방식
-      srcDir: '/',
-      filename: 'voda-sw.js',
+      // strategies: 'injectManifest',  // 직접 sw.js를 넣어주는 방식
+      // srcDir: '/',
+      // filename: 'voda-sw.js',
+      injectRegister:'script',
       registerType: "autoUpdate",
       devOptions: {
         enabled: true,
@@ -48,4 +49,12 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: { // 번들링의 입력 파일을 정의
+      input: {
+        main: "./index.html",  // React 애플리케이션의 진입점
+        sw: "public/voda-sw.js",  // Service Worker 파일
+      },
+    },
+  },
 });
