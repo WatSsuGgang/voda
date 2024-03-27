@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 const Container = styled.div`

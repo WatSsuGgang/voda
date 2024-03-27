@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 
 const Bar = styled.div({
   marginTop: "1rem",
@@ -14,6 +14,7 @@ const Bar = styled.div({
   backgroundColor: "lightgray",
   padding: "1rem",
   gap: "0.5rem",
+  zIndex: "99",
 });
 
 const Button = styled.div({
@@ -23,14 +24,9 @@ const Button = styled.div({
   fontWeight: "bold",
   alignItems: "center",
   borderRadius: "2rem",
-  height: "100%",
-  width: "25%",
+  height: "3rem",
+  width: "5rem",
 });
-
-const opacity = {
-  food: 0.5,
-  effect: 0.5,
-};
 
 export default function CategoryBar() {
   const { currentCategory, setCurrentCategory } = usePetStore();
@@ -39,21 +35,32 @@ export default function CategoryBar() {
   }
 
   return (
-    <Bar style={{ zIndex: 99 }}>
-      <Button
-        onClick={clickHandler}
-        id={"food"}
-        style={currentCategory === "food" ? { opacity: 1 } : { opacity: 0.5 }}
+    <Bar>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
       >
-        간식
-      </Button>
-      <Button
-        onClick={clickHandler}
-        id={"effect"}
-        style={currentCategory === "effect" ? { opacity: 1 } : { opacity: 0.5 }}
-      >
-        효과
-      </Button>
+        <Button
+          onClick={clickHandler}
+          id={"food"}
+          style={currentCategory === "food" ? { opacity: 1 } : { opacity: 0.5 }}
+        >
+          간식
+        </Button>
+        <Button
+          onClick={clickHandler}
+          id={"effect"}
+          style={
+            currentCategory === "effect" ? { opacity: 1 } : { opacity: 0.5 }
+          }
+        >
+          효과
+        </Button>
+      </div>
     </Bar>
   );
 }

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import usePetStore from "../../store/petStore";
+import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import useUserStore from "../../store/userStore";
 import { Modal } from "@mui/material";
 import { Button } from "@mui/material";
 import ItemContainer from "./ItemContainer";
 import ItemNameContainer from "./ItemNameContainer";
 import ItemPriceContainer from "./ItemPriceContainer";
-import { buyItem } from "../../services/item";
+import { buyItem, applyItem } from "../../services/item";
 
 const ItemWrapper = styled.div({
   display: "grid",
@@ -32,11 +32,18 @@ const ModalBox = styled.div`
   background-color: white;
   padding: 1rem;
 `;
-
 export default function ItemList() {
-  const [openModal, setOpenModal] = useState(false);
   const [modalItem, setModalItem] = useState({});
-  const { items, currentCategory, setCurrentCategory } = usePetStore();
+
+  // 구매 모달
+  const [openModal, setOpenModal] = useState(false);
+
+  // 착용 모달
+  const [openBoughtModal, setOpenBoughtModal] = useState(false);
+
+  const { usingId } = usePetPersistStore();
+  const { boughtItems, displayItems, currentCategory, setCurrentCategory } =
+    usePetStore();
   const { coin } = useUserStore();
 
   const handleModalItemChange = (item) => {
@@ -46,7 +53,16 @@ export default function ItemList() {
   const handleOpenModal = () => {
     setOpenModal(true);
   };
+
   const handleCloseModal = () => setOpenModal(false);
+
+  const handleOpenBoughtModal = () => {
+    if (modalItem.itemId !== usingId[currentCategory].itemId) {
+      setOpenBoughtModal(true);
+    }
+  };
+
+  const handleCloseBoughtModal = () => setOpenBoughtModal(false);
 
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   useEffect(() => {
@@ -68,19 +84,43 @@ export default function ItemList() {
     //1이상이면 받침 있음 -> 을
     return "을";
   }
-
   async function handleBuyItem() {
     if (coin >= modalItem.price) {
       await buyItem({ itemId: modalItem.itemId, price: modalItem.price });
       handleCloseModal();
-    } else {
-      alert("돈이 모라자요");
     }
+  }
+
+  async function handleApplyItem() {
+    try {
+      const data = await applyItem(usingId[currentCategory].ownId);
+      console.log(data);
+    } catch (error) {}
+    handleCloseModal();
   }
 
   return (
     <ItemWrapper>
-      {items.map((item, index) => (
+      {boughtItems.map((item, index) => (
+        <div
+          key={index}
+          onTouchStart={() => {
+            handleModalItemChange(item);
+          }}
+          onClick={handleOpenBoughtModal}
+        >
+          <div>
+            <ItemNameContainer bought={true} name={item.name} />
+            <ItemContainer bought={true} url={`${EMOJI_URL}/${item.imgURl}`} />
+            <ItemPriceContainer
+              using={usingId[currentCategory].itemId === item.itemId}
+              bought={true}
+              price={item.price}
+            />
+          </div>
+        </div>
+      ))}
+      {displayItems.map((item, index) => (
         <div
           key={index}
           onTouchStart={() => {
@@ -90,7 +130,7 @@ export default function ItemList() {
         >
           <div>
             <ItemNameContainer name={item.name} />
-            <ItemContainer url={imgBaseURL + item.imgURl} />
+            <ItemContainer url={`${EMOJI_URL}/${item.imgURl}`} />
             <ItemPriceContainer price={item.price} />
           </div>
         </div>
@@ -107,7 +147,7 @@ export default function ItemList() {
             }}
           >
             <img
-              src={imgBaseURL + modalItem.imgURl}
+              src={`${EMOJI_URL}/${modalItem.imgURl}`}
               style={{
                 width: "3rem",
                 height: "3rem",
@@ -119,7 +159,76 @@ export default function ItemList() {
               }}
             >
               <b>"{modalItem.name}"</b>
-              {checkName(modalItem.name)} 구매하시겠습니까?
+              {checkName(modalItem.name)}{" "}
+              {coin >= modalItem.price
+                ? "구매하시겠습니까?"
+                : "구매할 돈이 모자라요"}
+            </p>
+            {coin >= modalItem.price ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleCloseModal}
+                >
+                  취소
+                </Button>
+                <Button
+                  variant="contained"
+                  color={"success?"}
+                  onClick={handleBuyItem}
+                >
+                  구매
+                </Button>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              ></div>
+            )}
+          </div>
+        </ModalBox>
+      </Modal>
+
+      <Modal open={openBoughtModal} onClose={handleCloseBoughtModal}>
+        <ModalBox>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <img
+              src={`${EMOJI_URL}/${modalItem.imgURl}`}
+              style={{
+                width: "3rem",
+                height: "3rem",
+              }}
+            />
+            <p
+              style={{
+                margin: "0",
+              }}
+            >
+              <b>"{modalItem.name}"</b>
+              {`${checkName(modalItem.name)}을 착용하시겠습니까?`}
             </p>
             <div
               style={{
@@ -132,17 +241,10 @@ export default function ItemList() {
             >
               <Button
                 variant="contained"
-                color="error"
-                onClick={handleCloseModal}
+                color={"success"}
+                onClick={handleApplyItem}
               >
-                취소
-              </Button>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleBuyItem}
-              >
-                구매
+                착용
               </Button>
             </div>
           </div>

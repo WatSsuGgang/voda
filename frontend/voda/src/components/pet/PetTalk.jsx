@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 import { getPetTalk } from "../../services/pet";
 
 const Chatbox = styled.div({
