@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 import { Modal } from "@mui/material";
 import styled from "styled-components";
 import { editPetName } from "../../services/pet";
@@ -25,7 +25,7 @@ const ModalForm = styled.div`
 `;
 
 export default function Pet() {
-  const { name, setName, stage, petAppearance } = usePetStore();
+  const { using, name, setName, stage, petAppearance } = usePetStore();
   const [newName, setNewName] = useState("");
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -71,7 +71,6 @@ export default function Pet() {
       setIsNewNameEmpty(true);
     }
   }
-
   return (
     <div>
       <div
@@ -83,13 +82,15 @@ export default function Pet() {
           gap: "1rem",
         }}
       >
-        {/* <img
-          src={using.effect.imgURl}
-          style={{
-            width: "5rem",
-            height: "5rem",
-          }}
-        /> */}
+        {using.effect.item && (
+          <img
+            src={`${EMOJI_URL}/${using.effect.item.imgURl}`}
+            style={{
+              width: "5rem",
+              height: "5rem",
+            }}
+          />
+        )}
         <img
           src={`${EMOJI_URL}/${pet_map[stage][petAppearance]}`}
           style={{

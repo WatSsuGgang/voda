@@ -1,5 +1,5 @@
 import React from "react";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 
 export default function Emotion() {
   const { emotion } = usePetStore();

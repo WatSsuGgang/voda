@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Header from "../../components/shop/Header";
 import CategoryBar from "../../components/shop/CategoryBar";
 import ItemList from "../../components/shop/ItemList";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 import { getItem } from "../../services/item";
 import { CircularProgress } from "@mui/material";
 
@@ -32,12 +32,14 @@ const TopComponents = styled.div`
 
 export default function PetShopPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const { currentCategory, setItems } = usePetStore();
+  const { currentCategory, setBoughtItems, setDisplayItems } = usePetStore();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getItem(currentCategory);
-        setItems(response.data);
+        setBoughtItems(response.data.bought);
+        setDisplayItems(response.data.display);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
