@@ -1,3 +1,5 @@
+import { precacheAndRoute, getCacheKeyForURL } from 'workbox-precaching';
+
 const CACHE_NAME = "cache-v1";
 
 const FILES_TO_CACHE = ["/offline.html", "/favicon.ico"];
@@ -36,6 +38,6 @@ self.addEventListener("fetch", (event) => {
 });
 
 // 추가: 매니페스트를 프리캐시하고 라우팅
-// self.__WB_MANIFEST = [].concat(self.__WB_MANIFEST || []);
+self.__WB_MANIFEST = [].concat(self.__WB_MANIFEST || []);
 
-// precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);
