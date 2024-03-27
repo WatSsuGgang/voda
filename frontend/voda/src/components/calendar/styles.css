@@ -107,7 +107,7 @@
 }
 
 .modal-content {
-  /* margin-top: 20px; */
+  margin-top: 20px;
 }
 
 .close {
@@ -115,4 +115,10 @@
   font-size: 1.5rem;
   cursor: pointer;
   color: #333;
+}
+
+/* 일기가 있는 날짜에 대한 스타일 */
+.has-diary {
+  background-color: #ffc107; /* 일기가 있는 날짜를 강조하는 배경색 */
+  color: #333; /* 글자색은 어두운 회색으로 설정 */
 }
