@@ -65,14 +65,15 @@ const Calendar = () => {
       const date = new Date(currentYear, currentMonth, i);
       const isCurrentMonth = date.getMonth() === currentMonth; // 현재 달인지 확인
       const isSelected = date.toDateString() === selectedDate; // 선택된 날짜인지 확인
+      const hasDiary = diaryDates.includes(date.toDateString()); // 해당 날짜에 일기가 있는지 확인
 
       calendarDays.push(
         <div
           key={i}
           className={`calendar-day ${
             isCurrentMonth ? "current-month" : "non-current-month"
-          } ${isSelected ? "selected" : ""}`} // 현재 달이 아닌 경우에는 'non-current-month' 클래스 추가
-          onClick={() => isCurrentMonth && handleDateClick(date)} // 현재 달이 아닌 날짜는 클릭 불가능하도록 설정
+          } ${isSelected ? "selected" : ""} ${hasDiary ? "has-diary" : ""}`} // 일기가 있는 날짜에는 'has-diary' 클래스 추가
+          onClick={() => isCurrentMonth && handleDateClick(date)}
         >
           {i}
         </div>
