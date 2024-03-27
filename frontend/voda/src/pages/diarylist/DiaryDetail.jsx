@@ -44,7 +44,7 @@ const DiaryDetail = () => {
     };
 
     fetchDiary();
-  }, [id]); // id가 변경될 때마다 다이어리를 다시 가져옴
+  }, []); // id가 변경될 때마다 다이어리를 다시 가져옴
 
   const store = useStore();
   const emotionImageUrl = store.emotions[diary?.diaryEmotion];
@@ -53,10 +53,11 @@ const DiaryDetail = () => {
   const playVoice = (e) => {
     e.preventDefault();
     console.log("클릭함", e);
-    if (audioContextRef.current && audioFiles.length > 0) {
-      audioContextRef.current.src = audioFiles[currentAudioIndex]?.fileUrl;
-      audioContextRef.current.play();
-      setCurrentAudioIndex((prevIndex) => (prevIndex + 1) % audioFiles.length);
+    if (audioFiles.length > 0) {
+      for (let i = 0; i < audioFiles.length; i++) {
+        const audio = new Audio(audioFiles[i]?.fileUrl);
+        audio.play();
+      }
     }
   };
 
@@ -158,7 +159,6 @@ const DiaryDetail = () => {
 
       <audio
         ref={audioContextRef}
-        src={diary.diaryFiles[currentAudioIndex]?.fileUrl}
         onEnded={() =>
           setCurrentAudioIndex(
             (prevIndex) => (prevIndex + 1) % audioFiles.length
