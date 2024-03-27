@@ -7,6 +7,8 @@ import PetTalk from "../../components/pet/PetTalk";
 import { getPet } from "../../services/pet";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import { CircularProgress } from "@mui/material";
+import { getUserInfo } from "../../services/mypage";
+import { useUserStore } from "../../store/userStore";
 
 // data 형식
 // data = {owned: [], pet: {emotion: "JOY", exp: 0, isEvolution: false, isFeed: true}}
@@ -25,6 +27,11 @@ const PetPage = () => {
     setStage,
   } = usePetStore();
   const { setUsingId } = usePetPersistStore();
+  const { setUserInfo } = useUserStore();
+  const userInfo = async () => {
+    const res = await getUserInfo();
+    setUserInfo(res.data);
+  };
   useEffect(() => {
     // 임시 memberId
 
@@ -32,6 +39,7 @@ const PetPage = () => {
       try {
         const data = await getPet();
         setUsing(data.map);
+        console.log("드렁", data);
         setUsingId({
           food: {
             itemId: data.map.food.item.itemId,
@@ -58,6 +66,7 @@ const PetPage = () => {
       }
     };
     fetchData();
+    userInfo();
   }, []);
   return (
     <div
