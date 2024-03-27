@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 
 const Bar = styled.div({
   backgroundColor: "#686868",

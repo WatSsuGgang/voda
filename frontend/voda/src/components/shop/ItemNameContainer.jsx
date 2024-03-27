@@ -12,23 +12,19 @@ const NameContainer = styled.div`
   background-color: #fff7b2;
 `;
 
-{
-  /* <ItemNameContainer
-            // style={
-            //   item.own
-            //     ? { opacity: 1 }
-            //     : {
-            //         opacity: 0.5,
-            //         filter: "grayscale(75%)",
-            //       }
-            // }
-            >
-              <p style={{ margin: "0", fontWeight: "bold" }}>{item.name}</p>
-            </ItemNameContainer> */
-}
-export default function ItemNameContainer({ name }) {
+export default function ItemNameContainer({ bought = false, name }) {
   return (
-    <NameContainer>
+    <NameContainer
+      style={
+        bought
+          ? {
+              backgroundColor: "#89ADAA",
+            }
+          : {
+              backgroundColor: "#AFAB99",
+            }
+      }
+    >
       <p style={{ margin: "0", fontWeight: "bold" }}>{name}</p>{" "}
     </NameContainer>
   );

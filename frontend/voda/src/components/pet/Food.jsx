@@ -1,12 +1,12 @@
 import React from "react";
-import usePetStore from "../../store/petStore";
+import { usePetStore } from "../../store/petStore";
 import { feedPet } from "../../services/pet";
 
 export default function Food() {
   const {
     isFeed,
     setIsFeed,
-    usingFoodImgURl,
+    using,
     setPetId,
     setIsEvolution,
     setName,
@@ -63,7 +63,7 @@ export default function Food() {
     <>
       <img
         id="food"
-        src={`${EMOJI_URL}/${usingFoodImgURl}`}
+        src={`${EMOJI_URL}/${using.food.item.imgURl}`}
         onClick={clickHandler}
         style={
           isFeed

@@ -5,7 +5,7 @@ import MiddleComponent from "../../components/pet/MiddleComponent";
 import Pet from "../../components/pet/Pet";
 import PetTalk from "../../components/pet/PetTalk";
 import { getPet } from "../../services/pet";
-import usePetStore from "../../store/petStore";
+import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import { CircularProgress } from "@mui/material";
 
 // data 형식
@@ -13,8 +13,7 @@ import { CircularProgress } from "@mui/material";
 const PetPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {
-    setUsingFoodImgURl,
-    setUsingEffectImgURl,
+    setUsing,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -25,14 +24,24 @@ const PetPage = () => {
     setPetId,
     setStage,
   } = usePetStore();
+  const { setUsingId } = usePetPersistStore();
   useEffect(() => {
     // 임시 memberId
 
     const fetchData = async () => {
       try {
         const data = await getPet();
-        setUsingFoodImgURl(data.map.food.item.imgURl);
-        setUsingEffectImgURl(data.map.effect.item.imgURl);
+        setUsing(data.map);
+        setUsingId({
+          food: {
+            itemId: data.map.food.item.itemId,
+            ownId: data.map.food.ownId,
+          },
+          effect: {
+            itemId: data.map.effect.item.itemId,
+            ownId: data.map.effect.ownId,
+          },
+        });
         setEmotion(data.pet.emotion);
         setExp(data.pet.exp);
         setIsEvolution(data.pet.isEvolution);
@@ -43,7 +52,7 @@ const PetPage = () => {
         setPetId(data.pet.petId);
         setStage(data.pet.stage);
         setIsLoading(false);
-        console.log(data);
+        console.log(data.map);
       } catch (error) {
         console.error(error);
       }
