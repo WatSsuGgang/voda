@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.*;
 public interface OwnRepository extends JpaRepository<Own, Integer> {
 
     List<Own> findAllByMember_MemberIdAndItemStatus(Integer memberId, ItemStatus itemStatus);
+    List<Own> findAllByMember_MemberId(Integer memberId);
 
     boolean existsByMember_MemberIdAndItem_ItemId(Integer memberId, Integer itemId);
 

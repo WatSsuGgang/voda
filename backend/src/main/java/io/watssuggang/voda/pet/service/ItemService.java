@@ -7,8 +7,7 @@ import io.watssuggang.voda.member.service.MemberService;
 import io.watssuggang.voda.pet.domain.Item;
 import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.dto.req.*;
-import io.watssuggang.voda.pet.dto.res.ItemResponse;
-import io.watssuggang.voda.pet.dto.res.StoreResponse;
+import io.watssuggang.voda.pet.dto.res.*;
 import io.watssuggang.voda.pet.exception.ItemException;
 import io.watssuggang.voda.pet.exception.OwnException;
 import io.watssuggang.voda.pet.repository.*;
@@ -50,11 +49,11 @@ public class ItemService {
     public StoreResponse getAllItemByCategory(SecurityUserDto userDto, String category) {
         List<? extends Item> itemNotInOwn = itemQueryRepository.findAllItemNotInOwn(
                 userDto.getMemberId(), category);
-        List<? extends Item> itemInOwn = itemQueryRepository.findAllItemInOwn(
-                userDto.getMemberId(), category);
+        List<Own> ownItems = ownRepository.findAllByMember_MemberId(
+                userDto.getMemberId());
 
         return StoreResponse.of(
-                itemInOwn.stream().map(ItemResponse::of).toList(),
+                ownItems.stream().map(OwnResponse::of).toList(),
                 itemNotInOwn.stream().map(ItemResponse::of).toList()
         );
     }
