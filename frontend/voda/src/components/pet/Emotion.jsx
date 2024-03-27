@@ -3,6 +3,7 @@ import usePetStore from "../../store/petStore";
 
 export default function Emotion() {
   const { emotion } = usePetStore();
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const emotion_map = {
     JOY: "Grinning%20Face%20with%20Smiling%20Eyes",
     ANGER: "Enraged%20Face",
@@ -13,7 +14,7 @@ export default function Emotion() {
   return (
     <>
       <img
-        src={`https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/${emotion_map[emotion]}.png`}
+        src={`${EMOJI_URL}/Smilies/${emotion_map[emotion]}.png`}
         style={{
           width: "3rem",
           height: "3rem",

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import usePetStore from "../../store/petStore";
+import { getPetTalk } from "../../services/pet";
 
 const Chatbox = styled.div({
   borderRadius: "2rem",
@@ -12,20 +13,19 @@ const Chatbox = styled.div({
 });
 
 export default function PetTalk(props) {
-  const { emotion, isFeed } = usePetStore();
-  const [message, setMessage] = useState("...");
+  const { isFeed } = usePetStore();
+  const [talk, setTalk] = useState("");
 
   useEffect(() => {
-    if (isFeed) {
-      setMessage("배불러잉");
-    } else {
-      setMessage("배고파잉");
-    }
-  }, [message]);
+    const fetchData = async () => {
+      const data = await getPetTalk();
+      setTalk(data.talk);
+    };
+  }, []);
 
   return (
     <>
-      <Chatbox>{message}</Chatbox>
+      <Chatbox>{"talk"}</Chatbox>
     </>
   );
 }

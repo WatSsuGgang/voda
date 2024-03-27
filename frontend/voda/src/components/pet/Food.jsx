@@ -3,8 +3,21 @@ import usePetStore from "../../store/petStore";
 import { feedPet } from "../../services/pet";
 
 export default function Food() {
-  const { currentFood, isFeed, setIsFeed } = usePetStore();
-  function feed() {
+  const {
+    isFeed,
+    setIsFeed,
+    usingFoodImgURl,
+    setPetId,
+    setIsEvolution,
+    setName,
+    setPetAppearance,
+    setStage,
+    setLevel,
+    setExp,
+    setEmotion,
+  } = usePetStore();
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
+  function feedAnimation() {
     const food = document.getElementById("food");
     food.animate(
       [
@@ -26,17 +39,21 @@ export default function Food() {
       1000
     );
   }
-
   async function clickHandler(e) {
     if (!isFeed) {
-      feed();
+      feedAnimation();
       try {
-        const response = await feedPet();
-        if (response.status === 200) {
-          setIsFeed(true);
-        } else {
-          console.log(response.status);
-        }
+        const data = await feedPet();
+        setPetId(data.petId);
+        setIsEvolution(data.isEvolution);
+        setName(data.name);
+        setPetAppearance(data.petAppearance);
+        setStage(data.stage);
+        setLevel(data.level);
+        setExp(data.exp);
+        setEmotion(data.emotion);
+        setIsFeed(data.isFeed);
+        console.log(data);
       } catch (error) {
         alert("먹이가 없음");
       }
@@ -46,7 +63,7 @@ export default function Food() {
     <>
       <img
         id="food"
-        src={`https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/${currentFood}.png`}
+        src={`${EMOJI_URL}/${usingFoodImgURl}`}
         onClick={clickHandler}
         style={
           isFeed

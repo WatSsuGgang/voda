@@ -27,6 +27,7 @@ export default function ExpBar() {
       <h3 style={{ margin: "0" }}>Lv.{level}</h3>
       <Bar>
         <div
+          id="exp-bar"
           style={{
             height: "100%",
             width: `${exp}`,
