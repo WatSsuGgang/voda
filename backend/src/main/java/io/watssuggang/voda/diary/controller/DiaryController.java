@@ -36,6 +36,14 @@ public class DiaryController {
         return ResponseEntity.ok(diaryService.answer(file, diaryId, userDto.getMemberId()));
     }
 
+    @PostMapping("/terminate")
+    public ResponseEntity<?> terminate(@CurrentUser SecurityUserDto userDto,
+        @RequestBody DiaryTerminateRequestDto requestDto)
+        throws  IOException {
+        System.out.println("terminate start============================================");
+        return diaryService.terminate(requestDto.getDiaryId(), userDto.getMemberId());
+    }
+
     @PostMapping("/createImage")
     public ResponseEntity<?> createImageByKarlo(@RequestBody KarloRequest karloRequest) {
         return ResponseEntity.ok(diaryService.createImage(karloRequest));

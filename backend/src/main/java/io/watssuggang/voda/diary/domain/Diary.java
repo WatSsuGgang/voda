@@ -26,10 +26,10 @@ public class Diary extends BaseEntity {
     @Column(columnDefinition = "char(2)", length = 2)
     private Emotion diaryEmotion;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<DiaryFile> diaryFiles = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<Talk> diaryTalks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

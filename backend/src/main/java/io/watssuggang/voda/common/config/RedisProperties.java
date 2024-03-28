@@ -1,4 +1,4 @@
-package io.watssuggang.voda.common.jwt.config;
+package io.watssuggang.voda.common.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
