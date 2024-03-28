@@ -1,5 +1,5 @@
 import React from "react"; // eslint-disable-line no-unused-vars
-import myPageBackground from "../../assets/mypage/mypage_background.png";
+import myPageBackground from "/images/mypage/mypage_background.png";
 import styled from "styled-components";
 import { Box } from "@mui/material";
 import TopComponent from "../../components/user/TopComponent";
