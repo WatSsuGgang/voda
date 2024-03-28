@@ -53,7 +53,6 @@ const Record = () => {
       }
     };
     fetchAudioUrl();
-    store.changeRecording(true);
   }, []);
 
   // 음성 데시벨을 측정해서, 20 데시벨 이하로 6초 이상 유지되면 음성 녹음 종료
