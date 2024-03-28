@@ -1,11 +1,11 @@
 import React from "react"; // eslint-disable-line no-unused-vars
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import diaryListIcon from "../../assets/navbar/diaryList.svg";
-import calendarIcon from "../../assets/navbar/calendar.svg";
-import userIcon from "../../assets/navbar/user.svg";
-import petIcon from "../../assets/navbar/pet.svg";
-import voiceDiaryIcon from "../../assets/navbar/voiceDiary.svg";
+import diaryListIcon from "/images/navbar/diaryList.svg";
+import calendarIcon from "/images/navbar/calendar.svg";
+import userIcon from "/images/navbar/user.svg";
+import petIcon from "/images/navbar/pet.svg";
+import voiceDiaryIcon from "/images/navbar/voiceDiary.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { deleteDiary } from "../../services/voicediary";
 import useStore from "../../store/store";
