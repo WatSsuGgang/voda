@@ -6,6 +6,7 @@ import io.watssuggang.voda.member.dto.req.UpdateMemberInfoRequest;
 import io.watssuggang.voda.member.dto.res.EmotionReportResponse;
 import io.watssuggang.voda.member.dto.res.MemberInfoResponse;
 import io.watssuggang.voda.member.service.MyPageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +29,7 @@ public class MyPageController {
 
     @PatchMapping
     public ResponseEntity<?> updateMemberInfo(@CurrentUser SecurityUserDto currentUser,
-        @RequestBody UpdateMemberInfoRequest req) {
+        @Valid @RequestBody UpdateMemberInfoRequest req) {
         MemberInfoResponse response = myPageService.updateMemberInfo(currentUser.getMemberId(),
             req.getNewNickname());
 
