@@ -3,8 +3,6 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.exception.ErrorCode;
-import io.watssuggang.voda.common.security.dto.SecurityUserDto;
-import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.diary.domain.*;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
@@ -19,7 +17,6 @@ import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.exception.MemberNotFoundException;
 import io.watssuggang.voda.member.repository.MemberRepository;
 import io.watssuggang.voda.pet.domain.Pet;
-import io.watssuggang.voda.pet.dto.res.PetResponse;
 import io.watssuggang.voda.pet.exception.PetException;
 import io.watssuggang.voda.pet.repository.PetRepository;
 import jakarta.transaction.Transactional;
@@ -244,7 +241,7 @@ public class DiaryServiceImpl implements DiaryService {
         String title = jsonObject.getString("title");
         String content = jsonObject.getString("content");
         String emotion = jsonObject.getString("emotion");
-        String imagePrompt = jsonObject.getString("prompt");
+        String imagePrompt = jsonObject.getString("prompt") + ", cartoon";
 
         existedDiary.updateDiary(title, Emotion.valueOf(emotion), content);
 
