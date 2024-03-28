@@ -3,8 +3,6 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.exception.ErrorCode;
-import io.watssuggang.voda.common.security.dto.SecurityUserDto;
-import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.diary.domain.*;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
@@ -16,10 +14,11 @@ import io.watssuggang.voda.diary.exception.DiaryNotFoundException;
 import io.watssuggang.voda.diary.repository.*;
 import io.watssuggang.voda.diary.util.PromptHolder;
 import io.watssuggang.voda.member.domain.Member;
+import io.watssuggang.voda.member.domain.PointLog;
 import io.watssuggang.voda.member.exception.MemberNotFoundException;
 import io.watssuggang.voda.member.repository.MemberRepository;
+import io.watssuggang.voda.member.service.PointLogService;
 import io.watssuggang.voda.pet.domain.Pet;
-import io.watssuggang.voda.pet.dto.res.PetResponse;
 import io.watssuggang.voda.pet.exception.PetException;
 import io.watssuggang.voda.pet.repository.PetRepository;
 import jakarta.transaction.Transactional;
@@ -61,108 +60,109 @@ public class DiaryServiceImpl implements DiaryService {
     private final TalkRepository talkRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final PointLogService pointLogService;
 
     private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
         message.add(new MessageDTO("user", PromptHolder.DEFAULT_PROPMT + text));
         DiaryChatRequestDto reqDto = DiaryChatRequestDto.builder()
-            .messages(message)
-            .build();
+                .messages(message)
+                .build();
         DiaryChatResponseDto chatResDto = chatClient.post()
-            .bodyValue(reqDto)
-            .retrieve()
-            .bodyToMono(DiaryChatResponseDto.class)
-            .block();
+                .bodyValue(reqDto)
+                .retrieve()
+                .bodyToMono(DiaryChatResponseDto.class)
+                .block();
         assert chatResDto != null;
         return chatResDto.getContent().get(0).getText();
     }
 
     private String getStt(MultipartFile mp3File) throws IOException {
         DiarySttResponseDto sttResult = sttClient.post()
-            .bodyValue(mp3File.getBytes())
-            .retrieve()
-            .bodyToMono(DiarySttResponseDto.class)
-            .block();
+                .bodyValue(mp3File.getBytes())
+                .retrieve()
+                .bodyToMono(DiarySttResponseDto.class)
+                .block();
         assert sttResult != null;
         return sttResult.getText();
     }
 
     private String getTts(String chat, Integer userId) {
         byte[] ttsResult = ttsClient.post()
-            .bodyValue(
-                "speaker=nara"
-                    + "&text=" + chat)
-            .retrieve()
-            .bodyToMono(byte[].class)
-            .block();
+                .bodyValue(
+                        "speaker=nara"
+                                + "&text=" + chat)
+                .retrieve()
+                .bodyToMono(byte[].class)
+                .block();
         assert ttsResult != null;
         return fileUploadService.fileUpload(userId, "audio/mpeg", "voice-ai", "mp3",
-            ttsResult); // ai 발화 s3 bucket 저장
+                ttsResult); // ai 발화 s3 bucket 저장
     }
 
 
     public void addFileToDiary(int diaryId, FileType fileType, String fileUrl) {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
         DiaryFile newFile = DiaryFile.builder()
-            .fileType(fileType) // 새 파일의 타입 설정
-            .fileUrl(fileUrl) // 새 파일의 URL 설정
-            .build();
+                .fileType(fileType) // 새 파일의 타입 설정
+                .fileUrl(fileUrl) // 새 파일의 URL 설정
+                .build();
         diaryFileRepository.save(newFile);
         diary.addFile(newFile);
     }
 
     public DiaryTtsResponseDto init(Integer userId) {
         Diary diary = Diary.builder()
-            .diaryContent("init")
-            .build();
+                .diaryContent("init")
+                .build();
         Diary newDiary = diaryRepository.save(diary);
         String chatRes = getChat(""); //ai 첫 질문 받아옴
         log.info("init chat : " + chatRes);
         Talk aiTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("AI"))
-            .talkContent(chatRes)
-            .diary(newDiary)
-            .build();
+                .talkSpeaker(Speaker.valueOf("AI"))
+                .talkContent(chatRes)
+                .diary(newDiary)
+                .build();
         talkRepository.save(aiTalk); //ai 발화 db 저장
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
         addFileToDiary(newDiary.getDiaryId(), FileType.MP3, ttsUrl); //ttsUrl db 저장
         return new DiaryTtsResponseDto(
-            ttsUrl, newDiary.getDiaryId(), false);
+                ttsUrl, newDiary.getDiaryId(), false);
     }
 
     public DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
-        throws IOException {
+            throws IOException {
         String sttUrl = fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
-            file); //사용자 발화 s3 bucket 저장
+                file); //사용자 발화 s3 bucket 저장
         addFileToDiary(diaryId, FileType.MP3, sttUrl); //sttUrl db 저장
         String sttRes = getStt(file); //사용자 발화 텍스트화
         log.info("user chat : " + sttRes);
         if (sttRes.trim().replaceAll("\\s+", "").contains("오늘일기끝")) {
             return new DiaryTtsResponseDto(
-                null, diaryId, true);
+                    null, diaryId, true);
         }
         if (sttRes.equals("")) {
             return new DiaryTtsResponseDto(
-                null, diaryId, false); //TODO: "말씀이 잘 안들려요" 음성 제작해서 넣기
+                    null, diaryId, false); //TODO: "말씀이 잘 안들려요" 음성 제작해서 넣기
         }
         Talk userTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("USER"))
-            .talkContent(sttRes)
-            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
-            .build();
+                .talkSpeaker(Speaker.valueOf("USER"))
+                .talkContent(sttRes)
+                .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
+                .build();
         talkRepository.save(userTalk); //사용자 발화 db 저장
         String chatRes = getChat(sttRes); //ai 발화 받아옴
         log.info("ai chat : " + chatRes);
         Talk aiTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("AI"))
-            .talkContent(chatRes)
-            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
-            .build();
+                .talkSpeaker(Speaker.valueOf("AI"))
+                .talkContent(chatRes)
+                .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
+                .build();
         talkRepository.save(aiTalk); //ai 발화 db 저장
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
         addFileToDiary(diaryId, FileType.MP3, ttsUrl); //ttsUrl db 저장
         return new DiaryTtsResponseDto(
-            ttsUrl, diaryId, false);
+                ttsUrl, diaryId, false);
     }
 
 //  public DiaryChatResponseDto chatTest(String prompt) {
@@ -174,10 +174,10 @@ public class DiaryServiceImpl implements DiaryService {
     public KarloResponse createImage(KarloRequest karloRequest) {
         System.out.println(karloRequest);
         return karloClient.post()
-            .bodyValue(karloRequest)
-            .retrieve()
-            .bodyToMono(KarloResponse.class)
-            .block();
+                .bodyValue(karloRequest)
+                .retrieve()
+                .bodyToMono(KarloResponse.class)
+                .block();
     }
 
     @Override
@@ -191,14 +191,14 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         List<Map<String, String>> talkList = talks.stream()
-            .map(talk -> {
-                Map<String, String> talkMap = new HashMap<>();
-                String key =
-                    talk.getTalkSpeaker().equals(Speaker.AI) ? "question" : "answer";
-                talkMap.put(key, talk.getTalkContent());
-                return talkMap;
-            })
-            .toList();
+                .map(talk -> {
+                    Map<String, String> talkMap = new HashMap<>();
+                    String key =
+                            talk.getTalkSpeaker().equals(Speaker.AI) ? "question" : "answer";
+                    talkMap.put(key, talk.getTalkContent());
+                    return talkMap;
+                })
+                .toList();
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -211,21 +211,21 @@ public class DiaryServiceImpl implements DiaryService {
     // 다이어리 생성
     @Override
     public DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId,
-        Integer memberId) {
+            Integer memberId) {
 
         Member writer = memberRepository.findById(memberId)
-            .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(MemberNotFoundException::new);
 
         Diary existedDiary = diaryRepository.findById(diaryId)
-            .orElseThrow(DiaryNotFoundException::new);
+                .orElseThrow(DiaryNotFoundException::new);
 
         if (isUnAuthorized(existedDiary.getWriter(), memberId)) {
             throw new DiaryException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
         }
 
         String allAnswers = talkList.stream()
-            .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
-            .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
+                .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
+                .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
 
         log.info("합친 답변: " + allAnswers);
 
@@ -251,27 +251,34 @@ public class DiaryServiceImpl implements DiaryService {
         existedDiary.addMember(writer);
 
         createImage(KarloRequest.of(imagePrompt))
-            .getImages()
-            .forEach(imageResponse -> {
-                String image = fileUploadService.fileUpload(
-                    existedDiary.getMember().getMemberId(),
-                    MediaType.IMAGE_JPEG_VALUE,
-                    "image",
-                    "jpeg",
-                    getImage(imageResponse));
+                .getImages()
+                .forEach(imageResponse -> {
+                    String image = fileUploadService.fileUpload(
+                            existedDiary.getMember().getMemberId(),
+                            MediaType.IMAGE_JPEG_VALUE,
+                            "image",
+                            "jpeg",
+                            getImage(imageResponse));
 
-                DiaryFile savedImage = diaryFileRepository.save(DiaryFile.builder()
-                    .fileType(FileType.WEBP)
-                    .fileUrl(image)
-                    .build());
-                savedImage.addDiary(existedDiary);
-            });
+                    DiaryFile savedImage = diaryFileRepository.save(DiaryFile.builder()
+                            .fileType(FileType.WEBP)
+                            .fileUrl(image)
+                            .build());
+                    savedImage.addDiary(existedDiary);
+                });
 
         Diary save = diaryRepository.save(existedDiary);
         // 펫의 Exp 올려주기
         Pet pet = petRepository.findByMember_MemberId(memberId)
-            .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
+                .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
         pet.updateExp((byte) 5);
+
+        pet.getMember().increasePoint(10);
+
+        pointLogService.makePointLog(
+                PointLog.ofEarnPointLog(pet.getMember(), 20, "일기")
+        );
+
         return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
     }
 
@@ -279,7 +286,7 @@ public class DiaryServiceImpl implements DiaryService {
         try {
             URL url = new URL(imageResponse.getImage());
             try (InputStream inputStream = url.openStream();
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
                 int bytesRead;
                 byte[] data = new byte[1024];
                 while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
@@ -310,17 +317,17 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public List<DiaryDetailResponse> getDiaryList(LocalDateTime start, LocalDateTime end,
-        String emotion, Integer memberId) {
+            String emotion, Integer memberId) {
 
         List<DiaryDetailResponse> responseList = new ArrayList<>();
 
         List<Diary> filteredDiaryList = diaryRepository.findDiariesByCondition(start, end,
-            emotion, memberId);
+                emotion, memberId);
 
         Optional<Integer> writerId = filteredDiaryList.stream().map(Diary::getWriter).findFirst();
 
         if (writerId.isPresent() && isUnAuthorized(writerId.get(),
-            memberId)) {
+                memberId)) {
             throw new DiaryException(ErrorCode.DIARY_READ_UNAUTHORIZED);
         }
 
@@ -339,11 +346,11 @@ public class DiaryServiceImpl implements DiaryService {
         DiaryChatRequestDto req = DiaryChatRequestDto.builder().messages(messages).build();
 
         DiaryChatResponseDto diaryChatResponseDto = chatClient.post()
-            .uri("https://api.anthropic.com/v1/messages")
-            .bodyValue(req)
-            .retrieve()
-            .bodyToMono(DiaryChatResponseDto.class)
-            .block();
+                .uri("https://api.anthropic.com/v1/messages")
+                .bodyValue(req)
+                .retrieve()
+                .bodyToMono(DiaryChatResponseDto.class)
+                .block();
 
         return diaryChatResponseDto != null ? diaryChatResponseDto.getContent().get(0) : null;
     }

@@ -43,9 +43,6 @@ public class Member extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Diary> diaries = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
-    private List<PointLog> pointLogs = new ArrayList<>();
-
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.PERSIST)
     private Pet pet;
 
@@ -54,10 +51,6 @@ public class Member extends BaseEntity {
 
     public void addDiaries(Diary diary) {
         this.diaries.add(diary);
-    }
-
-    public void addPointLogs(PointLog pointLog) {
-        this.pointLogs.add(pointLog);
     }
 
     public void increaseMemberDiaryCount() {
@@ -69,16 +62,20 @@ public class Member extends BaseEntity {
         pet.addPet(this);
     }
 
-    public void reducePoint(Integer point){
-        if(this.memberPoint < point){
+    public void reducePoint(Integer point) {
+        if (this.memberPoint < point) {
             throw new MemberException(ErrorCode.NOT_ENOUGH_POINT);
         }
         this.memberPoint -= point;
     }
 
+    public void increasePoint(Integer point) {
+        this.memberPoint += point;
+    }
+
     @Builder
     public Member(String memberName, String provider, String memberEmail, String userRole,
-        Integer memberPoint, Integer memberDiaryCount, Pet pet) {
+            Integer memberPoint, Integer memberDiaryCount, Pet pet) {
         this.memberName = memberName;
         this.provider = provider;
         this.memberEmail = memberEmail;

@@ -3,7 +3,9 @@ package io.watssuggang.voda.pet.service;
 import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
 import io.watssuggang.voda.member.domain.Member;
+import io.watssuggang.voda.member.domain.PointLog;
 import io.watssuggang.voda.member.service.MemberService;
+import io.watssuggang.voda.member.service.PointLogService;
 import io.watssuggang.voda.pet.domain.Item;
 import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.dto.req.*;
@@ -25,6 +27,7 @@ public class ItemService {
     private final ItemQueryRepository itemQueryRepository;
     private final OwnRepository ownRepository;
     private final MemberService memberService;
+    private final PointLogService pointLogService;
 
     public ItemResponse createItem(ItemRequest postRequest) {
         validExistItem(postRequest.getName(), postRequest.getCategory());
@@ -44,6 +47,7 @@ public class ItemService {
 
     /**
      * 카테고리별로 모든 아이템을 조회하는 메서드
+     *
      * @return 소유한 아이템, 진열된 아이템을 포함하여 StoreResponse 반환
      */
     public StoreResponse getAllItemByCategory(SecurityUserDto userDto, String category) {
@@ -71,7 +75,13 @@ public class ItemService {
         Own own = Own.of();
         own.purchase(member, verifyItem);
 
-        return ownRepository.save(own).getOwnedId();
+        Integer ownedId = ownRepository.save(own).getOwnedId();
+
+        pointLogService.makePointLog(
+                PointLog.ofUsePointLog(member, verifyItem.getItemPrice(), verifyItem.getItemName())
+        );
+
+        return ownedId;
     }
 
     private void validBuyItem(Integer memberId, Integer itemId) {
