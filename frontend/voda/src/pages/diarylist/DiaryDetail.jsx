@@ -2,8 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router";
 import useStore from "../../store/store";
 import styled from "styled-components";
-import save from "../../assets/diarylist/save.svg";
-import playbutton from "../../assets/diarylist/playbutton.svg";
+import save from "/images/diarylist/save.svg";
+import playbutton from "/images/diarylist/playbutton.svg";
 import { getDiaryDetail } from "../../services/diarylist";
 import LodaingSpinner from "../../components/common/LoadingSpinner";
 const Title = styled.h3`
