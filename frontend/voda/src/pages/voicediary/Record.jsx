@@ -6,7 +6,6 @@ import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
 import PlingSound from "../../../public/Pling.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
-import Mention from "../../components/voicediary/Mention";
 import {
   initDiary,
   recordDiary,
@@ -32,6 +31,9 @@ const Record = () => {
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const requestIdRef = useRef(null);
   let chatCount = 0;
 
   // 처음 화면을 렌더링 할 때, init api 요청 받아옴
@@ -71,12 +73,12 @@ const Record = () => {
     const averageDecibel = totalDecibel / dataArray.length;
     console.log("데시벨:", averageDecibel);
     // 데시벨이 임계값 이하인지 확인
-    if (averageDecibel <= 50) {
+    if (averageDecibel <= 30) {
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
       if (consecutiveSilenceTimeRef.current >= 2000) {
         setVoiceRecognized(false); // 음성 인식이 20 데시벨 이상으로 잘 되고 있는지 구분. 이모티콘 변경
       }
-      if (consecutiveSilenceTimeRef.current >= 4000) {
+      if (consecutiveSilenceTimeRef.current >= 5000) {
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
       }
@@ -167,6 +169,10 @@ const Record = () => {
     audioContextRef.current = new (window.AudioContext ||
       window.webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
+    analyserRef.current.minDecibels = -90;
+    analyserRef.current.maxDecibels = -10;
+    analyserRef.current.smoothingTimeConstant = 0.85;
+    analyserRef.current.fftsize = 512;
     // getUserMedia 연결
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
@@ -187,6 +193,58 @@ const Record = () => {
           mediaRecorder.ondataavailable = (e) => {
             chunks.push(e.data);
           };
+          // 캔버스 그리기 위한 세팅
+          const canvasCtx = canvasRef.current.getContext("2d");
+          const containerWidth =
+            canvasRef.current.clientWidth.toString() || "0";
+          canvasRef.current?.setAttribute("width", containerWidth);
+
+          // 오디오 시각화
+          const visualizeAudio = () => {
+            const width = canvasRef.current.width || 0;
+            const height = canvasRef.current.height || 0;
+
+            const bufferLength = analyserRef.current.frequencyBinCount;
+            const dataArray = new Float32Array(bufferLength);
+
+            canvasCtx.clearRect(0, 0, width, height);
+
+            const draw = () => {
+              if (!canvasCtx) {
+                return;
+              }
+              requestIdRef.current = requestAnimationFrame(draw);
+              analyserRef.current.getFloatFrequencyData(dataArray);
+
+              canvasCtx.fillStyle = "rgb(255, 255, 255)";
+              canvasCtx.fillRect(0, 0, width, height);
+
+              // 주파수 데이터가 부족한 경우 캔버스가 비어 보이지 않도록 barWidth를 크게 표현하기위해 2.5를 곱해줍니다.
+              const barWidth = (width / bufferLength) * 2.5;
+              let barHeight = 0;
+              let x = 0; // 캔버스 왼쪽 끝에서부터 시작
+
+              // dataArray 주파수 데이터를 순회하며 캔버스에 그려줍니다.
+              for (let i = 0; i < bufferLength; i++) {
+                // 막대기 높이 계산
+                barHeight = (dataArray[i] + 120) * 2;
+                // 막대기가 높을 수록 밝은 색으로 표시됩니다.
+                canvasCtx.fillStyle =
+                  "rgb(" + Math.floor(barHeight + 100) + ",50,50)";
+
+                canvasCtx.fillRect(
+                  x,
+                  height - barHeight / 2, // 막대기가 사각형 밑변 중간에 걸칠 수 있게 y좌표 offset 조정
+                  barWidth,
+                  barHeight
+                );
+
+                x += barWidth + 1;
+              }
+            };
+            draw();
+          };
+          visualizeAudio();
 
           mediaRecorder.onstop = () => {
             // // 서버로 오디오 파일 전송
@@ -243,11 +301,16 @@ const Record = () => {
           style={{ marginLeft: "3%" }}
         />
       </div>
-      <div
-        style={{ textAlign: "center", marginTop: "15%", fontSize: "1.2rem" }}
-      >
-        <Mention aiSpeaking={aiSpeaking} voiceRecognized={voiceRecognized} />
-      </div>
+
+      {/* 데시벨 시각화 */}
+      {!aiSpeaking && (
+        <div
+          ref={containerRef}
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <canvas ref={canvasRef} height={120}></canvas>
+        </div>
+      )}
 
       {/* 사용자의 음성 녹음 시작을 알리는 효과음 재생 */}
       <audio
