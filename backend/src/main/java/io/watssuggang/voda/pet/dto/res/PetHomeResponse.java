@@ -1,6 +1,5 @@
 package io.watssuggang.voda.pet.dto.res;
 
-import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 
@@ -8,11 +7,11 @@ import lombok.Getter;
 public class PetHomeResponse {
 
     private final PetResponse pet;
-    private final Map<String, OwnResponse> map;
+    private final Map<String, OwnResponse> using;
 
     public PetHomeResponse(PetResponse pet, Map<String, OwnResponse> using) {
         this.pet = pet;
-        this.map = using;
+        this.using = using;
     }
 
     public static PetHomeResponse of(
