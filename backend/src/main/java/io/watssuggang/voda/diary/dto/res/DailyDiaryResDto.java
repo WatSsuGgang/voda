@@ -7,8 +7,10 @@ import io.watssuggang.voda.diary.domain.DiaryFile;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
+@Slf4j
 public class DailyDiaryResDto {
 
     List<DailyDiaryInfo> diaries;
@@ -22,7 +24,8 @@ public class DailyDiaryResDto {
                 .emotion(diary.getDiaryEmotion())
                 .title(diary.getDiarySummary())
                 .image(diary.getDiaryFiles().stream()
-                    .filter(diaryFile -> diaryFile.getFileType().equals(FileType.IMG))
+                    .peek(diaryFile -> log.info("file id: " + diaryFile.getFileId()))
+                    .filter(diaryFile -> diaryFile.getFileType().equals(FileType.WEBP))
                     .map(DiaryFile::getFileUrl)
                     .findFirst()
                     .orElse(""))
