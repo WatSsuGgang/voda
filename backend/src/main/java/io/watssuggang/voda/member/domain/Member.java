@@ -1,7 +1,9 @@
 package io.watssuggang.voda.member.domain;
 
 import io.watssuggang.voda.common.domain.BaseEntity;
+import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.diary.domain.Diary;
+import io.watssuggang.voda.member.exception.MemberException;
 import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.domain.Pet;
 import jakarta.persistence.*;
@@ -12,6 +14,7 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_email", "provider"})})
 public class Member extends BaseEntity {
 
     @Id
@@ -32,10 +35,10 @@ public class Member extends BaseEntity {
     private String userRole;
 
     @Setter
-    private Integer memberPoint;
+    private Integer memberPoint = 10;
 
     @Setter
-    private Integer memberDiaryCount;
+    private Integer memberDiaryCount = 0;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Diary> diaries = new ArrayList<>();
@@ -64,6 +67,13 @@ public class Member extends BaseEntity {
     public void addPet(Pet pet) {
         this.pet = pet;
         pet.addPet(this);
+    }
+
+    public void reducePoint(Integer point){
+        if(this.memberPoint < point){
+            throw new MemberException(ErrorCode.NOT_ENOUGH_POINT);
+        }
+        this.memberPoint -= point;
     }
 
     @Builder

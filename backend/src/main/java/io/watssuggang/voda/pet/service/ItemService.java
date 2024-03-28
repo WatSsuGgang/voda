@@ -86,7 +86,7 @@ public class ItemService {
         }
     }
 
-    private Item getVerifyItem(Integer itemId) {
+    public Item getVerifyItem(Integer itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND));
     }
