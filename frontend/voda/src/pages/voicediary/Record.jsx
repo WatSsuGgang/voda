@@ -73,9 +73,9 @@ const Record = () => {
     const averageDecibel = totalDecibel / dataArray.length;
     console.log("데시벨:", averageDecibel);
     // 데시벨이 임계값 이하인지 확인
-    if (averageDecibel <= 30) {
+    if (averageDecibel <= 45) {
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
-      if (consecutiveSilenceTimeRef.current >= 2000) {
+      if (consecutiveSilenceTimeRef.current >= 3000) {
         setVoiceRecognized(false); // 음성 인식이 20 데시벨 이상으로 잘 되고 있는지 구분. 이모티콘 변경
       }
       if (consecutiveSilenceTimeRef.current >= 5000) {
@@ -215,7 +215,7 @@ const Record = () => {
               }
               requestIdRef.current = requestAnimationFrame(draw);
               analyserRef.current.getFloatFrequencyData(dataArray);
-
+              // console.log("데시벨", dataArray);
               canvasCtx.fillStyle = "rgb(255, 255, 255)";
               canvasCtx.fillRect(0, 0, width, height);
 
@@ -274,6 +274,7 @@ const Record = () => {
 
   const exit = async () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
+      stopRecording();
       await deleteDiary(store.diaryId);
       navigate("/voice");
     }

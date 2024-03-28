@@ -208,6 +208,7 @@ const Calendar = () => {
     }
     return <div className="calendar">{calendarDays}</div>;
   };
+  console.log(diaryData);
   return (
     <div className="calendar-wrapper" ref={swipeRef}>
       {/* Swipe를 적용할 DOM에 Ref 추가 */}
