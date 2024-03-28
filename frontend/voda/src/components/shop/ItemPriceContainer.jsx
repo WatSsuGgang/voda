@@ -8,14 +8,10 @@ const PriceContainer = styled.div`
   align-items: center;
 `;
 
-export default function ItemPriceContainer({
-  using = false,
-  bought = false,
-  price,
-}) {
+export default function ItemPriceContainer({ status = "UNBOUGHT", price }) {
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const coinImgURL = `${EMOJI_URL}/Objects/Coin.png`;
-  if (!bought) {
+  if (status === "UNBOUGHT") {
     return (
       <PriceContainer>
         <img src={coinImgURL} alt="Coin" width="20rem" height="20rem" />
@@ -23,7 +19,7 @@ export default function ItemPriceContainer({
       </PriceContainer>
     );
   } else {
-    if (!using) {
+    if (status === "OWNED") {
       return (
         <PriceContainer>
           <p style={{ margin: "0", overflow: "hidden" }}>{"보유중"}</p>

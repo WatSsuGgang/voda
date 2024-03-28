@@ -30,8 +30,22 @@ const TopComponents = styled.div`
   width: 100%;
 `;
 
+const SpinnerWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255);
+`;
+
 export default function PetShopPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 추가: 로딩 상태 관리
+
   const { currentCategory, setBoughtItems, setDisplayItems } = usePetStore();
   useEffect(() => {
     const fetchData = async () => {
@@ -47,13 +61,21 @@ export default function PetShopPage() {
     setIsLoading(false);
   }, [currentCategory]);
 
+  useEffect(() => {
+    setLoading(true); // 추가: 로딩 시작
+    const timer = setTimeout(() => {
+      setLoading(false); // 추가: 1.5초 후 로딩 종료
+    }, 750);
+    return () => clearTimeout(timer); // 추가: cleanup 함수
+  }, [currentCategory]);
+
   return (
     <Page>
       <TopComponents>
         <Header />
         <CategoryBar />
       </TopComponents>
-      {isLoading ? (
+      {loading ? (
         <div
           style={{
             position: "absolute",

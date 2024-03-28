@@ -53,7 +53,6 @@ export default function Food() {
         setExp(data.exp);
         setEmotion(data.emotion);
         setIsFeed(data.isFeed);
-        console.log(data);
       } catch (error) {
         console.log(error);
       }

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import { useUserStore } from "../../store/userStore";
@@ -32,10 +34,11 @@ const ModalBox = styled.div`
   background-color: white;
   padding: 1rem;
 `;
+
 export default function ItemList() {
   const [modalItem, setModalItem] = useState({});
   const [modalItemOwnId, setModalItemOwnId] = useState();
-  const [modalItemItemId, setModalItemItemId] = useState();
+  const [loading, setLoading] = useState(false); // 추가: 로딩 상태 관리
 
   // 구매 모달
   const [openModal, setOpenModal] = useState(false);
@@ -43,16 +46,11 @@ export default function ItemList() {
   // 착용 모달
   const [openBoughtModal, setOpenBoughtModal] = useState(false);
 
-  const { usingId, setUsingId } = usePetPersistStore();
-  const {
-    using,
-    setUsing,
-    boughtItems,
-    displayItems,
-    currentCategory,
-    setCurrentCategory,
-  } = usePetStore();
+  const { usingId } = usePetPersistStore();
+  const { boughtItems, displayItems, currentCategory, setCurrentCategory } =
+    usePetStore();
   const { coins } = useUserStore();
+  const navigate = useNavigate();
 
   const handleModalItemChange = (item) => {
     setModalItem(item);
@@ -94,6 +92,7 @@ export default function ItemList() {
   }
   async function handleBuyItem() {
     if (coins >= modalItem.price) {
+      // 사면 ownId 넘겨주는거
       await buyItem({ itemId: modalItem.itemId, price: modalItem.price });
       handleCloseModal();
       setOpenBoughtModal(true);
@@ -101,185 +100,173 @@ export default function ItemList() {
   }
   async function handleApplyItem() {
     try {
-      console.log(modalItemOwnId);
       const response = await applyItem(modalItemOwnId);
-      console.log("착용", response.data);
-      console.log("사용중", using);
     } catch (error) {}
     handleCloseModal();
-    window.location.reload();
+    navigate("/pet");
   }
   return (
-    <ItemWrapper>
-      {boughtItems.map((item, index) => {
-        if (item.item.itemCategory === currentCategory.toUpperCase()) {
-          return (
-            <div
-              key={index}
-              onTouchStart={() => {
-                handleModalItemChange(item.item);
-                setModalItemOwnId(item.ownId);
-                setModalItemItemId(item.item.itemId);
-                setUsingId((prevUsingId) => ({
-                  ...prevUsingId, // 기존의 usingId 상태를 복사
-                  [currentCategory]: {
-                    // currentCategory에 해당하는 값을 업데이트
-                    ...prevUsingId[currentCategory], // 해당 카테고리의 기존 값을 복사 (필요한 경우)
-                    itemId: item.item.itemId, // 새로운 itemId로 업데이트
-                    ownId: item.ownId, // 새로운 ownId로 업데이트
-                  },
-                }));
-              }}
-              onClick={handleOpenBoughtModal}
-            >
-              <div>
-                <ItemNameContainer bought={true} name={item.item.name} />
-                <ItemContainer
-                  bought={true}
-                  url={`${EMOJI_URL}/${item.item.imgURl}`}
-                />
-                <ItemPriceContainer
-                  using={usingId[currentCategory].itemId === item.item.itemId}
-                  bought={true}
-                  price={item.item.price}
-                />
-              </div>
-            </div>
-          );
-        }
-      })}
-
-      {displayItems.map((item, index) => (
-        <div
-          key={index}
-          onTouchStart={() => {
-            handleModalItemChange(item);
-          }}
-          onClick={handleOpenModal}
-        >
-          <div>
-            <ItemNameContainer name={item.name} />
-            <ItemContainer url={`${EMOJI_URL}/${item.imgURl}`} />
-            <ItemPriceContainer price={item.price} />
-          </div>
-        </div>
-      ))}
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <ModalBox>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "1rem",
-            }}
-          >
-            <img
-              src={`${EMOJI_URL}/${modalItem.imgURl}`}
-              style={{
-                width: "3rem",
-                height: "3rem",
-              }}
-            />
-            <p
-              style={{
-                margin: "0",
-              }}
-            >
-              <b>"{modalItem.name}"</b>
-              {checkName(modalItem.name)}{" "}
-              {coins >= modalItem.price
-                ? "구매하시겠습니까?"
-                : "구매할 돈이 모자라요"}
-            </p>
-            {coins >= modalItem.price ? (
+    <>
+      <ItemWrapper>
+        {boughtItems.map((item, index) => {
+          if (item.item.itemCategory === currentCategory.toUpperCase()) {
+            return (
               <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "1rem",
+                key={index}
+                onTouchStart={() => {
+                  handleModalItemChange(item.item);
+                  setModalItemOwnId(item.ownId);
                 }}
+                onClick={handleOpenBoughtModal}
               >
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleCloseModal}
-                >
-                  취소
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={handleBuyItem}
-                >
-                  구매
-                </Button>
+                <div>
+                  <ItemNameContainer bought={true} name={item.item.name} />
+                  <ItemContainer
+                    bought={true}
+                    url={`${EMOJI_URL}/${item.item.imgURl}`}
+                  />
+                  <ItemPriceContainer
+                    status={item.itemStatus}
+                    price={item.item.price}
+                  />
+                </div>
               </div>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "1rem",
-                }}
-              ></div>
-            )}
-          </div>
-        </ModalBox>
-      </Modal>
+            );
+          }
+        })}
 
-      <Modal open={openBoughtModal} onClose={handleCloseBoughtModal}>
-        <ModalBox>
+        {displayItems.map((item, index) => (
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "1rem",
+            key={index}
+            onTouchStart={() => {
+              handleModalItemChange(item);
             }}
+            onClick={handleOpenModal}
           >
-            {}
-            <img
-              src={`${EMOJI_URL}/${modalItem.imgURl}`}
-              style={{
-                width: "3rem",
-                height: "3rem",
-              }}
-            />
-            <p
-              style={{
-                margin: "0",
-              }}
-            >
-              <b>"{modalItem.name}"</b>
-              {`${checkName(modalItem.name)} 착용하시겠습니까?`}
-            </p>
+            <div>
+              <ItemNameContainer name={item.name} />
+              <ItemContainer url={`${EMOJI_URL}/${item.imgURl}`} />
+              <ItemPriceContainer price={item.price} />
+            </div>
+          </div>
+        ))}
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <ModalBox>
             <div
               style={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "1rem",
               }}
             >
-              <Button
-                variant="contained"
-                color={"success"}
-                onClick={handleApplyItem}
+              <img
+                src={`${EMOJI_URL}/${modalItem.imgURl}`}
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                }}
+              />
+              <p
+                style={{
+                  margin: "0",
+                }}
               >
-                착용
-              </Button>
+                <b>"{modalItem.name}"</b>
+                {checkName(modalItem.name)}{" "}
+                {coins >= modalItem.price
+                  ? "구매하시겠습니까?"
+                  : "구매할 돈이 모자라요"}
+              </p>
+              {coins >= modalItem.price ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "1rem",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleCloseModal}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={handleBuyItem}
+                  >
+                    구매
+                  </Button>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "1rem",
+                  }}
+                ></div>
+              )}
             </div>
-          </div>
-        </ModalBox>
-      </Modal>
-    </ItemWrapper>
+          </ModalBox>
+        </Modal>
+
+        <Modal open={openBoughtModal} onClose={handleCloseBoughtModal}>
+          <ModalBox>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              {}
+              <img
+                src={`${EMOJI_URL}/${modalItem.imgURl}`}
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                }}
+              />
+              <p
+                style={{
+                  margin: "0",
+                }}
+              >
+                <b>"{modalItem.name}"</b>
+                {`${checkName(modalItem.name)} 착용하시겠습니까?`}
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color={"success"}
+                  onClick={handleApplyItem}
+                >
+                  착용
+                </Button>
+              </div>
+            </div>
+          </ModalBox>
+        </Modal>
+      </ItemWrapper>
+    </>
   );
 }

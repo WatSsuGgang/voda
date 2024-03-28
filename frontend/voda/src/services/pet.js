@@ -29,9 +29,10 @@ export const feedPet = async () => {
 
 // User
 // 펫 레벨업
-export const levelUpPet = () => {
-  const url = `/pet/levelup/`;
-  const response = request(HTTPMethods.PATCH, url);
+export const levelUpPet = async () => {
+  const url = `/pet/levelup`;
+  const response = await request(HTTPMethods.PATCH, url);
+  return response;
 };
 
 // User
