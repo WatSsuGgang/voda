@@ -16,6 +16,7 @@ import io.watssuggang.voda.pet.repository.ItemRepository;
 import io.watssuggang.voda.pet.repository.OwnRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,13 +63,13 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.save(addMember);
 
         // 기본 아이템 구매하고 장착
-        for (ItemCategory itemCategory : ItemCategory.values()) {
+        Arrays.stream(ItemCategory.values()).forEach(itemCategory -> {
             Own item = Own.of();
             item.purchase(addMember, itemRepository.findByItemCategoryAndItemPrice(itemCategory, 0)
                     .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND)));
             item.use();
             ownRepository.save(item);
-        }
+        });
 
         return member.getMemberId();
     }
