@@ -6,7 +6,7 @@ import calendarIcon from "../../assets/navbar/calendar.svg";
 import userIcon from "../../assets/navbar/user.svg";
 import petIcon from "../../assets/navbar/pet.svg";
 import voiceDiaryIcon from "../../assets/navbar/voiceDiary.svg";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const opacity = {
   diary: 0,
@@ -36,66 +36,76 @@ const Menus = styled.div`
   font-size: 12px;
 `;
 
-const NavLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-`;
 const NavBar = () => {
   const location = useLocation();
-  function opacityStyle(location) {
+  const navigate = useNavigate();
+
+  const handleLinkClick = (destination) => {
+    const currentPath = location.pathname;
+    if (currentPath === "/voice/record") {
+      const confirmed = window.confirm(
+        "Are you sure you want to leave the voice page?"
+      );
+      if (confirmed) {
+        navigate(destination);
+      }
+    } else {
+      navigate(destination);
+    }
+  };
+
+  const opacityStyle = (location) => {
     let loc = location.split("/")[1];
     for (const key in opacity) {
-      if (key === loc) {
-        opacity[key] = 1;
-      } else {
-        opacity[key] = 0.2;
-      }
+      opacity[key] = key === loc ? 1 : 0.2;
     }
-  }
+  };
+
   opacityStyle(location.pathname);
+
   return (
     <div>
       <Nav>
-        <NavLink to="/pet">
+        <div onClick={() => handleLinkClick("/pet")}>
           <Icons style={{ opacity: opacity.pet }}>
             <div>
               <img src={petIcon} alt="" />
             </div>
             <Menus>펫 키우기</Menus>
           </Icons>
-        </NavLink>
-        <NavLink to="/diary">
+        </div>
+        <div onClick={() => handleLinkClick("/diary")}>
           <Icons style={{ opacity: opacity.diary }}>
             <div>
               <img src={diaryListIcon} alt="" />
             </div>
             <Menus>일기 목록</Menus>
           </Icons>
-        </NavLink>
-        <NavLink to="/voice">
+        </div>
+        <div onClick={() => handleLinkClick("/voice")}>
           <Icons style={{ opacity: opacity.voice }}>
             <div>
               <img src={voiceDiaryIcon} alt="" />
             </div>
             <Menus>일기 쓰기</Menus>
           </Icons>
-        </NavLink>
-        <NavLink to="/calendar">
+        </div>
+        <div onClick={() => handleLinkClick("/calendar")}>
           <Icons style={{ opacity: opacity.calendar }}>
             <div>
               <img src={calendarIcon} alt="" />
             </div>
             <Menus>캘린더</Menus>
           </Icons>
-        </NavLink>
-        <NavLink to="/user">
+        </div>
+        <div onClick={() => handleLinkClick("/user")}>
           <Icons style={{ opacity: opacity.user }}>
             <div>
               <img src={userIcon} alt="" />
             </div>
             <Menus>마이페이지</Menus>
           </Icons>
-        </NavLink>
+        </div>
       </Nav>
     </div>
   );

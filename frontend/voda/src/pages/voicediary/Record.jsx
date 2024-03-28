@@ -53,6 +53,7 @@ const Record = () => {
       }
     };
     fetchAudioUrl();
+    store.changeRecording(true);
   }, []);
 
   // 음성 데시벨을 측정해서, 20 데시벨 이하로 6초 이상 유지되면 음성 녹음 종료
@@ -71,12 +72,12 @@ const Record = () => {
     const averageDecibel = totalDecibel / dataArray.length;
     console.log("데시벨:", averageDecibel);
     // 데시벨이 임계값 이하인지 확인
-    if (averageDecibel <= 100) {
+    if (averageDecibel <= 50) {
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
       if (consecutiveSilenceTimeRef.current >= 2000) {
         setVoiceRecognized(false); // 음성 인식이 20 데시벨 이상으로 잘 되고 있는지 구분. 이모티콘 변경
       }
-      if (consecutiveSilenceTimeRef.current >= 6000) {
+      if (consecutiveSilenceTimeRef.current >= 4000) {
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
       }

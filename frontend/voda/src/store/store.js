@@ -16,6 +16,10 @@ const store = (set, get) => ({
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
   },
+  recordPlaying: false,
+  changeRecordPlaying: (value) => {
+    set({ recordPlaying: value });
+  },
 });
 
 const useStore = create(

@@ -6,7 +6,6 @@ import save from "../../assets/diarylist/save.svg";
 import playbutton from "../../assets/diarylist/playbutton.svg";
 import { getDiaryDetail } from "../../services/diarylist";
 import LodaingSpinner from "../../components/common/LoadingSpinner";
-
 const Title = styled.h3`
   color: #486b73;
 `;
@@ -24,9 +23,9 @@ const Container = styled.div`
 const DiaryDetail = () => {
   const [diary, setDiary] = useState(null); // 초기값을 null로 설정
   const [loading, setLoading] = useState(true); // 로딩 상태를 관리
-  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [audioFiles, setAudioFiles] = useState([]);
   const { id } = useParams();
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
 
   useEffect(() => {
     const fetchDiary = async () => {
@@ -44,31 +43,31 @@ const DiaryDetail = () => {
     };
 
     fetchDiary();
-  }, []); // id가 변경될 때마다 다이어리를 다시 가져옴
+    // 컴포넌트가 언마운트될 때 재생 중인 오디오를 멈춤
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.stop();
+      }
+    };
+  }, [id]); // id가 변경될 때마다 다이어리를 다시 가져옴
 
   const store = useStore();
   const emotionImageUrl = store.emotions[diary?.diaryEmotion];
   const audioContextRef = useRef(null);
+  const playNextAudio = () => {
+    if (currentAudioIndex < audioFiles.length - 1) {
+      setCurrentAudioIndex(currentAudioIndex + 1);
+      audioContextRef.current.src = audioFiles[currentAudioIndex + 1]?.fileUrl;
+      audioContextRef.current.play();
+    }
+  };
 
   const playVoice = (e) => {
     e.preventDefault();
-    console.log("클릭함", e);
+    store.changeRecordPlaying(true);
     if (audioFiles.length > 0) {
-      const playNextAudio = (currentIndex) => {
-        if (currentIndex < audioFiles.length - 1) {
-          const nextAudio = new Audio(audioFiles[currentIndex + 1]?.fileUrl);
-          nextAudio.onended = () => {
-            playNextAudio(currentIndex + 1);
-          };
-          nextAudio.play();
-        }
-      };
-
-      const firstAudio = new Audio(audioFiles[0]?.fileUrl);
-      firstAudio.onended = () => {
-        playNextAudio(0);
-      };
-      firstAudio.play();
+      audioContextRef.current.src = audioFiles[currentAudioIndex]?.fileUrl;
+      audioContextRef.current.play();
     }
   };
 
@@ -170,12 +169,8 @@ const DiaryDetail = () => {
 
       <audio
         ref={audioContextRef}
-        onEnded={() =>
-          setCurrentAudioIndex(
-            (prevIndex) => (prevIndex + 1) % audioFiles.length
-          )
-        }
         style={{ display: "none" }}
+        onEnded={playNextAudio}
       ></audio>
     </div>
   );
