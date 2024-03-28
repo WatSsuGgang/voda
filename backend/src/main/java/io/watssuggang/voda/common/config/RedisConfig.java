@@ -1,4 +1,4 @@
-package io.watssuggang.voda.common.jwt.config;
+package io.watssuggang.voda.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,8 +8,8 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
- 
+import org.springframework.data.redis.serializer.*;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableRedisRepositories
@@ -17,6 +17,7 @@ public class RedisConfig {
 
     private final RedisProperties redisProperties;
 
+    // 회원관리용 redis
     // Redis 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -38,6 +39,12 @@ public class RedisConfig {
          */
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+//        value로 key를 가져올 때 필요
+//        redisTemplate.setHashKeySerializer(new Jackson2JsonRedisSerializer());
+//        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
         return redisTemplate;
     }
+
 }

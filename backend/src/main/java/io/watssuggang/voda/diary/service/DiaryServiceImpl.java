@@ -29,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
+import org.springframework.data.redis.core.*;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -53,11 +54,17 @@ public class DiaryServiceImpl implements DiaryService {
     private final WebClient karloClient;
 
     private final DiaryRepository diaryRepository;
-    private final FileUploadService fileUploadService;
+    private final FileUpdateService fileUpdateService;
     private final DiaryFileRepository diaryFileRepository;
     private final TalkRepository talkRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final String terminateDiaryUrl = "https://voda-bucket.s3.ap-northeast-2.amazonaws.com/voice-place-holder/terminateDiary.mp3";
+    private final String nullAnswerUrl = "https://voda-bucket.s3.ap-northeast-2.amazonaws.com/voice-place-holder/nullAnswer.mp3";
+    private final String initPrefix = "today:";
+    private final String answerPrefix = "chatCount:";
+
 
     private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
@@ -93,7 +100,7 @@ public class DiaryServiceImpl implements DiaryService {
             .bodyToMono(byte[].class)
             .block();
         assert ttsResult != null;
-        return fileUploadService.fileUpload(userId, "audio/mpeg", "voice-ai", "mp3",
+        return fileUpdateService.fileUpload(userId, "audio/mpeg", "voice-ai", "mp3",
             ttsResult); // ai 발화 s3 bucket 저장
     }
 
@@ -109,8 +116,14 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     public DiaryTtsResponseDto init(Integer userId) {
+        Integer value = (Integer) redisTemplate.opsForValue().get(initPrefix+userId);
+        if(value != null && value >= 100) {
+            return new DiaryTtsResponseDto(null, null, true);
+        }
+        redisTemplate.opsForValue().increment(initPrefix+userId, 1);
         Diary diary = Diary.builder()
             .diaryContent("init")
+            .diaryEmotion(Emotion.NONE)
             .build();
         Diary newDiary = diaryRepository.save(diary);
         String chatRes = getChat(""); //ai 첫 질문 받아옴
@@ -126,21 +139,25 @@ public class DiaryServiceImpl implements DiaryService {
         return new DiaryTtsResponseDto(
             ttsUrl, newDiary.getDiaryId(), false);
     }
-
+    //TODO: 자정에 today redis 초기화시키기 작동하는지 확인
     public DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
         throws IOException {
-        String sttUrl = fileUploadService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
+        Integer value = (Integer) redisTemplate.opsForValue().get(answerPrefix+userId);
+        if(value != null && value > 10) {
+            return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
+        }
+        redisTemplate.opsForValue().increment(answerPrefix+userId, 1);
+        String sttUrl = fileUpdateService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
             file); //사용자 발화 s3 bucket 저장
         addFileToDiary(diaryId, FileType.MP3, sttUrl); //sttUrl db 저장
         String sttRes = getStt(file); //사용자 발화 텍스트화
         log.info("user chat : " + sttRes);
-        if (sttRes.trim().replaceAll("\\s+", "").contains("오늘일기끝")) {
-            return new DiaryTtsResponseDto(
-                null, diaryId, true);
+        String sttResShort = sttRes.trim().replaceAll("\\s+", "");
+        if (sttResShort.contains("오늘일기끝") || sttResShort.contains("오늘의일기끝")) {
+            return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
         }
         if (sttRes.equals("")) {
-            return new DiaryTtsResponseDto(
-                null, diaryId, false); //TODO: "말씀이 잘 안들려요" 음성 제작해서 넣기
+            return new DiaryTtsResponseDto(nullAnswerUrl, diaryId, false); //"말씀이 잘 안들려요" 반환
         }
         Talk userTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("USER"))
@@ -161,6 +178,23 @@ public class DiaryServiceImpl implements DiaryService {
         return new DiaryTtsResponseDto(
             ttsUrl, diaryId, false);
     }
+
+    @Override
+    public ResponseEntity<Void> terminate(Integer diaryId, Integer userId) {
+        try {
+            // s3 삭제
+            fileUpdateService.fileDelete(diaryId);
+            // diary db 삭제
+            diaryRepository.deleteById(diaryId);
+            // redis chatCnt 초기화
+            redisTemplate.delete(answerPrefix + userId);
+            // 3개 모두 성공시 200 반환
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 //  public DiaryChatResponseDto chatTest(String prompt) {
 //    DiaryChatResponseDto initChat = getChat(prompt);
@@ -250,7 +284,7 @@ public class DiaryServiceImpl implements DiaryService {
         createImage(KarloRequest.of(imagePrompt))
             .getImages()
             .forEach(imageResponse -> {
-                String image = fileUploadService.fileUpload(
+                String image = fileUpdateService.fileUpload(
                     existedDiary.getMember().getMemberId(),
                     MediaType.IMAGE_JPEG_VALUE,
                     "image",
@@ -269,6 +303,8 @@ public class DiaryServiceImpl implements DiaryService {
         Pet pet = petRepository.findByMember_MemberId(memberId)
             .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
         pet.updateExp((byte) 5);
+        // redis에 저장된 대화 횟수 삭제하기
+        redisTemplate.delete(answerPrefix + memberId);
         return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
     }
 
@@ -336,7 +372,6 @@ public class DiaryServiceImpl implements DiaryService {
         DiaryChatRequestDto req = DiaryChatRequestDto.builder().messages(messages).build();
 
         DiaryChatResponseDto diaryChatResponseDto = chatClient.post()
-            .uri("https://api.anthropic.com/v1/messages")
             .bodyValue(req)
             .retrieve()
             .bodyToMono(DiaryChatResponseDto.class)
@@ -348,6 +383,27 @@ public class DiaryServiceImpl implements DiaryService {
     // 자신의 일기를 조회하거나 수정하려고 하는 지 검사
     private boolean isUnAuthorized(Integer diaryMemberId, Integer loginMemberId) {
         return !diaryMemberId.equals(loginMemberId);
+    }
+
+    // redis의 today 일기 작성 횟수 초기화
+    @Override
+    @Transactional
+    public void deleteKeysWithToday(){
+
+        ScanOptions scanOptions = ScanOptions.scanOptions().match(initPrefix+"*").build();
+
+        List<String> keysToDelete = new ArrayList<>();
+        redisTemplate.execute((RedisCallback<Void>) connection -> {
+            Cursor<byte[]> cursor = connection.scan(scanOptions);
+            while (cursor.hasNext()) {
+                keysToDelete.add(new String(cursor.next()));
+            }
+            return null;
+        });
+
+        if (!keysToDelete.isEmpty()) {
+            redisTemplate.delete(keysToDelete);
+        }
     }
 
 }

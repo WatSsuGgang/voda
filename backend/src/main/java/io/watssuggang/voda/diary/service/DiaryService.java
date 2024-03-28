@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -18,6 +19,7 @@ public interface DiaryService {
     DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
         throws IOException;
 
+    ResponseEntity<Void> terminate(Integer diaryId, Integer userId);
     Map<String, Object> getChatList(int id, Integer memberId);
 
     DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId, Integer memberId);
@@ -28,6 +30,8 @@ public interface DiaryService {
         Integer memberId);
 
     KarloResponse createImage(KarloRequest karloRequest);
+
+    void deleteKeysWithToday();
 
 
 }
