@@ -3,7 +3,7 @@ import styled from "styled-components";
 import EditAllow from "../../components/voicediary/EditAllow";
 import StartRecord from "../../components/voicediary/StartRecord";
 const Title = styled.h1`
-  margin-top: 15%;
+  margin-top: 10%;
   text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
@@ -26,9 +26,10 @@ const Text = styled.div`
 `;
 
 const Finish = styled.div`
-  margin-top: 20%;
+  margin-top: 10%;
   text-align: center;
-  font-size: 1rem;
+  font-weight: bold;
+  font-size: 0.8rem;
   color: #0057ff;
 `;
 
@@ -57,11 +58,21 @@ const VoiceDiary = () => {
           <img src="src/assets/voicediary/Microphone.png" alt="" />
           <Text>내가 쓴 일기를 음성으로 녹음할 수 있어요</Text>
         </Contents>
+        <Contents>
+          <img
+            src="src/assets/voicediary/3NoIcon.png"
+            style={{ width: "9vw" }}
+          />
+          <Text>
+            일기는 하루에 <strong style={{ fontSize: "1.1rem" }}>3회</strong>
+            까지만 작성할 수 있어요
+          </Text>
+        </Contents>
       </ContentBox>
       <div style={{ margin: "8%" }}>
         <Finish>
           일기 작성을 종료하시려면, <br />
-          <strong style={{ fontSize: "1.2rem" }}>오늘 일기 끝</strong>이라고
+          <strong style={{ fontSize: "1.3rem" }}>오늘 일기 끝</strong>이라고
           말해주세요
         </Finish>
       </div>
