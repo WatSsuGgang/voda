@@ -39,7 +39,6 @@ export default function PetShopPage() {
         const response = await getItem(currentCategory);
         setBoughtItems(response.data.bought);
         setDisplayItems(response.data.display);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }

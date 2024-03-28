@@ -34,6 +34,8 @@ const ModalBox = styled.div`
 `;
 export default function ItemList() {
   const [modalItem, setModalItem] = useState({});
+  const [modalItemOwnId, setModalItemOwnId] = useState();
+  const [modalItemItemId, setModalItemItemId] = useState();
 
   // 구매 모달
   const [openModal, setOpenModal] = useState(false);
@@ -41,10 +43,16 @@ export default function ItemList() {
   // 착용 모달
   const [openBoughtModal, setOpenBoughtModal] = useState(false);
 
-  const { usingId } = usePetPersistStore();
-  const { boughtItems, displayItems, currentCategory, setCurrentCategory } =
-    usePetStore();
-  const { coin } = useUserStore();
+  const { usingId, setUsingId } = usePetPersistStore();
+  const {
+    using,
+    setUsing,
+    boughtItems,
+    displayItems,
+    currentCategory,
+    setCurrentCategory,
+  } = usePetStore();
+  const { coins } = useUserStore();
 
   const handleModalItemChange = (item) => {
     setModalItem(item);
@@ -85,41 +93,62 @@ export default function ItemList() {
     return "을";
   }
   async function handleBuyItem() {
-    if (coin >= modalItem.price) {
+    if (coins >= modalItem.price) {
       await buyItem({ itemId: modalItem.itemId, price: modalItem.price });
       handleCloseModal();
+      setOpenBoughtModal(true);
     }
   }
-
   async function handleApplyItem() {
     try {
-      const data = await applyItem(usingId[currentCategory].ownId);
-      console.log(data);
+      console.log(modalItemOwnId);
+      const response = await applyItem(modalItemOwnId);
+      console.log("착용", response.data);
+      console.log("사용중", using);
     } catch (error) {}
     handleCloseModal();
+    window.location.reload();
   }
-
   return (
     <ItemWrapper>
-      {boughtItems.map((item, index) => (
-        <div
-          key={index}
-          onTouchStart={() => {
-            handleModalItemChange(item);
-          }}
-          onClick={handleOpenBoughtModal}
-        >
-          <div>
-            <ItemNameContainer bought={true} name={item.name} />
-            <ItemContainer bought={true} url={`${EMOJI_URL}/${item.imgURl}`} />
-            <ItemPriceContainer
-              using={usingId[currentCategory].itemId === item.itemId}
-              bought={true}
-              price={item.price}
-            />
-          </div>
-        </div>
-      ))}
+      {boughtItems.map((item, index) => {
+        if (item.item.itemCategory === currentCategory.toUpperCase()) {
+          return (
+            <div
+              key={index}
+              onTouchStart={() => {
+                handleModalItemChange(item.item);
+                setModalItemOwnId(item.ownId);
+                setModalItemItemId(item.item.itemId);
+                setUsingId((prevUsingId) => ({
+                  ...prevUsingId, // 기존의 usingId 상태를 복사
+                  [currentCategory]: {
+                    // currentCategory에 해당하는 값을 업데이트
+                    ...prevUsingId[currentCategory], // 해당 카테고리의 기존 값을 복사 (필요한 경우)
+                    itemId: item.item.itemId, // 새로운 itemId로 업데이트
+                    ownId: item.ownId, // 새로운 ownId로 업데이트
+                  },
+                }));
+              }}
+              onClick={handleOpenBoughtModal}
+            >
+              <div>
+                <ItemNameContainer bought={true} name={item.item.name} />
+                <ItemContainer
+                  bought={true}
+                  url={`${EMOJI_URL}/${item.item.imgURl}`}
+                />
+                <ItemPriceContainer
+                  using={usingId[currentCategory].itemId === item.item.itemId}
+                  bought={true}
+                  price={item.item.price}
+                />
+              </div>
+            </div>
+          );
+        }
+      })}
+
       {displayItems.map((item, index) => (
         <div
           key={index}
@@ -160,11 +189,11 @@ export default function ItemList() {
             >
               <b>"{modalItem.name}"</b>
               {checkName(modalItem.name)}{" "}
-              {coin >= modalItem.price
+              {coins >= modalItem.price
                 ? "구매하시겠습니까?"
                 : "구매할 돈이 모자라요"}
             </p>
-            {coin >= modalItem.price ? (
+            {coins >= modalItem.price ? (
               <div
                 style={{
                   display: "flex",
@@ -183,7 +212,7 @@ export default function ItemList() {
                 </Button>
                 <Button
                   variant="contained"
-                  color={"success?"}
+                  color="success"
                   onClick={handleBuyItem}
                 >
                   구매
@@ -215,6 +244,7 @@ export default function ItemList() {
               gap: "1rem",
             }}
           >
+            {}
             <img
               src={`${EMOJI_URL}/${modalItem.imgURl}`}
               style={{
@@ -228,7 +258,7 @@ export default function ItemList() {
               }}
             >
               <b>"{modalItem.name}"</b>
-              {`${checkName(modalItem.name)}을 착용하시겠습니까?`}
+              {`${checkName(modalItem.name)} 착용하시겠습니까?`}
             </p>
             <div
               style={{
