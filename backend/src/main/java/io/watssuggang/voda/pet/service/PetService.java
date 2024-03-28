@@ -7,6 +7,8 @@ import io.watssuggang.voda.common.util.DateUtil;
 import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.exception.DiaryException;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
+import io.watssuggang.voda.member.domain.PointLog;
+import io.watssuggang.voda.member.service.PointLogService;
 import io.watssuggang.voda.pet.domain.Pet;
 import io.watssuggang.voda.pet.domain.PetTalk;
 import io.watssuggang.voda.pet.dto.req.PetTalkRequest;
@@ -33,6 +35,7 @@ public class PetService {
     private final PetTalkRepository petTalkRepository;
     private final DiaryRepository diaryRepository;
     private final OwnService ownService;
+    private final PointLogService pointLogService;
 
     /**
      * 펫에게 먹이를 준다. 5의 경험치가 올라간다.
@@ -46,6 +49,13 @@ public class PetService {
         }
 
         pet.updateExp((byte) 5);
+
+        pet.getMember().increasePoint(10);
+
+        pointLogService.makePointLog(
+                PointLog.ofEarnPointLog(pet.getMember(), 10, "밥")
+        );
+
         return PetResponse.of(pet);
     }
 

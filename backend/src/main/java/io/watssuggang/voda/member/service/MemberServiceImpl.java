@@ -1,13 +1,21 @@
 package io.watssuggang.voda.member.service;
 
+import io.watssuggang.voda.common.enums.ItemCategory;
+import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.dto.req.SignUpRequest;
+import io.watssuggang.voda.member.exception.MemberException;
 import io.watssuggang.voda.member.exception.MemberNotFoundException;
 import io.watssuggang.voda.member.repository.MemberRepository;
+import io.watssuggang.voda.pet.domain.Own;
 import io.watssuggang.voda.pet.domain.Pet;
+import io.watssuggang.voda.pet.exception.ItemException;
+import io.watssuggang.voda.pet.repository.ItemRepository;
+import io.watssuggang.voda.pet.repository.OwnRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,40 +24,62 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final DiaryRepository diaryRepository;
+    private final ItemRepository itemRepository;
+    private final OwnRepository ownRepository;
 
     @Override
     public Member findByEmail(String uid) {
 
         return memberRepository.findByMemberEmail(uid)
-            .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     @Override
     public Integer signUp(SignUpRequest signUpRequest) {
+        validExistMember(signUpRequest);
 
         Member addMember = Member.builder()
-            .memberName(signUpRequest.getNickname())
-            .provider(signUpRequest.getProvider())
-            .memberEmail(signUpRequest.getEmail())
-            .userRole("USER")
-            .memberDiaryCount(0)
-            .memberPoint(10)
-            .build();
+                .memberName(signUpRequest.getNickname())
+                .provider(signUpRequest.getProvider())
+                .memberEmail(signUpRequest.getEmail())
+                .userRole("USER")
+                .memberDiaryCount(0)
+                .memberPoint(10)
+                .build();
 
         Pet pet = Pet.builder()
-            .petName("기본펫")
-            .build();
+                .petLastFeed(LocalDateTime.now().minusHours(24))
+                .petName("기본펫")
+                .build();
 
         addMember.addPet(pet);
-
         Member member = memberRepository.save(addMember);
 
+        // 기본 아이템 구매하고 장착
+        for (ItemCategory itemCategory : ItemCategory.values()) {
+            Own item = Own.of();
+            item.purchase(addMember, itemRepository.findByItemCategoryAndItemPrice(itemCategory, 0)
+                    .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND)));
+            item.use();
+            ownRepository.save(item);
+        }
+
         return member.getMemberId();
+    }
+
+    private void validExistMember(SignUpRequest signUpRequest) {
+        if (memberRepository.existsByMemberEmailAndProvider(
+                signUpRequest.getEmail(),
+                signUpRequest.getProvider()
+        )) {
+            throw new MemberException(ErrorCode.DUPLICATE_MEMBER);
+        }
     }
 
     /**
