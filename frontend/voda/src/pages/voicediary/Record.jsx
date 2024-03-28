@@ -12,6 +12,7 @@ import {
   recordDiary,
   createDiary,
   getTalkList,
+  deleteDiary,
 } from "../../services/voicediary"; // api 함수 불러오기
 import useStore from "../../store/store";
 const Title = styled.h1`
@@ -31,7 +32,6 @@ const Record = () => {
   const recorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
-  const [Id, setId] = useState("");
   let chatCount = 0;
 
   // 처음 화면을 렌더링 할 때, init api 요청 받아옴
@@ -46,7 +46,7 @@ const Record = () => {
           navigate("/diarylist");
         } else {
           setAiAudioURL(res.data.ttsUrl);
-          setId(res.data.diaryId);
+          store.setDiaryId(res.data.diaryId);
         }
       } catch (err) {
         console.error(err);
@@ -113,9 +113,9 @@ const Record = () => {
   }, [aiAudioURL]);
 
   // 대화 내용 받아오는 함수
-  const fetchTalkList = async (id) => {
+  const fetchTalkList = async (diaryId) => {
     try {
-      const res = await getTalkList(id);
+      const res = await getTalkList(diaryId);
       console.log("지금까지의 대화:", res);
       return res;
     } catch (err) {
@@ -150,10 +150,10 @@ const Record = () => {
         }
         // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
         if (store.editAllow) {
-          navigate(`/voice/check/${Id}`);
+          navigate(`/voice/check/${store.diaryId}`);
         } else {
           // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
-          fetchCreate(Id);
+          fetchCreate(store.diaryId);
         }
       } else {
         setAiAudioURL(res.data.ttsUrl);
@@ -193,7 +193,7 @@ const Record = () => {
             // // 서버로 오디오 파일 전송
             const audioBlob = new Blob(chunks, { type: "audio/mpeg" });
             const formData = new FormData();
-            formData.append("diaryId", Id);
+            formData.append("diaryId", store.diaryId);
             formData.append("file", audioBlob, "recording.mpeg");
             fetchRecord(formData);
           };
@@ -215,8 +215,9 @@ const Record = () => {
     }
   };
 
-  const exit = () => {
+  const exit = async () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
+      await deleteDiary(store.diaryId);
       navigate("/voice");
     }
   };
@@ -239,7 +240,7 @@ const Record = () => {
       >
         <Timer />
         <StopCircleIcon
-          onClick={() => fetchCreate(Id)}
+          onClick={() => fetchCreate(store.diaryId)}
           style={{ marginLeft: "3%" }}
         />
       </div>

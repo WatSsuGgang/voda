@@ -57,3 +57,8 @@ export const getTalkList = async (id) => {
   const response = await getData(url);
   return response;
 };
+
+export const deleteDiary = async (id) => {
+  const url = `/diary/terminate`;
+  const response = await postData(url, { diaryId: id });
+};

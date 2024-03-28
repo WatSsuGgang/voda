@@ -7,7 +7,8 @@ import userIcon from "../../assets/navbar/user.svg";
 import petIcon from "../../assets/navbar/pet.svg";
 import voiceDiaryIcon from "../../assets/navbar/voiceDiary.svg";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { deleteDiary } from "../../services/voicediary";
+import useStore from "../../store/store";
 const opacity = {
   diary: 0,
   voice: 0,
@@ -39,14 +40,15 @@ const Menus = styled.div`
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const handleLinkClick = (destination) => {
+  const store = useStore();
+  const handleLinkClick = async (destination) => {
     const currentPath = location.pathname;
     if (currentPath === "/voice/record") {
       const confirmed = window.confirm(
         "Are you sure you want to leave the voice page?"
       );
       if (confirmed) {
+        await deleteDiary(store.diaryId);
         navigate(destination);
       }
     } else {
