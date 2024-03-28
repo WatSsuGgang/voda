@@ -2,6 +2,28 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export const usePetStore = create((set) => ({
+  petMap: {
+    1: { 달걀: "Food/Egg.png" },
+    2: { 병아리: "Animals/Hatching%20Chick.png" },
+    3: {
+      앵무새: "Animals/Parrot.png",
+      펭귄: "Animals/Penguin.png",
+      독수리: "Animals/Eagle.png",
+      상어: "Animals/Shark.png",
+      도도새: "Animals/Dodo.png",
+      비둘기: "Animals/Dove.png",
+      고래: "Animals/Spouting%20Whale.png",
+      고릴라: "Animals/Gorilla.png",
+      나무늘보: "Animals/Sloth.png",
+      용: "Animals/Dragon.png",
+      티라노: "Animals/T-Rex.png",
+      다람쥐: "Animals/Chipmunk.png",
+      부엉이: "Animals/Owl.png",
+      "검은 고양이": "Animals/Black%20Cat.png",
+      까마귀: "Animals/Black%20Bird.png",
+    },
+  },
+
   // 상점 탭 (간식/효과)
   currentCategory: "food",
   setCurrentCategory: (category) => set({ currentCategory: category }),

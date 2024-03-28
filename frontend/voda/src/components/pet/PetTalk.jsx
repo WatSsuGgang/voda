@@ -21,7 +21,9 @@ export default function PetTalk(props) {
       const data = await getPetTalk();
       setTalk(data.talk);
     };
-  }, []);
+    // talk가 undefined
+    // fetchData();
+  }, [talk]);
 
   return (
     <>
