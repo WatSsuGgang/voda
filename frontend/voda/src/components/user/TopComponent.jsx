@@ -41,7 +41,8 @@ export default function TopComponent() {
   async function newNameSubmitHandler(e) {
     e.preventDefault();
     if (newName.length > 0) {
-      const response = await editUserInfo(newName);
+      const changedNickname = { newNickname: newName };
+      const response = await editUserInfo(changedNickname);
       console.log(response);
       userStore.setUserInfo(response.data);
       setNewName("");
@@ -64,7 +65,8 @@ export default function TopComponent() {
           style={{
             width: "32vw",
             height: "5vh",
-            color: "#242424",
+            color: "white",
+            fontWeight: "bold",
             backgroundColor: "#A6D1A5",
           }}
           onClick={handleOpenModal}
@@ -96,7 +98,7 @@ export default function TopComponent() {
                   color: "red",
                 }}
               >
-                펫 이름를 입력해주세요
+                닉네임을 입력해주세요
               </p>
             )}
             <Button variant="contained" onClick={newNameSubmitHandler}>

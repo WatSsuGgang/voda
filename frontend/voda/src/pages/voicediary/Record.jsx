@@ -25,7 +25,6 @@ const Record = () => {
   const store = useStore();
   const [aiSpeaking, setAiSpeaking] = useState(true); // ai가 말하는 중인지 구분
   const [voiceRecognized, setVoiceRecognized] = useState(true); // 음성 인식이 30데시벨 이상으로잘 되고 있는지 구분
-  const [audioURL, setAudioURL] = useState(null); // 사용자의 음성 녹음이 종료될 때 생성되는 audioUrl
   const [aiAudioURL, setAiAudioURL] = useState(null); // aiAudioUrl, 서버에 요청을 보내서 응답이 올 때 설정
   const aiAudioElementRef = useRef(null); // ai의 음성 데이터를 연결시키는 audio tag ref
   const effectAudioElementRef = useRef(null); // 녹음 시작 시 효과음 audio tag ref
@@ -33,16 +32,22 @@ const Record = () => {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const [Id, setId] = useState("");
+  let chatCount = 0;
 
-  // 처음 화면을 렌더링 할 때, ai 질문 음성 파일을 임시로 설정해줌. 추후, init api 요청으로 바꿀 예정
+  // 처음 화면을 렌더링 할 때, init api 요청 받아옴
   useEffect(() => {
-    // api init api 요청. 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
+    // 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
     const fetchAudioUrl = async () => {
       try {
         const res = await initDiary();
         console.log("최초 응답:", res.data);
-        setAiAudioURL(res.data.ttsUrl);
-        setId(res.data.diaryId);
+        if (res.data.terminate) {
+          window.alert("일기는 하루 3회까지만 작성할 수 있습니다.");
+          navigate("/diarylist");
+        } else {
+          setAiAudioURL(res.data.ttsUrl);
+          setId(res.data.diaryId);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -133,10 +138,15 @@ const Record = () => {
   // 사용자 녹음이 종료되면 서버에 음성 파일 보내는 함수
   const fetchRecord = async (data) => {
     try {
+      chatCount += 1;
       const res = await recordDiary(data);
       console.log("응답옴:", res.data);
       // 만약 terminate가 true이면 일기를 종료해야 된다.
       if (res.data.terminate) {
+        // 10회 이상으로 terminate가 된 경우
+        if (chatCount === 10) {
+          window.alert("최대 10번까지만 대화를 주고 받을 수 있습니다.");
+        }
         // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
         if (store.editAllow) {
           navigate(`/voice/check/${Id}`);
