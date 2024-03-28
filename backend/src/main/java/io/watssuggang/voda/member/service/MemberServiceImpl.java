@@ -15,6 +15,7 @@ import io.watssuggang.voda.pet.exception.ItemException;
 import io.watssuggang.voda.pet.repository.ItemRepository;
 import io.watssuggang.voda.pet.repository.OwnRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
@@ -52,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         Pet pet = Pet.builder()
+                .petLastFeed(LocalDateTime.now().minusHours(24))
                 .petName("기본펫")
                 .build();
 
