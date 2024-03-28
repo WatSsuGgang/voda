@@ -16,9 +16,9 @@ const store = (set, get) => ({
   changeEditMode: () => {
     set((state) => ({ editAllow: !state.editAllow }));
   },
-  recordPlaying: false,
-  changeRecordPlaying: (value) => {
-    set({ recordPlaying: value });
+  diaryId: "",
+  setDiaryId: (value) => {
+    set({ diaryId: value });
   },
 });
 

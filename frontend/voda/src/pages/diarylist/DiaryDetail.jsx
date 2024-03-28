@@ -64,7 +64,6 @@ const DiaryDetail = () => {
 
   const playVoice = (e) => {
     e.preventDefault();
-    store.changeRecordPlaying(true);
     if (audioFiles.length > 0) {
       audioContextRef.current.src = audioFiles[currentAudioIndex]?.fileUrl;
       audioContextRef.current.play();
