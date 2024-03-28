@@ -39,28 +39,28 @@ const VoiceDiary = () => {
       <Title>오늘의 일기를 작성해보세요</Title>
       <ContentBox>
         <Contents>
-          <img src="src/assets/voicediary/InnerPeace.png" alt="" />
+          <img src="public/images/voicediary/InnerPeace.png" alt="" />
           <Text>일기는 마음의 안정과 정신적인 조화를 증진시켜요</Text>
         </Contents>
         <Contents>
-          <img src="src/assets/voicediary/Amnesia.png" alt="" />
+          <img src="public/images/voicediary/Amnesia.png" alt="" />
           <Text>일기는 기억력을 향상시키는 데 효과적이에요</Text>
         </Contents>
         <Contents>
-          <img src="src/assets/voicediary/Target.png" alt="" />
+          <img src="public/images/voicediary/Target.png" alt="" />
           <Text>일기는 목표를 설정하고 달성하는 데 도움을 줘요</Text>
         </Contents>
         <Contents>
-          <img src="src/assets/voicediary/CreativeThinking.png" alt="" />
+          <img src="public/images/voicediary/CreativeThinking.png" alt="" />
           <Text>일기를 꾸준히 작성하면 창의성을 성장시킬 수 있어요</Text>
         </Contents>
         <Contents>
-          <img src="src/assets/voicediary/Microphone.png" alt="" />
+          <img src="public/images/voicediary/Microphone.png" alt="" />
           <Text>내가 쓴 일기를 음성으로 녹음할 수 있어요</Text>
         </Contents>
         <Contents>
           <img
-            src="src/assets/voicediary/3NoIcon.png"
+            src="public/images/voicediary/3NoIcon.png"
             style={{ width: "9vw" }}
           />
           <Text>
