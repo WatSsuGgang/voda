@@ -48,7 +48,22 @@ const NavBar = () => {
         "Are you sure you want to leave the voice page?"
       );
       if (confirmed) {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          // 현재 오디오 스트림을 가져옴
+          const mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          // 오디오 스트림이 존재하면 연결된 트랙을 중지
+          if (mediaStream) {
+            const tracks = mediaStream.getTracks();
+            console.log("미디어 스트림", mediaStream);
+            console.log("track", tracks);
+            tracks.forEach((track) => track.stop());
+          }
+        }
+        // 다이어리 삭제
         await deleteDiary(store.diaryId);
+        // 목적지로 이동
         navigate(destination);
       }
     } else {
