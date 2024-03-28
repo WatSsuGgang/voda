@@ -38,16 +38,15 @@ const PetPage = () => {
     const fetchData = async () => {
       try {
         const data = await getPet();
-        setUsing(data.map);
-        console.log("드렁", data);
+        setUsing(data.using);
         setUsingId({
           food: {
-            itemId: data.map.food.item.itemId,
-            ownId: data.map.food.ownId,
+            itemId: data.using.food.item.itemId,
+            ownId: data.using.food.ownId,
           },
           effect: {
-            itemId: data.map.effect.item.itemId,
-            ownId: data.map.effect.ownId,
+            itemId: data.using.effect.item.itemId,
+            ownId: data.using.effect.ownId,
           },
         });
         setEmotion(data.pet.emotion);
@@ -60,7 +59,7 @@ const PetPage = () => {
         setPetId(data.pet.petId);
         setStage(data.pet.stage);
         setIsLoading(false);
-        console.log(data.map);
+        console.log(data.using);
       } catch (error) {
         console.error(error);
       }

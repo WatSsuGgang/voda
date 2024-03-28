@@ -60,7 +60,10 @@ export const usePetStore = create((set) => ({
 export const usePetPersistStore = create(
   persist(
     (set, get) => ({
-      usingId: "",
+      usingId: {
+        food: { itemId: 0, ownId: 0 }, // 기본값으로 설정할 수 있는 값으로 초기화
+        effect: { itemId: 0, ownId: 0 }, // 기본값으로 설정할 수 있는 값으로 초기화
+      },
       setUsingId: (state) => set({ usingId: state }),
     }),
     {
