@@ -4,7 +4,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
-import PlingSound from "../../../public/Pling.mp3";
+import PlingSound from "/Pling.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
 import Mention from "../../components/voicediary/Mention";
 import {
