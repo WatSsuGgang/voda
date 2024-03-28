@@ -1,4 +1,4 @@
-import { precacheAndRoute, getCacheKeyForURL } from 'workbox-precaching';
+import { precacheAndRoute } from 'workbox-precaching';
 
 const CACHE_NAME = "cache-v1";
 
