@@ -64,7 +64,8 @@ export default function Pet() {
     e.preventDefault();
     if (newName.length > 0) {
       const response = await editPetName(newName);
-      setName(response.name);
+      console.log("반응", response);
+      setName(response.data.name);
       setNewName("");
       handleCloseModal();
     } else {

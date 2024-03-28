@@ -38,8 +38,9 @@ export const levelUpPet = () => {
 // 펫 닉네임 수정
 export const editPetName = async (name) => {
   const url = `/pet`;
-  const data = { name };
+  const data = { name: name };
   const response = await request(HTTPMethods.PATCH, url, data);
+  return response;
 };
 
 // Admin
