@@ -40,7 +40,6 @@ public class DiaryController {
     public ResponseEntity<?> terminate(@CurrentUser SecurityUserDto userDto,
         @RequestBody DiaryTerminateRequestDto requestDto)
         throws  IOException {
-        System.out.println("terminate start============================================");
         return diaryService.terminate(requestDto.getDiaryId(), userDto.getMemberId());
     }
 

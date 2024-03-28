@@ -60,7 +60,8 @@ public class DiaryServiceImpl implements DiaryService {
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
     private final RedisTemplate<String, Object> redisTemplate;
-
+    private final String terminateDiaryUrl = "https://voda-bucket.s3.ap-northeast-2.amazonaws.com/voice-place-holder/terminateDiary.mp3";
+    private final String nullAnswerUrl = "https://voda-bucket.s3.ap-northeast-2.amazonaws.com/voice-place-holder/nullAnswer.mp3";
     private String getChat(String text) {
         List<MessageDTO> message = new ArrayList<>();
         message.add(new MessageDTO("user", PromptHolder.DEFAULT_PROPMT + text));
@@ -139,8 +140,7 @@ public class DiaryServiceImpl implements DiaryService {
         throws IOException {
         Integer value = (Integer) redisTemplate.opsForValue().get("chatCnt:"+userId);
         if(value != null && value > 10) {
-            return new DiaryTtsResponseDto("https://voda-bucket.s3.ap-northeast-2.amazonaws.com/voice-place-holder/terminateDiary.mp3",
-                diaryId, true); //"일기 작성을 종료할게요" 반환
+            return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
         }
         redisTemplate.opsForValue().increment("chatCnt:"+userId, 1);
         String sttUrl = fileUpdateService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
@@ -150,13 +150,10 @@ public class DiaryServiceImpl implements DiaryService {
         log.info("user chat : " + sttRes);
         String sttResShort = sttRes.trim().replaceAll("\\s+", "");
         if (sttResShort.contains("오늘일기끝") || sttResShort.contains("오늘의일기끝")) {
-            return new DiaryTtsResponseDto(
-                null, diaryId, true);
+            return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
         }
         if (sttRes.equals("")) {
-            return new DiaryTtsResponseDto(
-                "https://voda-bucket.s3.ap-northeast-2.amazonaws.com/voice-place-holder/nullAnswer.mp3",
-                diaryId, false); //"말씀이 잘 안들려요" 반환
+            return new DiaryTtsResponseDto(nullAnswerUrl, diaryId, false); //"말씀이 잘 안들려요" 반환
         }
         Talk userTalk = Talk.builder()
             .talkSpeaker(Speaker.valueOf("USER"))
