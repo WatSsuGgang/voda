@@ -3,10 +3,14 @@ import Calendar from "../../components/calendar/Calendar";
 
 const CalendarPage = () => {
   return (
-    <div>
+    <div
+      style={{
+        marginTop: "3rem",
+      }}
+    >
       <h2
         style={{
-          margin: "0 auto",
+          textAlign: "center",
         }}
       >
         감정 캘린더
