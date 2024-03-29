@@ -14,14 +14,12 @@ const Chatbox = styled.div({
 });
 
 export default function PetTalk(props) {
-  const [talk, setTalk] = useState("");
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPetTalk();
       const petTalk = data.petTalk;
-      console.log(petTalk);
       // 한 글자씩 표시되도록 설정
       for (let i = 0; i < petTalk.length; i++) {
         setTimeout(() => {

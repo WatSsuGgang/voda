@@ -43,7 +43,6 @@ export default function TopComponent() {
     if (newName.length > 0) {
       const changedNickname = { newNickname: newName };
       const response = await editUserInfo(changedNickname);
-      console.log(response);
       userStore.setUserInfo(response.data);
       setNewName("");
       handleCloseModal();

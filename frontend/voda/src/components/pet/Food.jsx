@@ -88,7 +88,7 @@ export default function Food() {
         setIsFeed(data.isFeed);
         setNextFeedTime(displayNextFeedTime());
       } catch (error) {
-        console.log(error);
+        console.error();
       }
     } else {
       setTooltipOpen(true);
