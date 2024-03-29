@@ -10,6 +10,7 @@ import ItemContainer from "./ItemContainer";
 import ItemNameContainer from "./ItemNameContainer";
 import ItemPriceContainer from "./ItemPriceContainer";
 import { buyItem, applyItem } from "../../services/item";
+import { getItem } from "../../services/item";
 
 const ItemWrapper = styled.div({
   display: "grid",
@@ -47,8 +48,14 @@ export default function ItemList() {
   const [openBoughtModal, setOpenBoughtModal] = useState(false);
 
   const { usingId } = usePetPersistStore();
-  const { boughtItems, displayItems, currentCategory, setCurrentCategory } =
-    usePetStore();
+  const {
+    setBoughtItems,
+    setDisplayItems,
+    boughtItems,
+    displayItems,
+    currentCategory,
+    setCurrentCategory,
+  } = usePetStore();
   const { coins } = useUserStore();
   const navigate = useNavigate();
 
@@ -93,9 +100,28 @@ export default function ItemList() {
   async function handleBuyItem() {
     if (coins >= modalItem.price) {
       // 사면 ownId 넘겨주는거
-      await buyItem({ itemId: modalItem.itemId, price: modalItem.price });
+      await buyItem({
+        itemId: modalItem.itemId,
+        price: modalItem.price,
+      })
+        .then(() => {
+          const fetchData = async () => {
+            try {
+              const response = await getItem(currentCategory);
+              console.log(response.data);
+              setBoughtItems(response.data.bought);
+              setDisplayItems(response.data.display);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+          fetchData();
+          setIsLoading(false);
+        })
+        .catch(() => {});
+
       handleCloseModal();
-      setOpenBoughtModal(true);
+      // setOpenBoughtModal(true);
     }
   }
   async function handleApplyItem() {
