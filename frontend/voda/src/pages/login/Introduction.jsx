@@ -42,7 +42,7 @@ const Introduction = () => {
     // 2초 후에 다른 요소들을 보이도록 상태 업데이트
     const timer = setTimeout(() => {
       setShowContent(true);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -50,14 +50,10 @@ const Introduction = () => {
   return (
     <IntroductionContainer>
       {/* PWAInstallButton은 항상 화면에 나타남 */}
+      <PWAInstallButton />
       <ContentContainer show={showContent}>
         <IntroductionHeader />
-        <PWAInstallButton />
       </ContentContainer>
-      {/* 안내 문구 */}
-      <Instruction id="instruction" show={!showContent}>
-        앱 설치를 원하시면 버튼을 클릭해주세요
-      </Instruction>
       {/* 나머지 요소들은 트랜지션으로 나타남 */}
       {showContent && (
         <>
