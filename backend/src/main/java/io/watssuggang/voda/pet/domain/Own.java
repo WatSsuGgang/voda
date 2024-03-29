@@ -26,8 +26,14 @@ public class Own {
         return new Own();
     }
 
+    /**
+     * 구매 메서드
+     * @apiNote 회원의 포인트를 아이템의 포인트만큼 차감시킨다.
+     * 회원의 소유 목록에 추가한다.
+     */
     public void purchase(Member member, Item item) {
-        if (member.getOwns().contains(this)) {
+        member.reducePoint(item.getItemPrice());
+        if (!member.getOwns().contains(this)) {
             member.getOwns().add(this);
         }
         this.item = item;
