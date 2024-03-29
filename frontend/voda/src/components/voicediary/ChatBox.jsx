@@ -1,74 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
   margin: 3vh 1vh;
-  max-height: 55vh;
+  max-height: 60vh;
   overflow: auto;
 `;
 
 const ChatBox = ({ messages, onChildDataChange }) => {
-  // 음성 일기 더미 데이터. 화면 이동할 때, props로 넘겨주는 방식으로 구현 예정.
   const [chatMessages, setChatMessages] = useState(messages);
-  // 텍스트 수정이 일어날 때마다
+
   useEffect(() => {
     onChildDataChange(chatMessages);
   }, [chatMessages]);
 
-  // 변화 추적
   const handleChange = (index, value) => {
     const newContents = [...chatMessages];
     newContents[index] = { answer: value };
     setChatMessages(newContents);
   };
 
+  const textareaRef = useRef(null);
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      const { scrollHeight, clientHeight } = textareaRef.current;
+      textareaRef.current.style.height = `${Math.max(
+        scrollHeight,
+        clientHeight
+      )}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [chatMessages]);
+
   const renderInputs = () => {
     return chatMessages.map((content, index) => {
-      if (index % 2 === 1) {
-        return (
-          <div
-            key={index}
-            style={{ display: "flex", justifyContent: "end", margin: "3vh 0" }}
-          >
-            <input
-              style={{
-                border: "0",
-                backgroundColor: "#D8E5FF",
-                borderRadius: "10px",
-                padding: "20px",
-              }}
-              key={index}
-              placeholder={content.answer}
-              value={content.answer}
-              onChange={(e) => handleChange(index, e.target.value)}
-            />
-          </div>
-        );
-      } else {
-        return (
-          <div
-            key={index}
+      return (
+        <div
+          key={index}
+          style={{
+            display: "flex",
+            justifyContent: index % 2 === 1 ? "end" : "start",
+            margin: "3vh 0",
+          }}
+        >
+          <textarea
+            ref={textareaRef}
             style={{
-              display: "flex",
-              justifyContent: "start",
-              margin: "3vh 0",
+              border: "0",
+              backgroundColor: index % 2 === 1 ? "#D8E5FF" : "#F2F2F2",
+              borderRadius: "10px",
+              padding: "20px",
+              maxWidth: "40vw",
+              width: "auto",
+              resize: "none",
+              height: "auto",
+              fontSize: "1rem",
+              color: "#000",
             }}
-          >
-            <input
-              style={{
-                border: "0",
-                backgroundColor: "#F2F2F2",
-                borderRadius: "10px",
-                padding: "20px",
-              }}
-              key={index}
-              placeholder={content.question}
-              value={content.question}
-              disabled
-            />
-          </div>
-        );
-      }
+            placeholder={index % 2 === 1 ? content.answer : content.question}
+            value={index % 2 === 1 ? content.answer : content.question}
+            onChange={(e) => handleChange(index, e.target.value)}
+            readOnly={index % 2 === 0}
+          />
+        </div>
+      );
     });
   };
 
