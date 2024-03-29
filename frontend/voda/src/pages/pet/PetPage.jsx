@@ -34,7 +34,6 @@ const PetPage = () => {
   const fetchData = async () => {
     try {
       const data = await getPet();
-      console.log("petPage", data);
       setUsing(data.using);
       setUsingId({
         food: {

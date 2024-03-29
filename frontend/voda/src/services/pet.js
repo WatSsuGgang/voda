@@ -13,9 +13,9 @@ export const getPet = async () => {
 
 // User
 // 펫 대화
-export const getPetTalk = () => {
-  const url = `/pet/talk/`;
-  const response = request(HTTPMethods.GET, url);
+export const getPetTalk = async () => {
+  const url = `/pet/talk`;
+  const response = await request(HTTPMethods.GET, url);
   return response.data;
 };
 
