@@ -1,4 +1,4 @@
-import { getData, postData, formPostData } from "./api";
+import { formPostData, request } from "./api";
 import { HTTPMethods } from "./api";
 import { HTTPStatusCodes } from "./api";
 
@@ -6,7 +6,7 @@ import { HTTPStatusCodes } from "./api";
 // 일기 작성
 export const initDiary = () => {
   const url = "/diary/init";
-  const response = getData(url);
+  const response = request(HTTPMethods.GET, url);
   return response;
 };
 
@@ -45,7 +45,7 @@ export const createDiary = async (id, data) => {
   }
   const diaryData = { diaryId: id, talk_list: transformedData };
   const url = "/diary/create";
-  const response = await postData(url, diaryData);
+  const response = await request(HTTPMethods.POST, url, diaryData);
   alert("일기 생성이 완료되었습니다");
   return response;
 };
@@ -55,11 +55,11 @@ export const createDiary = async (id, data) => {
 // data = {"talk_list": [{"question": "질문1"},{"answer": "질문1에 대한 답변"},{"question": "질문2"},{"answer": "질문2에 대한 답변"},...]}
 export const getTalkList = async (id) => {
   const url = `/diary/talk/${id}`;
-  const response = await getData(url);
+  const response = await request(HTTPMethods.GET, url);
   return response;
 };
 
 export const deleteDiary = async (id) => {
   const url = `/diary/terminate`;
-  const response = await postData(url, { diaryId: id });
+  const response = await request(HTTPMethods.POST, url, { diaryId: id });
 };
