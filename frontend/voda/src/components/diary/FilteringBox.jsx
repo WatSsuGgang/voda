@@ -14,6 +14,11 @@ const Container = styled.div`
   display: flex;
   justify-content: end;
   align-items: center;
+  margin: 0 1rem 0;
+`;
+
+const Search = styled.div`
+  margin: 0 0.2rem 0;
 `;
 
 const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
@@ -47,6 +52,7 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
   };
   return (
     <Container>
+      <Search>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
         <DatePicker
           label="시작 날짜"
@@ -59,6 +65,8 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
           onChange={handleStartDateChange}
         />
       </LocalizationProvider>
+      </Search>
+      <Search>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
         <DatePicker
           label="종료 날짜"
@@ -71,6 +79,8 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
           onChange={handleEndDateChange}
         />
       </LocalizationProvider>
+      </Search>
+      <Search>
       <FormControl size="small" style={{ minWidth: "20vw" }}>
         <InputLabel id="demo-simple-select-filled-label">감정</InputLabel>
         <Select
@@ -87,9 +97,11 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
           <MenuItem value={"ANGER"}>분노</MenuItem>
           <MenuItem value={"SADNESS"}>슬픔</MenuItem>
           <MenuItem value={"FEAR"}>무서움</MenuItem>
-          <MenuItem value={"CURIOSITY"}>놀람</MenuItem>
+          <MenuItem value={"CURIOSITY"}>호기심</MenuItem>
         </Select>
       </FormControl>
+      </Search>
+      <Search>
       <Button
         onClick={handleButtonClick}
         style={{
@@ -101,6 +113,7 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
       >
         검색
       </Button>
+      </Search>
     </Container>
   );
 };
