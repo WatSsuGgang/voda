@@ -1,67 +1,125 @@
 import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import IntroductionCarousel from "../../components/login/IntroductionCarousel";
 import IntroductionHeader from "../../components/login/IntroductionHeader";
 import LoginButton from "../../components/login/LoginButton";
-import PWAInstallButton from "../../components/common/PWAInstallButton.jsx";
+import { Modal } from "@mui/material";
+import vodaLogo from "/logo.svg";
 
-const fadeInOut = keyframes`
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
-`;
-
-const IntroductionContainer = styled.div`
-  width: 85%;
-  margin: auto;
-  padding: 5px;
-  position: relative;
-`;
-
-const ContentContainer = styled.div`
+const ModalForm = styled.div`
   display: flex;
-  justify-content: space-between;
-  position: relative;
-  opacity: ${({ show }) => (show ? "1" : "0")};
-  transition: opacity 2s ease-in-out;
-`;
-
-const Instruction = styled.div`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: 10px;
+  top: 85%;
   left: 50%;
-  transform: translateX(-50%);
-  font-size: 16px;
-  animation: ${fadeInOut} 3s ease-in-out;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  height: 10rem;
+  border-radius: 2rem;
+  background-color: white;
+  padding: 0.3rem;
 `;
-
+const InstallButton = styled.button`
+  width: 70%;
+  height: 5vh;
+  background-color: #89adaa;
+  border-radius: 10px;
+  border: 0.5px ridge;
+  color: white;
+`;
 const Introduction = () => {
-  const [showContent, setShowContent] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [seen, setSeen] = useState(false);
+  const handleCloseModal = () => setSeen(false);
+  const [device, setDevice] = useState("");
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("사용자가 설치 프롬프트에 동의했습니다.");
+        } else {
+          console.log("사용자가 설치 프롬프트를 무시했습니다.");
+        }
+
+        setDeferredPrompt(null);
+        setSeen(false);
+      });
+    }
+  };
+
+  const handleBeforeInstallPrompt = (event) => {
+    event.preventDefault();
+    setDeferredPrompt(event);
+    setSeen(true);
+  };
 
   useEffect(() => {
-    // 2초 후에 다른 요소들을 보이도록 상태 업데이트
-    const timer = setTimeout(() => {
-      setShowContent(true);
-    }, 1000);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    return () => clearTimeout(timer);
+    const agent = navigator.userAgent;
+    let tempDevice = "web";
+
+    if (agent.toLowerCase().indexOf("android") >= 0) {
+      tempDevice = "android";
+    } else if (agent.toLowerCase().indexOf("iphone") >= 0) {
+      tempDevice = "iphone";
+    }
+    setDevice(tempDevice);
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+    };
   }, []);
-
   return (
-    <IntroductionContainer>
-      {/* PWAInstallButton은 항상 화면에 나타남 */}
-      <PWAInstallButton />
-      <ContentContainer show={showContent}>
+    <>
+      <div
+        style={{
+          width: "85%",
+          margin: "auto",
+        }}
+      >
         <IntroductionHeader />
-      </ContentContainer>
-      {/* 나머지 요소들은 트랜지션으로 나타남 */}
-      {showContent && (
-        <>
-          <IntroductionCarousel />
-          <LoginButton />
-        </>
-      )}
-    </IntroductionContainer>
+        <IntroductionCarousel />
+        <LoginButton />
+      </div>
+
+      <Modal open={seen} onClose={handleCloseModal}>
+        <ModalForm>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={vodaLogo}
+              style={{ width: "5rem", height: "10vh", marginRight: "5%" }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "centers",
+              }}
+            >
+              <h3 style={{ textAlign: "center", paddingBottom: "2%" }}>
+                음성 일기 서비스 Voda
+              </h3>
+
+              <InstallButton
+                style={{ fontWeight: " bold" }}
+                onClick={handleInstallClick}
+              >
+                앱 다운로드
+              </InstallButton>
+            </div>
+          </div>
+        </ModalForm>
+      </Modal>
+    </>
   );
 };
 
