@@ -37,7 +37,23 @@ const glow = keyframes`
 `;
 
 // 진화 애니메이션을 적용할 스타일드 컴포넌트
-const EvolutionAnimation = styled.img`
+const EvolvingAnimation = styled.img`
+  animation: ${glow} 2s ease-in-out infinite; /* 애니메이션 적용 */
+`;
+
+const reverseGlow = keyframes`
+  0%, 100% {
+    transform: scale(1.5); /* 처음과 마지막에 크기가 커집니다. */
+    filter: brightness(2); /* 처음과 마지막에 더 밝게 광채를 낸다 */
+  }
+  50% {
+    transform: scale(1); /* 중간에 크기가 작아집니다. */
+    filter: brightness(1); /* 중간에 광채가 어둡게 됩니다. */
+  }
+  `;
+
+// 진화 애니메이션을 적용할 스타일드 컴포넌트
+const EvolvedAnimation = styled.img`
   animation: ${glow} 2s ease-in-out infinite; /* 애니메이션 적용 */
 `;
 
@@ -64,9 +80,20 @@ const stretch = keyframes`
   40%, 60% { transform: scaleY(0.95) scaleX(1.1); }
 `;
 
-// 쫀득한 애니메이션을 적용할 스타일드 컴포넌트
-const TouchedAnimation = styled.img`
+const stretchHorizontal = keyframes`
+  0%, 100% { transform: scaleX(1); }
+  20%, 80% { transform: scaleX(1.1) scaleY(0.95); }
+  40%, 60% { transform: scaleX(0.95) scaleY(1.1); }
+`;
+
+// 펫 만지면
+const PetTouchedAnimation = styled.img`
   animation: ${stretch} 0.5s ease-in-out; /* 애니메이션 적용 */
+`;
+
+// 이펙트 만지면
+const EffectTouchedAnimation = styled.img`
+  animation: ${stretchHorizontal} 0.5s ease-in-out; /* 애니메이션 적용 */
 `;
 
 export default function Pet() {
@@ -75,10 +102,10 @@ export default function Pet() {
     using,
     name,
     setName,
+    exp,
     stage,
     petAppearance,
     isEvolution,
-    setUsing,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -92,42 +119,66 @@ export default function Pet() {
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isEvolving, setIsEvolving] = useState(false);
-  const [isTouched, setIsTouched] = useState(false); // pulse 애니메이션 상태 추가
+  const [isEvolved, setIsEvolved] = useState(false);
+  const [isPetTouched, setIsPetTouched] = useState(false); // pulse 애니메이션 상태 추가
+  const [isEffectTouched, setIsEffectTouched] = useState(false); // pulse 애니메이션 상태 추가
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
 
-  async function evolvePet() {
-    setIsEvolving(true); // 진화 애니메이션 트리거
-    const response = await levelUpPet(); // 진화 함수 호출
-    // 응답에서 업데이트된 펫 정보 추출
-    console.log("레벨업", response);
-    const updatedPet = response.data;
+  async function evolvePet(updatedStage, updatedPetAppearance) {
+    console.log("진화 시작");
+    setIsEvolving(true); // 진화 애니메이션 시작
 
-    // 5초 후에 실행될 로직
+    // 여기서 setTimeout을 사용하여 진화 애니메이션을 2초간 실행합니다.
+    // 애니메이션이 완료되는 시점에 setIsEvolving(false)를 호출합니다.
     setTimeout(() => {
-      // 펫 스테이트 업데이트
-      setName(updatedPet.name);
-      setStage(updatedPet.stage);
-      setLevel(updatedPet.level);
-      setEmotion(updatedPet.emotion);
-      setExp(updatedPet.exp);
-      setIsFeed(updatedPet.isFeed);
-      setPetId(updatedPet.petId);
-      setPetAppearance(updatedPet.petAppearance);
-      setIsEvolution(updatedPet.isEvolution);
-
       setIsEvolving(false); // 진화 애니메이션 종료
-    }, 5000); // 5000ms = 5초
+      console.log("진화 완");
+      setStage(updatedStage);
+      setPetAppearance(updatedPetAppearance);
+      setIsEvolved(true);
+    }, 2000);
+  }
+
+  async function levelupPet() {
+    const response = await levelUpPet(); // 레벨업 함수 호출
+    console.log("레벨업", response.data);
+    const updatedPet = response.data;
+    console.log(updatedPet);
+    // 펫 스테이트 업데이트
+    setName(updatedPet.name);
+    setLevel(updatedPet.level);
+    setEmotion(updatedPet.emotion);
+    setExp(updatedPet.exp % 10);
+    setIsFeed(updatedPet.isFeed);
+    setPetId(updatedPet.petId);
+    setIsEvolution(updatedPet.isEvolution);
+
+    if (updatedPet.isEvolution) {
+      evolvePet(updatedPet.stage, updatedPet.petAppearance); // 진화 애니메이션 실행
+      setTimeout(() => {
+        // 진화 애니메이션이 끝난 후에 진화된 petAppearance로 업데이트
+        console.log("진화 완료");
+        setIsEvolving(false); // 진화 애니메이션 종료
+        setIsEvolved(true);
+      }, 2000); // 진화 애니메이션의 시간에 맞추어 설정
+      setTimeout(() => {
+        setIsEvolved(false);
+        setIsEvolution(false);
+      }, 4000);
+    } else {
+      setStage(updatedPet.stage);
+      setPetAppearance(updatedPet.petAppearance);
+    }
   }
 
   useEffect(() => {
-    if (isEvolution) {
-      setIsEvolving(isEvolution);
-      evolvePet();
+    if (exp === 10) {
+      levelupPet();
     }
-  }, [isEvolution]);
+  }, [exp]);
 
   function newNameChangeHandler(e) {
     setNewName(e.target.value);
@@ -150,10 +201,17 @@ export default function Pet() {
   }
 
   // pulse 애니메이션을 트리거하는 함수
-  function handleTouchedAnimation() {
-    setIsTouched(true);
+  function handlePetTouchedAnimation() {
+    setIsPetTouched(true);
     setTimeout(() => {
-      setIsTouched(false);
+      setIsPetTouched(false);
+    }, 1000); // 2초 후에 pulse 애니메이션 종료
+  }
+  // pulse 애니메이션을 트리거하는 함수
+  function handleEffectTouchedAnimation() {
+    setIsEffectTouched(true);
+    setTimeout(() => {
+      setIsEffectTouched(false);
     }, 1000); // 2초 후에 pulse 애니메이션 종료
   }
 
@@ -168,25 +226,42 @@ export default function Pet() {
           gap: "1rem",
         }}
       >
-        {using.effect.item && (
-          <img
+        {isEffectTouched ? (
+          <EffectTouchedAnimation
             src={`${EMOJI_URL}/${using.effect.item.imgURl}`}
             style={{
               width: "5rem",
               height: "5rem",
             }}
           />
+        ) : (
+          <img
+            src={`${EMOJI_URL}/${using.effect.item.imgURl}`}
+            style={{
+              width: "5rem",
+              height: "5rem",
+            }}
+            onClick={handleEffectTouchedAnimation} // 클릭 시 pulse 애니메이션 트리거
+          />
         )}
         {isEvolving ? (
-          <EvolutionAnimation
+          <EvolvingAnimation
             src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
             style={{
               width: "12rem",
               height: "12rem",
             }}
           />
-        ) : isTouched ? (
-          <TouchedAnimation
+        ) : isEvolved ? (
+          <EvolvedAnimation
+            src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
+            style={{
+              width: "12rem",
+              height: "12rem",
+            }}
+          ></EvolvedAnimation>
+        ) : isPetTouched ? (
+          <PetTouchedAnimation
             src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
             style={{
               width: "12rem",
@@ -200,7 +275,7 @@ export default function Pet() {
               width: "12rem",
               height: "12rem",
             }}
-            onClick={handleTouchedAnimation} // 클릭 시 pulse 애니메이션 트리거
+            onClick={handlePetTouchedAnimation} // 클릭 시 pulse 애니메이션 트리거
           />
         )}
       </div>

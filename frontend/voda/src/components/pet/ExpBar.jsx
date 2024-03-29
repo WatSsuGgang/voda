@@ -36,7 +36,7 @@ export default function ExpBar() {
     >
       <h3 style={{ margin: "0" }}>Lv.{level}</h3>
       <Bar>
-        <ExpBarFill exp={exp} />
+        <ExpBarFill exp={exp * 10} />
       </Bar>
     </div>
   );

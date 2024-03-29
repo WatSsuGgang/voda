@@ -9,7 +9,6 @@ import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import { CircularProgress } from "@mui/material";
 import { getUserInfo } from "../../services/mypage";
 import { useUserStore } from "../../store/userStore";
-import { useNavigate } from "react-router-dom";
 
 const PetPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +34,7 @@ const PetPage = () => {
   const fetchData = async () => {
     try {
       const data = await getPet();
-      console.log("petinfo", data);
+      console.log("petPage", data);
       setUsing(data.using);
       setUsingId({
         food: {
@@ -66,40 +65,42 @@ const PetPage = () => {
     userInfo();
   }, []);
   return (
-    <div
-      style={{
-        width: "85%",
-        height: "85vh",
-        margin: "auto",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        alignItems: "center",
-      }}
-    >
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "0.5rem",
-            }}
-          >
-            <TopBar />
-            <TopComponent />
-            <MiddleComponent />
-          </div>
-          <Pet />
-          <PetTalk />
-        </>
-      )}
-    </div>
+    <>
+      <div
+        style={{
+          width: "85%",
+          height: "85vh",
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <TopBar />
+              <TopComponent />
+              <MiddleComponent />
+            </div>
+            <Pet />
+            <PetTalk />
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
