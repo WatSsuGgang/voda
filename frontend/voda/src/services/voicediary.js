@@ -24,7 +24,7 @@ export const recordDiary = async (data) => {
 // User
 // 일기 생성
 // data = { talk_list: [{q, a}, ...] }
-export const createDiary = (id, data) => {
+export const createDiary = async (id, data) => {
   const transformedData = [];
   let currentItem = {};
   data.forEach((item) => {
@@ -45,7 +45,8 @@ export const createDiary = (id, data) => {
   }
   const diaryData = { diaryId: id, talk_list: transformedData };
   const url = "/diary/create";
-  const response = postData(url, diaryData);
+  const response = await postData(url, diaryData);
+  alert("일기 생성이 완료되었습니다");
   return response;
 };
 
