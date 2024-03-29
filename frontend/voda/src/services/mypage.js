@@ -7,7 +7,6 @@ import { HTTPStatusCodes } from "./api";
 export const getUserInfo = async () => {
   const url = "/user";
   const response = await request(HTTPMethods.GET, url);
-  console.log("get User info", response);
   return response;
 };
 
