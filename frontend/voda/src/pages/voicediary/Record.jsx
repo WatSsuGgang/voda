@@ -152,7 +152,7 @@ const Record = () => {
         // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
         if (store.editAllow) {
           navigate(`/voice/check/${store.diaryId}`);
-        } else {
+        } else if (!store.editAllow) {
           // 편집 허용이 아니라면 바로 일기 생성하는 함수 실행
           fetchCreate(store.diaryId);
         }
