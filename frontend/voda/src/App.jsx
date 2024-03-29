@@ -19,7 +19,7 @@ import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
 import Nickname from "./pages/login/Nickname";
 import LoginSuccess from "./pages/login/LoginSuccess";
-
+import PWAInstallButton from "./components/common/PWAInstallButton.jsx";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -34,7 +34,6 @@ function App() {
   useEffect(() => {
     setIsLoggedIn(localStorage.getItem("accessToken") !== null);
   }, [isLoggedIn]);
-  // const { isLoggedIn } = useStore();
   if (isLoggedIn) {
     return (
       <div>
@@ -59,13 +58,16 @@ function App() {
     );
   } else {
     return (
-      <Routes>
-        <Route path="/" element={<Start />}></Route>
-        <Route path="/intro" element={<Introduction />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/login/nickname" element={<Nickname />}></Route>
-        <Route path="/login-success" element={<LoginSuccess />}></Route>
-      </Routes>
+      <div>
+        <PWAInstallButton />
+        <Routes>
+          <Route path="/" element={<Start />}></Route>
+          <Route path="/intro" element={<Introduction />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/login/nickname" element={<Nickname />}></Route>
+          <Route path="/login-success" element={<LoginSuccess />}></Route>
+        </Routes>
+      </div>
     );
   }
 }
