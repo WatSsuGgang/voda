@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { RiInstallLine } from "react-icons/ri";
 import styled from "styled-components";
 const InstallButton = styled.button`
-  width: 30%;
+  width: 100%;
   height: 5vh;
-  background-color: #fffae1;
+  background-color: #feffd4;
   border-radius: 10px;
-  border: none;
+  border: 0.5px ridge;
 `;
+
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
@@ -46,6 +46,7 @@ const PWAInstallPrompt = () => {
   return (
     <div
       style={{
+        width: "20vw",
         display: "flex",
         justifyContent: "end",
         alignItems: "center",
@@ -53,7 +54,7 @@ const PWAInstallPrompt = () => {
     >
       {deferredPrompt && (
         <InstallButton onClick={handleInstallClick}>
-          <RiInstallLine />
+          <RiInstallLine style={{ width: "5vw", height: "3vh" }} />
         </InstallButton>
       )}
     </div>
