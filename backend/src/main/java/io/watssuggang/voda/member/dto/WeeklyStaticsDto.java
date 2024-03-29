@@ -19,58 +19,72 @@ public class WeeklyStaticsDto {
     }
 
     public WeeklyStaticsDto sundayOf(DailyStaticDto sunday) {
-        this.sunday = DailyStaticDto.builder()
-            .emotion(sunday.getEmotion())
-            .summary(sunday.getSummary())
-            .build();
+        if (sunday != null) {
+            this.sunday = DailyStaticDto.builder()
+                .emotion(sunday.getEmotion())
+                .summary(sunday.getSummary())
+                .build();
+        }
         return this;
     }
 
     public WeeklyStaticsDto mondayOf(DailyStaticDto monday) {
-        this.monday = DailyStaticDto.builder()
-            .emotion(monday.getEmotion())
-            .summary(monday.getSummary())
-            .build();
+        if (monday != null) {
+            this.monday = DailyStaticDto.builder()
+                .emotion(monday.getEmotion())
+                .summary(monday.getSummary())
+                .build();
+        }
         return this;
     }
 
     public WeeklyStaticsDto tuesdayOf(DailyStaticDto tuesday) {
-        this.tuesday = DailyStaticDto.builder()
-            .emotion(tuesday.getEmotion())
-            .summary(tuesday.getSummary())
-            .build();
+        if (tuesday != null) {
+            this.tuesday = DailyStaticDto.builder()
+                .emotion(tuesday.getEmotion())
+                .summary(tuesday.getSummary())
+                .build();
+        }
         return this;
     }
 
     public WeeklyStaticsDto wednesdayOf(DailyStaticDto wednesday) {
-        this.wednesday = DailyStaticDto.builder()
-            .emotion(wednesday.getEmotion())
-            .summary(wednesday.getSummary())
-            .build();
+        if (wednesday != null) {
+            this.wednesday = DailyStaticDto.builder()
+                .emotion(wednesday.getEmotion())
+                .summary(wednesday.getSummary())
+                .build();
+        }
         return this;
     }
 
     public WeeklyStaticsDto thursdayOf(DailyStaticDto thursday) {
-        this.thursday = DailyStaticDto.builder()
-            .emotion(thursday.getEmotion())
-            .summary(thursday.getSummary())
-            .build();
+        if (thursday != null) {
+            this.thursday = DailyStaticDto.builder()
+                .emotion(thursday.getEmotion())
+                .summary(thursday.getSummary())
+                .build();
+        }
         return this;
     }
 
     public WeeklyStaticsDto fridayOf(DailyStaticDto friday) {
-        this.friday = DailyStaticDto.builder()
-            .emotion(friday.getEmotion())
-            .summary(friday.getSummary())
-            .build();
+        if (friday != null) {
+            this.friday = DailyStaticDto.builder()
+                .emotion(friday.getEmotion())
+                .summary(friday.getSummary())
+                .build();
+        }
         return this;
     }
 
     public WeeklyStaticsDto saturdayOf(DailyStaticDto saturday) {
-        this.saturday = DailyStaticDto.builder()
-            .emotion(saturday.getEmotion())
-            .summary(saturday.getSummary())
-            .build();
+        if (saturday != null) {
+            this.saturday = DailyStaticDto.builder()
+                .emotion(saturday.getEmotion())
+                .summary(saturday.getSummary())
+                .build();
+        }
         return this;
     }
 }
