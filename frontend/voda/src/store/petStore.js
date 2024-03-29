@@ -2,6 +2,9 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export const usePetStore = create((set) => ({
+  petTouched: false,
+  setPetTouched: (state) => set({ petTouched: state }),
+
   petMap: {
     1: { 달걀: "Food/Egg.png" },
     2: { 병아리: "Animals/Hatching%20Chick.png" },

@@ -14,21 +14,32 @@ const Chatbox = styled.div({
 });
 
 export default function PetTalk(props) {
+  const [talk, setTalk] = useState("");
   const [displayedText, setDisplayedText] = useState("");
+  const { petTouched } = usePetStore();
+
+  const fetchData = async () => {
+    const data = await getPetTalk();
+    const petTalk = data.petTalk;
+    // 새로운 데이터를 표시하기 전에 displayedText 초기화
+    setDisplayedText("");
+    // 한 글자씩 표시되도록 설정
+    for (let i = 0; i < petTalk.length; i++) {
+      setTimeout(() => {
+        setDisplayedText((prevText) => prevText + petTalk[i]);
+      }, i * 100); // 한 글자씩 0.1초 간격으로 나타남
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getPetTalk();
-      const petTalk = data.petTalk;
-      // 한 글자씩 표시되도록 설정
-      for (let i = 0; i < petTalk.length; i++) {
-        setTimeout(() => {
-          setDisplayedText((prevText) => prevText + petTalk[i]);
-        }, i * 100); // 한 글자씩 0.1초 간격으로 나타남
-      }
-    };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (petTouched) {
+      fetchData();
+    }
+  }, [petTouched]);
 
   return (
     <>
