@@ -113,7 +113,7 @@ export default function ItemList() {
               setBoughtItems(itemResponse.data.bought);
               setDisplayItems(itemResponse.data.display);
             } catch (error) {
-              console.error(error);
+              console.error();
             }
           };
           fetchData();

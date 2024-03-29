@@ -21,6 +21,7 @@ export const usePetStore = create((set) => ({
       부엉이: "Animals/Owl.png",
       "검은 고양이": "Animals/Black%20Cat.png",
       까마귀: "Animals/Black%20Bird.png",
+      수달: "Animals/Otter.png",
     },
   },
 
