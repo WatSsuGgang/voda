@@ -32,6 +32,7 @@ export const feedPet = async () => {
 export const levelUpPet = async () => {
   const url = `/pet/levelup`;
   const response = await request(HTTPMethods.PATCH, url);
+  console.log(response);
   return response;
 };
 
