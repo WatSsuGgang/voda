@@ -98,6 +98,7 @@ const EffectTouchedAnimation = styled.img`
 
 export default function Pet() {
   const {
+    setPetTouched,
     petMap,
     using,
     name,
@@ -198,8 +199,10 @@ export default function Pet() {
   // pulse 애니메이션을 트리거하는 함수
   function handlePetTouchedAnimation() {
     setIsPetTouched(true);
+    setPetTouched(true);
     setTimeout(() => {
       setIsPetTouched(false);
+      setPetTouched(false);
     }, 1000); // 2초 후에 pulse 애니메이션 종료
   }
   // pulse 애니메이션을 트리거하는 함수
