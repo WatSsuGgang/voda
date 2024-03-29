@@ -1,5 +1,5 @@
-import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
-import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
+import NavigateBeforeSharpIcon from "@mui/icons-material/NavigateBeforeSharp";
+import NavigateNextSharpIcon from "@mui/icons-material/NavigateNextSharp";
 import { CircularProgress, Modal } from "@mui/material"; // Material-UI에서 Modal import
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -209,17 +209,22 @@ const Calendar = () => {
     }
     return <div className="calendar">{calendarDays}</div>;
   };
-  console.log(diaryData);
   return (
     <div className="calendar-wrapper" ref={swipeRef}>
       {/* Swipe를 적용할 DOM에 Ref 추가 */}
       <div className="calendar-header">
-        <NavigateBeforeSharpIcon className="button" onClick={handlePrevMonth}></NavigateBeforeSharpIcon>
+        <NavigateBeforeSharpIcon
+          className="button"
+          onClick={handlePrevMonth}
+        ></NavigateBeforeSharpIcon>
         {/* <button onClick={handlePrevMonth}>&lt;</button> */}
         <h2>
           {currentYear}년 {currentMonth + 1}월
         </h2>
-        <NavigateNextSharpIcon className="button" onClick={handleNextMonth}></NavigateNextSharpIcon>
+        <NavigateNextSharpIcon
+          className="button"
+          onClick={handleNextMonth}
+        ></NavigateNextSharpIcon>
         {/* <button onClick={handleNextMonth}>&gt;</button> */}
       </div>
       <div className="weekdays">
@@ -232,41 +237,40 @@ const Calendar = () => {
       {showDetail && (
         <Modal open={showDetail} onClose={() => setShowDetail(false)}>
           <div className="modal">
-              <div className="modal-date">
-                {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일
+            <div className="modal-date">
+              {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일
+            </div>
+
+            {/* 일기 데이터를 표시하는 부분 */}
+            {isDiaryDataLoading ? (
+              <CircularProgress></CircularProgress>
+            ) : (
+              <div className="diary-items">
+                {diaryData.length > 0 ? (
+                  diaryData.map((item, index) => (
+                    <div
+                      key={index}
+                      className="diary-item"
+                      onClick={() => handleDiaryItemClick(item.diaryId)} // 다이어리 아이템 클릭 시 해당 다이어리 페이지로 이동
+                    >
+                      <img
+                        src={item.image}
+                        alt=""
+                        className="diary-item-image"
+                      />
+                      <div className="diary-item-title">{item.title}</div>
+                      <img
+                        src={emotions[item.emotion]}
+                        alt=""
+                        className="diary-item-emotion"
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <h4>작성한 일기가 없습니다.</h4>
+                )}
               </div>
-           
-              {/* 일기 데이터를 표시하는 부분 */}
-              {isDiaryDataLoading ? (
-                <CircularProgress></CircularProgress>
-              ) : (
-                <div className="diary-items">
-                  {diaryData.length > 0 ? (
-                    diaryData.map((item, index) => (
-                      <div
-                        key={index}
-                        className="diary-item"
-                        onClick={() => handleDiaryItemClick(item.diaryId)} // 다이어리 아이템 클릭 시 해당 다이어리 페이지로 이동
-                      >
-                        <img
-                          src={item.image}
-                          alt=""
-                          className="diary-item-image"
-                        />
-                        <div className="diary-item-title">{item.title}</div>
-                        <img
-                          src={emotions[item.emotion]}
-                          alt=""
-                          className="diary-item-emotion"
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <h4>작성한 일기가 없습니다.</h4>
-                  )}
-                </div>
-              )}
-            
+            )}
           </div>
         </Modal>
       )}
