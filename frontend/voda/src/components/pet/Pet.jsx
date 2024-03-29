@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import { usePetStore } from "../../store/petStore";
 import { Modal } from "@mui/material";
-import styled from "styled-components";
-import { editPetName } from "../../services/pet";
+import styled, { keyframes } from "styled-components";
+import { editPetName, levelUpPet } from "../../services/pet";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
@@ -24,36 +24,161 @@ const ModalForm = styled.div`
   padding: 1rem;
 `;
 
+// 진화 애니메이션 Keyframes 정의
+const glow = keyframes`
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.5); /* 중간에 크기가 커집니다. */
+    filter: brightness(2); /* 중간에 더 밝게 광채를 낸다 */
+  }
+`;
+
+// 진화 애니메이션을 적용할 스타일드 컴포넌트
+const EvolvingAnimation = styled.img`
+  animation: ${glow} 2s ease-in-out infinite; /* 애니메이션 적용 */
+`;
+
+const reverseGlow = keyframes`
+  0%, 100% {
+    transform: scale(1.5); /* 처음과 마지막에 크기가 커집니다. */
+    filter: brightness(2); /* 처음과 마지막에 더 밝게 광채를 낸다 */
+  }
+  50% {
+    transform: scale(1); /* 중간에 크기가 작아집니다. */
+    filter: brightness(1); /* 중간에 광채가 어둡게 됩니다. */
+  }
+  `;
+
+// 진화 애니메이션을 적용할 스타일드 컴포넌트
+const EvolvedAnimation = styled.img`
+  animation: ${glow} 2s ease-in-out infinite; /* 애니메이션 적용 */
+`;
+
+// 진화 상태가 아닐 때의 애니메이션 Keyframes 정의
+const pulse = keyframes`
+  0%, 100% {
+    transform: scale(1); /* 초기 크기 */
+  }
+  50% {
+    transform: scale(1.1); /* 중간에 약간 크기가 커짐 */
+  }
+`;
+
+// 평소에 적용할 스타일드 컴포넌트
+const NormalAnimation = styled.img`
+  animation: ${pulse} 1s alternate infinite; /* 애니메이션 적용 */
+`;
+
+// 쫀득한 애니메이션 Keyframes 정의
+// 수직방향으로 줄었다가 늘어나기 애니메이션 keyframes
+const stretch = keyframes`
+  0%, 100% { transform: scaleY(1); }
+  20%, 80% { transform: scaleY(1.1) scaleX(0.95); }
+  40%, 60% { transform: scaleY(0.95) scaleX(1.1); }
+`;
+
+const stretchHorizontal = keyframes`
+  0%, 100% { transform: scaleX(1); }
+  20%, 80% { transform: scaleX(1.1) scaleY(0.95); }
+  40%, 60% { transform: scaleX(0.95) scaleY(1.1); }
+`;
+
+// 펫 만지면
+const PetTouchedAnimation = styled.img`
+  animation: ${stretch} 0.5s ease-in-out; /* 애니메이션 적용 */
+`;
+
+// 이펙트 만지면
+const EffectTouchedAnimation = styled.img`
+  animation: ${stretchHorizontal} 0.5s ease-in-out; /* 애니메이션 적용 */
+`;
+
 export default function Pet() {
-  const { using, name, setName, stage, petAppearance } = usePetStore();
+  const {
+    petMap,
+    using,
+    name,
+    setName,
+    exp,
+    stage,
+    petAppearance,
+    isEvolution,
+    setEmotion,
+    setExp,
+    setIsEvolution,
+    setIsFeed,
+    setLevel,
+    setPetAppearance,
+    setPetId,
+    setStage,
+  } = usePetStore();
   const [newName, setNewName] = useState("");
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [isEvolving, setIsEvolving] = useState(false);
+  const [isEvolved, setIsEvolved] = useState(false);
+  const [isPetTouched, setIsPetTouched] = useState(false); // pulse 애니메이션 상태 추가
+  const [isEffectTouched, setIsEffectTouched] = useState(false); // pulse 애니메이션 상태 추가
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
-  const pet_map = {
-    1: { 달걀: "Food/Egg.png" },
-    2: { 병아리: "Animals/Hatching%20Chick.png" },
-    3: {
-      앵무새: "Animals/Parrot.png",
-      펭귄: "Animals/Penguin.png",
-      독수리: "Animals/Eagle.png",
-      상어: "Animals/Shark.png",
-      도도새: "Animals/Dodo.png",
-      비둘기: "Animals/Dove.png",
-      고래: "Animals/Spouting%20Whale.png",
-      고릴라: "Animals/Gorilla.png",
-      나무늘보: "Animals/Sloth.png",
-      용: "Animals/Dragon.png",
-      티라노: "Animals/T-Rex.png",
-      다람쥐: "Animals/Chipmunk.png",
-      부엉이: "Animals/Owl.png",
-      "검은 고양이": "Animals/Black%20Cat.png",
-      까마귀: "Animals/Black%20Bird.png",
-    },
-  };
+
+  async function evolvePet(updatedStage, updatedPetAppearance) {
+    console.log("진화 시작");
+    setIsEvolving(true); // 진화 애니메이션 시작
+
+    // 여기서 setTimeout을 사용하여 진화 애니메이션을 2초간 실행합니다.
+    // 애니메이션이 완료되는 시점에 setIsEvolving(false)를 호출합니다.
+    setTimeout(() => {
+      setIsEvolving(false); // 진화 애니메이션 종료
+      console.log("진화 완");
+      setStage(updatedStage);
+      setPetAppearance(updatedPetAppearance);
+      setIsEvolved(true);
+    }, 2000);
+  }
+
+  async function levelupPet() {
+    const response = await levelUpPet(); // 레벨업 함수 호출
+    console.log("레벨업", response.data);
+    const updatedPet = response.data;
+    console.log(updatedPet);
+    // 펫 스테이트 업데이트
+    setName(updatedPet.name);
+    setLevel(updatedPet.level);
+    setEmotion(updatedPet.emotion);
+    setExp(updatedPet.exp % 10);
+    setIsFeed(updatedPet.isFeed);
+    setPetId(updatedPet.petId);
+    setIsEvolution(updatedPet.isEvolution);
+
+    if (updatedPet.isEvolution) {
+      evolvePet(updatedPet.stage, updatedPet.petAppearance); // 진화 애니메이션 실행
+      setTimeout(() => {
+        // 진화 애니메이션이 끝난 후에 진화된 petAppearance로 업데이트
+        console.log("진화 완료");
+        setIsEvolving(false); // 진화 애니메이션 종료
+        setIsEvolved(true);
+      }, 2000); // 진화 애니메이션의 시간에 맞추어 설정
+      setTimeout(() => {
+        setIsEvolved(false);
+        setIsEvolution(false);
+      }, 4000);
+    } else {
+      setStage(updatedPet.stage);
+      setPetAppearance(updatedPet.petAppearance);
+    }
+  }
+
+  useEffect(() => {
+    if (exp === 10) {
+      levelupPet();
+    }
+  }, [exp]);
 
   function newNameChangeHandler(e) {
     setNewName(e.target.value);
@@ -62,7 +187,9 @@ export default function Pet() {
 
   async function newNameSubmitHandler(e) {
     e.preventDefault();
-    if (newName.length > 0) {
+    if (
+      newName.match(/^(?![0-9])[a-zA-Z\uAC00-\uD7A3][a-zA-Z\uAC00-\uD7A3\d]*$/)
+    ) {
       const response = await editPetName(newName);
       console.log("반응", response);
       setName(response.data.name);
@@ -72,6 +199,22 @@ export default function Pet() {
       setIsNewNameEmpty(true);
     }
   }
+
+  // pulse 애니메이션을 트리거하는 함수
+  function handlePetTouchedAnimation() {
+    setIsPetTouched(true);
+    setTimeout(() => {
+      setIsPetTouched(false);
+    }, 1000); // 2초 후에 pulse 애니메이션 종료
+  }
+  // pulse 애니메이션을 트리거하는 함수
+  function handleEffectTouchedAnimation() {
+    setIsEffectTouched(true);
+    setTimeout(() => {
+      setIsEffectTouched(false);
+    }, 1000); // 2초 후에 pulse 애니메이션 종료
+  }
+
   return (
     <div>
       <div
@@ -83,22 +226,58 @@ export default function Pet() {
           gap: "1rem",
         }}
       >
-        {using.effect.item && (
-          <img
+        {isEffectTouched ? (
+          <EffectTouchedAnimation
             src={`${EMOJI_URL}/${using.effect.item.imgURl}`}
             style={{
               width: "5rem",
               height: "5rem",
             }}
           />
+        ) : (
+          <img
+            src={`${EMOJI_URL}/${using.effect.item.imgURl}`}
+            style={{
+              width: "5rem",
+              height: "5rem",
+            }}
+            onClick={handleEffectTouchedAnimation} // 클릭 시 pulse 애니메이션 트리거
+          />
         )}
-        <img
-          src={`${EMOJI_URL}/${pet_map[stage][petAppearance]}`}
-          style={{
-            width: "12rem",
-            height: "12rem",
-          }}
-        />
+        {isEvolving ? (
+          <EvolvingAnimation
+            src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
+            style={{
+              width: "12rem",
+              height: "12rem",
+            }}
+          />
+        ) : isEvolved ? (
+          <EvolvedAnimation
+            src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
+            style={{
+              width: "12rem",
+              height: "12rem",
+            }}
+          ></EvolvedAnimation>
+        ) : isPetTouched ? (
+          <PetTouchedAnimation
+            src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
+            style={{
+              width: "12rem",
+              height: "12rem",
+            }}
+          />
+        ) : (
+          <NormalAnimation
+            src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
+            style={{
+              width: "12rem",
+              height: "12rem",
+            }}
+            onClick={handlePetTouchedAnimation} // 클릭 시 pulse 애니메이션 트리거
+          />
+        )}
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2>{name}</h2>
@@ -123,14 +302,17 @@ export default function Pet() {
                 onChange={newNameChangeHandler}
               />
               {isNewNameEmpty && (
-                <p
-                  style={{
-                    margin: "0 auto",
-                    color: "red",
-                  }}
-                >
-                  펫 이름를 입력해주세요
-                </p>
+                <>
+                  <p
+                    style={{
+                      margin: "0 auto",
+                      color: "red",
+                      fontSize: "0.75rem",
+                    }}
+                  >
+                    한글 또는 영문의 한 단어어야 합니다.
+                  </p>
+                </>
               )}
               <Button variant="contained" onClick={newNameSubmitHandler}>
                 저장
