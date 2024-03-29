@@ -31,8 +31,8 @@ const glow = keyframes`
     filter: brightness(1);
   }
   50% {
-    transform: scale(1.5); /* 중간에 크기가 커집니다. */
-    filter: brightness(2); /* 중간에 더 밝게 광채를 낸다 */
+    transform: scale(1.25); /* 중간에 크기가 커집니다. */
+    filter: brightness(1.5); /* 중간에 더 밝게 광채를 낸다 */
   }
 `;
 
@@ -43,8 +43,8 @@ const EvolvingAnimation = styled.img`
 
 const reverseGlow = keyframes`
   0%, 100% {
-    transform: scale(1.5); /* 처음과 마지막에 크기가 커집니다. */
-    filter: brightness(2); /* 처음과 마지막에 더 밝게 광채를 낸다 */
+    transform: scale(1.25); /* 처음과 마지막에 크기가 커집니다. */
+    filter: brightness(1.5); /* 처음과 마지막에 더 밝게 광채를 낸다 */
   }
   50% {
     transform: scale(1); /* 중간에 크기가 작아집니다. */
@@ -105,7 +105,6 @@ export default function Pet() {
     exp,
     stage,
     petAppearance,
-    isEvolution,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -134,12 +133,13 @@ export default function Pet() {
     // 여기서 setTimeout을 사용하여 진화 애니메이션을 2초간 실행합니다.
     // 애니메이션이 완료되는 시점에 setIsEvolving(false)를 호출합니다.
     setTimeout(() => {
-      setIsEvolving(false); // 진화 애니메이션 종료
-      console.log("진화 완");
+      // 진화 애니메이션이 끝난 후에 진화된 petAppearance로 업데이트
+      console.log("진화 완료");
       setStage(updatedStage);
       setPetAppearance(updatedPetAppearance);
+      setIsEvolving(false); // 진화 애니메이션 종료
       setIsEvolved(true);
-    }, 2000);
+    }, 3000); // 진화 애니메이션의 지속 시간에 맞추어 설정
   }
 
   async function levelupPet() {
@@ -151,23 +151,24 @@ export default function Pet() {
     setName(updatedPet.name);
     setLevel(updatedPet.level);
     setEmotion(updatedPet.emotion);
-    setExp(updatedPet.exp % 10);
+    setExp(updatedPet.exp);
     setIsFeed(updatedPet.isFeed);
     setPetId(updatedPet.petId);
     setIsEvolution(updatedPet.isEvolution);
 
-    if (updatedPet.isEvolution) {
+    if (updatedPet.stage > stage) {
+      // 진화 애니메이션 발동
       evolvePet(updatedPet.stage, updatedPet.petAppearance); // 진화 애니메이션 실행
       setTimeout(() => {
         // 진화 애니메이션이 끝난 후에 진화된 petAppearance로 업데이트
         console.log("진화 완료");
         setIsEvolving(false); // 진화 애니메이션 종료
         setIsEvolved(true);
-      }, 2000); // 진화 애니메이션의 시간에 맞추어 설정
+      }, 3000); // 진화 애니메이션의 시간에 맞추어 설정
       setTimeout(() => {
         setIsEvolved(false);
         setIsEvolution(false);
-      }, 4000);
+      }, 6000);
     } else {
       setStage(updatedPet.stage);
       setPetAppearance(updatedPet.petAppearance);
@@ -226,6 +227,7 @@ export default function Pet() {
           gap: "1rem",
         }}
       >
+        {/* Effect */}
         {isEffectTouched ? (
           <EffectTouchedAnimation
             src={`${EMOJI_URL}/${using.effect.item.imgURl}`}
@@ -244,6 +246,9 @@ export default function Pet() {
             onClick={handleEffectTouchedAnimation} // 클릭 시 pulse 애니메이션 트리거
           />
         )}
+
+        {/* Pet */}
+        {/* Pet Evolving? */}
         {isEvolving ? (
           <EvolvingAnimation
             src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
@@ -252,7 +257,8 @@ export default function Pet() {
               height: "12rem",
             }}
           />
-        ) : isEvolved ? (
+        ) : // Pet Evolved?
+        isEvolved ? (
           <EvolvedAnimation
             src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
             style={{
@@ -260,7 +266,8 @@ export default function Pet() {
               height: "12rem",
             }}
           ></EvolvedAnimation>
-        ) : isPetTouched ? (
+        ) : // Pet Touched?
+        isPetTouched ? (
           <PetTouchedAnimation
             src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
             style={{
