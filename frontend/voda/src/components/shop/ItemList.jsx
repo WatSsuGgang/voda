@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
@@ -11,6 +10,7 @@ import ItemNameContainer from "./ItemNameContainer";
 import ItemPriceContainer from "./ItemPriceContainer";
 import { buyItem, applyItem } from "../../services/item";
 import { getItem } from "../../services/item";
+import { getUserInfo } from "../../services/mypage";
 
 const ItemWrapper = styled.div({
   display: "grid",
@@ -39,7 +39,6 @@ const ModalBox = styled.div`
 export default function ItemList() {
   const [modalItem, setModalItem] = useState({});
   const [modalItemOwnId, setModalItemOwnId] = useState();
-  const [loading, setLoading] = useState(false); // 추가: 로딩 상태 관리
 
   // 구매 모달
   const [openModal, setOpenModal] = useState(false);
@@ -56,6 +55,7 @@ export default function ItemList() {
     currentCategory,
     setCurrentCategory,
   } = usePetStore();
+  const { setUserInfo } = useUserStore();
   const { coins } = useUserStore();
   const navigate = useNavigate();
 
@@ -107,21 +107,20 @@ export default function ItemList() {
         .then(() => {
           const fetchData = async () => {
             try {
-              const response = await getItem(currentCategory);
-              console.log(response.data);
-              setBoughtItems(response.data.bought);
-              setDisplayItems(response.data.display);
+              const itemResponse = await getItem(currentCategory);
+              const userResponse = await getUserInfo();
+              setUserInfo(userResponse.data);
+              setBoughtItems(itemResponse.data.bought);
+              setDisplayItems(itemResponse.data.display);
             } catch (error) {
               console.error(error);
             }
           };
           fetchData();
-          setIsLoading(false);
         })
         .catch(() => {});
 
       handleCloseModal();
-      // setOpenBoughtModal(true);
     }
   }
   async function handleApplyItem() {
