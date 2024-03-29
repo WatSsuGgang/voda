@@ -1,33 +1,50 @@
-import React, { useState } from "react"; // eslint-disable-line no-unused-vars
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { keyframes, css } from "styled-components";
 import vodaLogo from "/logo.svg";
 import vodaLogoLetter from "/logo_letter.svg";
 import btn_google from "/login_btn/btn_google.svg";
 import btn_naver from "/login_btn/btn_naver.svg";
 import btn_kakao from "/login_btn/btn_kakao.svg";
 
-const ImageContainer = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-});
+const blink = keyframes`
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+`;
 
-const InstructionContainer = styled.p({
-  textAlign: "center",
-  fontSize: "1rem",
-  fontWeight: "bold",
-  marginTop: "5rem",
-});
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: ${() =>
+    css`
+      ${blink} 4s ease-in-out
+    `};
+`;
 
-const ButtonContainer = styled.div({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "1.5rem",
-  marginTop: "1.5rem",
-});
+const InstructionContainer = styled.p`
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 5rem;
+  animation: ${() =>
+    css`
+      ${blink} 4s ease-in-out
+    `};
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  animation: ${() =>
+    css`
+      ${blink} 4s ease-in-out
+    `};
+`;
 
 const Login = () => {
   const loginHandler = (e) => {
