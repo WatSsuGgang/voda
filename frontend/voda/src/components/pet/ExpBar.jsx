@@ -2,17 +2,27 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { usePetStore } from "../../store/petStore";
 
-const Bar = styled.div({
-  backgroundColor: "#686868",
-  borderRadius: "1rem",
-  height: "1rem",
-  width: "100%",
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "center",
-});
+const Bar = styled.div`
+  background-color: #686868;
+  border-radius: 1rem;
+  height: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const ExpBarFill = styled.div`
+  height: 85%;
+  width: ${({ exp }) => `${exp}%`};
+  background-color: #b8eea4;
+  border-radius: 1rem;
+  transition: width 0.5s ease-in-out; /* 경험치가 변경될 때 애니메이션 효과 추가 */
+`;
+
 export default function ExpBar() {
   const { level, exp } = usePetStore();
+
   return (
     <div
       style={{
@@ -26,15 +36,7 @@ export default function ExpBar() {
     >
       <h3 style={{ margin: "0" }}>Lv.{level}</h3>
       <Bar>
-        <div
-          id="exp-bar"
-          style={{
-            height: "100%",
-            width: `${exp}`,
-            backgroundColor: "#B8EEA4",
-            borderRadius: "1rem",
-          }}
-        ></div>
+        <ExpBarFill exp={exp * 10} />
       </Bar>
     </div>
   );
