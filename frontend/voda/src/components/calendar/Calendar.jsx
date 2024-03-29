@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./styles.css"; // styles.css 파일 import
-import { getDate, getMonth } from "../../services/calendar";
-import { Modal } from "@mui/material"; // Material-UI에서 Modal import
-import { CircularProgress } from "@mui/material";
-import useStore from "../../store/store";
+import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
+import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
+import { CircularProgress, Modal } from "@mui/material"; // Material-UI에서 Modal import
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getDate, getMonth } from "../../services/calendar";
+import useStore from "../../store/store";
+import "./styles.css"; // styles.css 파일 import
 
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date()); // 현재 날짜로 초기화
@@ -212,11 +213,13 @@ const Calendar = () => {
     <div className="calendar-wrapper" ref={swipeRef}>
       {/* Swipe를 적용할 DOM에 Ref 추가 */}
       <div className="calendar-header">
-        <button onClick={handlePrevMonth}>&lt;</button>
-        <h3>
+        <NavigateBeforeSharpIcon className="button" onClick={handlePrevMonth}></NavigateBeforeSharpIcon>
+        {/* <button onClick={handlePrevMonth}>&lt;</button> */}
+        <h2>
           {currentYear}년 {currentMonth + 1}월
-        </h3>
-        <button onClick={handleNextMonth}>&gt;</button>
+        </h2>
+        <NavigateNextSharpIcon className="button" onClick={handleNextMonth}></NavigateNextSharpIcon>
+        {/* <button onClick={handleNextMonth}>&gt;</button> */}
       </div>
       <div className="weekdays">
         {weekdays.map((day, index) => (
@@ -228,10 +231,10 @@ const Calendar = () => {
       {showDetail && (
         <Modal open={showDetail} onClose={() => setShowDetail(false)}>
           <div className="modal">
-            <div>
               <div className="modal-date">
                 {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일
               </div>
+           
               {/* 일기 데이터를 표시하는 부분 */}
               {isDiaryDataLoading ? (
                 <CircularProgress></CircularProgress>
@@ -262,7 +265,7 @@ const Calendar = () => {
                   )}
                 </div>
               )}
-            </div>
+            
           </div>
         </Modal>
       )}
