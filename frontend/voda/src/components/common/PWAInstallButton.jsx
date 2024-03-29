@@ -44,18 +44,14 @@ const PWAInstallPrompt = () => {
   };
 
   return (
-    <div
-      style={{
-        width: "20vw",
-        display: "flex",
-        justifyContent: "end",
-        alignItems: "center",
-      }}
-    >
+    <div>
       {deferredPrompt && (
-        <InstallButton onClick={handleInstallClick}>
-          <RiInstallLine style={{ width: "5vw", height: "3vh" }} />
-        </InstallButton>
+        <div>
+          <InstallButton onClick={handleInstallClick}>
+            <RiInstallLine style={{ width: "5vw", height: "3vh" }} />
+          </InstallButton>
+          <div>앱 설치를 원하시면 버튼을 클릭해주세요</div>
+        </div>
       )}
     </div>
   );

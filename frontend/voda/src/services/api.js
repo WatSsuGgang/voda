@@ -66,44 +66,6 @@ export const request = async (method, url, data = {}) => {
 
 // ------------------------------------------------------------------------------------------------
 
-// get 요청
-export const getData = async (url) => {
-  try {
-    const response = await axios.get(url);
-    const status = response.status;
-    if (status === HTTPStatusCodes.OK) {
-      // 응답 200일 경우
-      return response;
-    } else {
-      // 아닐 경우
-      return false;
-    }
-  } catch (error) {
-    // 에러일 경우
-    console.error(error);
-    return false;
-  }
-};
-
-// post 요청
-export const postData = async (url, data) => {
-  try {
-    const response = await axios.post(url, data);
-    const status = response.status;
-    if (status === HTTPStatusCodes.OK) {
-      // 응답 200일 경우
-      return response;
-    } else {
-      // 아닐 경우
-      return false;
-    }
-  } catch (error) {
-    // 에러일 경우
-    console.error(error);
-    return false;
-  }
-};
-
 // formdata 전송
 export const formPostData = async (url, data) => {
   try {
@@ -120,62 +82,6 @@ export const formPostData = async (url, data) => {
     } else {
       // 아닐 경우
       console.log("현재상태: ", status);
-      return false;
-    }
-  } catch (error) {
-    // 에러일 경우
-    console.error(error);
-    return false;
-  }
-};
-
-// delete 요청
-export const deleteData = async (url) => {
-  try {
-    const response = await axios.delete(url);
-    const status = response.status;
-    if (status === HTTPStatusCodes.OK) {
-      // 응답 200일 경우
-      return true;
-    } else {
-      // 아닐 경우
-      return false;
-    }
-  } catch (error) {
-    // 에러일 경우
-    console.error(error);
-    return false;
-  }
-};
-// put 요청
-export const putData = async (url, data) => {
-  try {
-    const response = await axios.put(url, data);
-    const status = response.status;
-    if (status === HTTPStatusCodes.OK) {
-      // 응답 200일 경우
-      return true;
-    } else {
-      // 아닐 경우
-      return false;
-    }
-  } catch (error) {
-    // 에러일 경우
-    console.error(error);
-    return false;
-  }
-};
-
-// patch 요청
-export const patchData = async () => {
-  try {
-    const response = await axios.delete(url);
-    const status = response.status;
-    if (status === HTTPStatusCodes.OK) {
-      // 응답 200일 경우
-      return true;
-    } else {
-      // 아닐 경우
       return false;
     }
   } catch (error) {
