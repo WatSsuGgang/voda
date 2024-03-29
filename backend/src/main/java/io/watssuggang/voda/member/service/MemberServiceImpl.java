@@ -66,6 +66,7 @@ public class MemberServiceImpl implements MemberService {
         Arrays.stream(ItemCategory.values()).forEach(itemCategory -> {
             Own item = Own.of();
             item.purchase(addMember, itemRepository.findByItemCategoryAndItemPrice(itemCategory, 0)
+                    .stream().findFirst()
                     .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND)));
             item.use();
             ownRepository.save(item);
