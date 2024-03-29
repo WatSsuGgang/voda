@@ -1,5 +1,6 @@
 package io.watssuggang.voda.pet.service;
 
+import io.watssuggang.voda.alarm.NotificationService;
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.exception.ErrorCode;
 import io.watssuggang.voda.common.security.dto.SecurityUserDto;
@@ -36,6 +37,7 @@ public class PetService {
     private final DiaryRepository diaryRepository;
     private final OwnService ownService;
     private final PointLogService pointLogService;
+    private final NotificationService notificationService;
 
     /**
      * 펫에게 먹이를 준다. 5의 경험치가 올라간다.
@@ -157,11 +159,11 @@ public class PetService {
                 DateUtil.getTodayDate());
 
         List<PetStatus> petStatuses = new ArrayList<>(List.of(PetStatus.JOKE));
-        if (DateUtil.AfterTodayMidNight(verifyPet.getPetLastFeed())) {
+        if (!DateUtil.AfterTodayMidNight(verifyPet.getPetLastFeed())) {
             petStatuses.add(PetStatus.HUNGRY);
         }
 
-        if (count > 0) {
+        if (count == 0) {
             petStatuses.add(PetStatus.DIARY);
         }
 
@@ -192,6 +194,8 @@ public class PetService {
     public PetHomeResponse getPetHomeInfo(Integer memberId) {
         Pet verifyPet = getVerifyPetByMemberId(memberId);
         Map<String, OwnResponse> usingItem = ownService.getUsingItemByMember(memberId);
+
+        notificationService.diaryCreatedNotification(verifyPet.getMember().getMemberId());
         return PetHomeResponse.of(
                 PetResponse.of(verifyPet),
                 usingItem
