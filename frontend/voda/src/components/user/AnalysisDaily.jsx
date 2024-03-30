@@ -48,43 +48,76 @@ const AnalysisDaily = ({ report }) => {
     <Slider {...settings}>
       {days.map((day, index) => (
         <Container>
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          {report.weeklyStatics[day].emotion === "NONE" ? (
             <div
+              key={index}
               style={{
-                fontSize: "1.4rem",
-                textAlign: "center",
-                fontWeight: "bold",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {koreanDays[day]}은 이런 감정을 <br />
-              가장 많이 느꼈어요
+              <div
+                style={{
+                  fontSize: "1.4rem",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {koreanDays[day]}에 작성한 일기가 없습니다
+              </div>
+              <img
+                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Expressionless%20Face.png"
+                alt="Expressionless Face"
+                width="150"
+                height="150"
+                style={{ marginTop: "15%" }}
+              />
             </div>
-            <img
-              src={store.emotions[report.weeklyStatics[day].emotion]}
-              style={{ marginTop: "15%", width: "150px", height: "150px" }}
-            />
-            <div style={{ fontWeight: "bold", fontSize: "1.4rem" }}>
-              {koreanEmotion[report.weeklyStatics[day].emotion.toLowerCase()]}
-            </div>
+          ) : (
             <div
+              key={index}
               style={{
-                margin: "18%",
-                fontSize: "1.2rem",
-                fontWeight: "bold",
-                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {report.weeklyStatics[day].summary}
+              <div
+                style={{
+                  fontSize: "1.4rem",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {koreanDays[day]}은 이런 감정을 <br />
+                가장 많이 느꼈어요
+              </div>
+              <img
+                src={store.emotions[report.weeklyStatics[day].emotion]}
+                style={{
+                  marginTop: "15%",
+                  width: "150px",
+                  height: "150px",
+                }}
+              />
+              <div style={{ fontWeight: "bold", fontSize: "1.4rem" }}>
+                {koreanEmotion[report.weeklyStatics[day].emotion.toLowerCase()]}
+              </div>
+              <div
+                style={{
+                  margin: "18%",
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                {report.weeklyStatics[day].summary}
+              </div>
             </div>
-          </div>
+          )}
         </Container>
       ))}
     </Slider>
