@@ -38,7 +38,14 @@ const DiaryList = () => {
         <LodaingSpinner />
       ) : (
         <div>
-          <Title>{userStore.nickname}님의 일기를 확인해보세요</Title>
+          <Title style={{
+            backgroundColor: "#FFFAE1",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+            {userStore.nickname}님의 일기를 확인해보세요</Title>
           <div>
             <div style={{ marginTop: "5%" }}>
               <FilteringBox
