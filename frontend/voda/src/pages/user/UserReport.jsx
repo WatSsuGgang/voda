@@ -4,7 +4,6 @@ import { useUserStore } from "../../store/userStore";
 import { getUserReport } from "../../services/mypage";
 import LoadingReport from "../../components/user/LoadingReport";
 import Analysis from "../../components/user/Analysis";
-import NotFound from "../../components/user/NotFound";
 const UserReport = () => {
   const [report, setReport] = useState("");
   const [loading, setLoading] = useState(true);

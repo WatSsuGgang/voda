@@ -4,6 +4,7 @@ import AnalysisDaily from "./AnalysisDaily";
 import AnalysisEmotion from "./AnalysisEmotion";
 import AnalysisPet from "./AnalysisPet";
 import AnalysisCount from "./AnalysisCount";
+import NotFound from "./NotFound";
 import { SectionsContainer, Section } from "react-fullpage";
 
 const Analysis = ({ report }) => {
@@ -20,22 +21,27 @@ const Analysis = ({ report }) => {
     sectionPaddingBottom: "0", // the section bottom padding
     verticalAlign: false, // align the content of each section vertical
   };
-
   return (
-    <SectionsContainer {...options}>
-      <Section>
-        <AnalysisCount report={report} />
-      </Section>
-      <Section>
-        <AnalysisEmotion report={report} />
-      </Section>
-      <Section>
-        <AnalysisDaily report={report} />
-      </Section>
-      <Section>
-        <AnalysisPet />
-      </Section>
-    </SectionsContainer>
+    <div>
+      {report.diaryCount === 0 ? (
+        <NotFound />
+      ) : (
+        <SectionsContainer {...options}>
+          <Section>
+            <AnalysisCount report={report} />
+          </Section>
+          <Section>
+            <AnalysisEmotion report={report} />
+          </Section>
+          <Section>
+            <AnalysisDaily report={report} />
+          </Section>
+          <Section>
+            <AnalysisPet />
+          </Section>
+        </SectionsContainer>
+      )}
+    </div>
   );
 };
 
