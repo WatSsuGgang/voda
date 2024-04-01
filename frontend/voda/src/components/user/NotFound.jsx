@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 const NotFound = () => {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   return (
     <div
@@ -15,26 +24,38 @@ const NotFound = () => {
       }}
     >
       <img
-        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Cross%20Mark.png"
-        alt="Cross Mark"
+        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People%20with%20activities/Person%20Pouting%20Light%20Skin%20Tone.png"
+        alt="Person Pouting Light Skin Tone"
         width="300"
         height="300"
       />
-      <h3 style={{ marginBottom: "30%" }}>아직 작성한 일기가 없습니다</h3>
+      <h2 style={{ margin: "10% 0 20% 0" }}>아직 작성한 일기가 없습니다</h2>
 
       <Button
         onClick={() => {
           navigate("/voice");
         }}
-        style={{
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        sx={{
           width: "60vw",
-          height: "5vh",
+          height: "8vh",
           marginBottom: "5vh",
-          backgroundColor: "#FFC876",
+          backgroundColor: isHovered ? "#0E5F07" : "#95C591",
           color: "white",
           fontWeight: "bold",
-          fontSize: "1rem",
+          fontSize: "1.2rem",
           borderRadius: "10px",
+          transition: "background-color 0.3s ease",
+          boxShadow: isHovered
+            ? "0px 5px 15px  rgba(1, 1, 0, 1)"
+            : "1px 1px 1px rgb(255,255,255), 0 5px 5px rgba(0,0,0,.35)",
+          cursor: "pointer",
+          "&:hover": {
+            backgroundColor: isHovered
+              ? "#0E5F07 !important"
+              : "#95C591 !important",
+          },
         }}
       >
         일기 쓰러 가기
