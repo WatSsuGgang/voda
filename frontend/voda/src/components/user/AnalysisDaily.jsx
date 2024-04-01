@@ -48,10 +48,9 @@ const AnalysisDaily = ({ report }) => {
   return (
     <Slider {...settings}>
       {days.map((day, index) => (
-        <Container>
+        <Container key={index}>
           {report.weeklyStatics[day].emotion === "NONE" ? (
             <div
-              key={index}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -78,7 +77,6 @@ const AnalysisDaily = ({ report }) => {
             </div>
           ) : (
             <div
-              key={index}
               style={{
                 display: "flex",
                 flexDirection: "column",
