@@ -36,7 +36,6 @@ const Record = () => {
   const containerRef = useRef(null);
   const requestIdRef = useRef(null);
   let chatCount = 0;
-
   // 처음 화면을 렌더링 할 때, init api 요청 받아옴
   useEffect(() => {
     // 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
@@ -80,7 +79,7 @@ const Record = () => {
       if (consecutiveSilenceTimeRef.current >= 2000) {
         setVoiceRecognized(false); // 음성 인식이 20 데시벨 이상으로 잘 되고 있는지 구분. 이모티콘 변경
       }
-      if (consecutiveSilenceTimeRef.current >= 5000) {
+      if (consecutiveSilenceTimeRef.current >= 4000) {
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
       }
@@ -114,6 +113,10 @@ const Record = () => {
       aiAudioElementRef.current.addEventListener("ended", handleAudioEnded);
       return () => {
         clearTimeout(timeout);
+        aiAudioElementRef?.current?.removeEventListener(
+          "ended",
+          handleAudioEnded
+        );
       };
     }
   }, [getResponse]);
@@ -182,6 +185,12 @@ const Record = () => {
     analyserRef.current.fftsize = 512;
     // getUserMedia 연결
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      const supportedConstraints =
+        navigator.mediaDevices.getSupportedConstraints();
+      const constraints = { audio: true };
+      if (supportedConstraints.noiseSuppression) {
+        constraints.audio = { ...constraints.audio, noiseSuppression: true };
+      }
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then((stream) => {
@@ -286,11 +295,10 @@ const Record = () => {
       navigate("/voice");
     }
   };
-
   return (
     <div>
       <div style={{ marginTop: "15%", display: "flex", justifyContent: "end" }}>
-        <LogoutIcon onClick={exit} />
+        <LogoutIcon onClick={() => exit} />
       </div>
       <Title>AI와 대화하며 일기를 작성해요</Title>
       <div style={{ textAlign: "center" }}>
@@ -336,5 +344,4 @@ const Record = () => {
     </div>
   );
 };
-
 export default Record;
