@@ -52,14 +52,24 @@ export default function TopComponent() {
   }
   return (
     <div style={{ marginTop: "5vh" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "end",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <IconButton onClick={handleLogout}>
+          <LogoutIcon />
+        </IconButton>
+      </div>
       <div>
         <h2>안녕하세요, {userStore.nickname}님!</h2>
         <h2>오늘 하루는 어떠셨나요?</h2>
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <IconButton onClick={handleLogout} style={{ margin: "0 5% 0 0" }}>
-          <LogoutIcon />
-        </IconButton>
         <Button
           style={{
             width: "32vw",
