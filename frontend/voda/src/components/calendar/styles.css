@@ -38,13 +38,13 @@
 /* 일요일과 일요일에 해당하는 요일과 날짜들을 빨간색으로 표시 */
 .weekday:nth-child(1),
 .calendar-day:nth-child(7n + 1) {
-  color: red;
+  color: crimson;
 }
 
 /* 토요일과 토요일에 해당하는 날짜들을 파란색으로 표시 */
 .weekday:nth-child(7),
 .calendar-day:nth-child(7n) {
-  color: blue;
+  color: royalblue;
 }
 
 .calendar-day {
@@ -68,8 +68,7 @@
 
 /* 선택된 날짜의 스타일 */
 .calendar-day.selected {
-  background-color: #007bff;
-  color: #fff;
+  filter: brightness(70%); /* 선택된 날짜를 어둡게 만듭니다 */
 }
 
 /* 현재 달이 아닌 날짜의 스타일 */
@@ -135,7 +134,7 @@ button:hover {
 
 .modal-date {
   position: absolute;
-  top: 3%;
+  top: 0.5rem;
   left: 50%;
   transform: translateX(-50%); /* 수평 중앙 정렬 */
   border-radius: 2rem;
@@ -155,7 +154,10 @@ button:hover {
 
 /* 일기가 있는 날짜에 대한 스타일 */
 .has-diary {
-  background-color: #b2d793;
+  /* background-color: #b2d793; */
+  border-radius: 100%; /* 텍스트를 동그랗게 만듭니다 */
+  background-color: #ffd8ab; /* 원하는 색깔을 설정합니다 */
+  padding: 20%;
 }
 
 .diary-items {
@@ -168,8 +170,8 @@ button:hover {
 /* DiaryItem 스타일 */
 .diary-item {
   display: flex;
-  width: 7.6rem;
-  margin-top: 2rem;
+  width: 6rem;
+  margin-top: 3rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -193,7 +195,7 @@ button:hover {
   overflow: hidden; /* 넘치는 부분을 숨김 */
   white-space: nowrap; /* 줄 바꿈 방지 */
   text-overflow: ellipsis; /* 텍스트가 너무 길면 ...으로 표시 */
-  width: 7.5rem;
+  width: 6rem;
   text-align: center;
   font-weight: bold;
 }
@@ -203,8 +205,4 @@ button:hover {
   height: 1.25rem;
   position: absolute;
   top: 0.1rem;
-}
-
-.weekday.saturday {
-  color: blue;
 }

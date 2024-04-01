@@ -181,7 +181,7 @@ const Calendar = () => {
           key={i}
           className={`calendar-day ${
             isCurrentMonth ? "current-month" : "non-current-month"
-          } ${isSelected ? "selected" : ""} ${hasDiary ? "has-diary" : ""}`} // 일기가 있는 날짜에는 'has-diary' 클래스 추가
+          }`}
           onClick={() => isCurrentMonth && handleDateClick(date)}
         >
           {/* 각 날짜에 대한 감정 이미지를 표시합니다. */}
@@ -192,7 +192,14 @@ const Calendar = () => {
               className="diary-emotion"
             />
           )}
-          {i}
+          {/* 일기가 있는 날짜에는 'has-diary' 클래스 추가 */}
+          <p
+            className={`${isSelected ? "selected" : ""} ${
+              hasDiary ? "has-diary" : ""
+            }`}
+          >
+            {i}
+          </p>
         </div>
       );
     }

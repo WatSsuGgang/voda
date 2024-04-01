@@ -172,7 +172,7 @@ export default function Pet() {
   }
 
   useEffect(() => {
-    if (exp === 10) {
+    if (exp >= 10) {
       levelupPet();
     }
   }, [exp]);
