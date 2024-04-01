@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { usePetStore } from "../../store/petStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { getPet } from "../../services/pet";
 
 const Container = styled.div`
   display: flex;
@@ -12,8 +13,27 @@ const Container = styled.div`
 `;
 
 const AnalysisPet = () => {
-  const { petMap, name, stage, petAppearance } = usePetStore();
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
+  const { petMap } = usePetStore();
+  const [stage, setStage] = useState();
+  const [petAppearance, setPetAppearance] = useState();
+  const [name, setName] = useState();
+  const [petImageUrl, setPetImageUrl] = useState();
+  const fetchData = async () => {
+    try {
+      const data = await getPet();
+      setStage(data.pet.stage);
+      setPetAppearance(data.pet.petAppearance);
+      setName(data.pet.name);
+      setPetImageUrl(`${petMap[data.pet.stage][data.pet.petAppearance]}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const navigate = useNavigate();
   return (
     <Container>
@@ -29,7 +49,7 @@ const AnalysisPet = () => {
         보러 가볼까요?
       </div>
       <img
-        src={`${EMOJI_URL}/${petMap[stage][petAppearance]}`}
+        src={`${EMOJI_URL}/${petImageUrl}`}
         style={{
           width: "15rem",
           height: "15rem",

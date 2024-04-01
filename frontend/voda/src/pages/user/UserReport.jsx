@@ -5,7 +5,7 @@ import { getUserReport } from "../../services/mypage";
 import LoadingReport from "../../components/user/LoadingReport";
 import Analysis from "../../components/user/Analysis";
 const UserReport = () => {
-  const [report, setReport] = useState("");
+  const [report, setReport] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getUserData = async () => {
