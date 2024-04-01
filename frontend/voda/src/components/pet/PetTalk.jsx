@@ -16,7 +16,7 @@ const Chatbox = styled.div({
 export default function PetTalk(props) {
   const [talk, setTalk] = useState("");
   const [displayedText, setDisplayedText] = useState("");
-  const { petTouched } = usePetStore();
+  const { petTouched, setPetTouched } = usePetStore();
 
   const fetchData = async () => {
     const data = await getPetTalk();
@@ -32,7 +32,10 @@ export default function PetTalk(props) {
   };
 
   useEffect(() => {
-    fetchData();
+    setPetTouched(true);
+    setTimeout(() => {
+      setPetTouched(false);
+    }, 1000);
   }, []);
 
   useEffect(() => {

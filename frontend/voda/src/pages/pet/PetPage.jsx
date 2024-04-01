@@ -14,6 +14,7 @@ const PetPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {
     setUsing,
+    setPetTouched,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -55,6 +56,9 @@ const PetPage = () => {
       setPetId(data.pet.petId);
       setStage(data.pet.stage);
       setIsLoading(false);
+      setTimeout(() => {
+        setPetTouched(false);
+      }, 1000);
     } catch (error) {
       console.error(error);
     }
