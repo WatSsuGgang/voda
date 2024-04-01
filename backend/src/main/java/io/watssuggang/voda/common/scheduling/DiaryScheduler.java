@@ -2,6 +2,7 @@ package io.watssuggang.voda.common.scheduling;
 
 import io.watssuggang.voda.diary.service.DiaryService;
 import io.watssuggang.voda.member.service.MemberService;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,9 +18,9 @@ public class DiaryScheduler {
     /**
      * 사용자가 하루에 일기를 쓴 횟수를 매일 자정에 초기화
      */
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "* * /1 * * *")
     public void deleteKeysWithTodaySchedule() {
         diaryService.deleteKeysWithToday();
-        log.info("delete Keys With Today");
+        log.info("delete Keys With Today"+ LocalDateTime.now());
     }
 }
