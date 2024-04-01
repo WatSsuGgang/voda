@@ -22,10 +22,7 @@ const editAllow = () => {
       <EditDiary>대화내용 수정</EditDiary>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography>Off</Typography>
-        <Switch
-          defaultChecked={store.editAllow}
-          onChange={store.changeEditMode}
-        />
+        <Switch checked={store.editAllow} onChange={store.changeEditMode} />
         <Typography>On</Typography>
       </Stack>
     </Box>
