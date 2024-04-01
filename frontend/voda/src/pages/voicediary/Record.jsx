@@ -35,7 +35,7 @@ const Record = () => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const requestIdRef = useRef(null);
-  const [speakingTime, setSpeakingTime] = useState(0);
+  const [speakingTime, setSpeakingTime] = useState(60);
   let chatCount = 0;
   // 처음 화면을 렌더링 할 때, init api 요청 받아옴
   useEffect(() => {
@@ -297,7 +297,7 @@ const Record = () => {
       console.log("녹음 중이 아닙니다.");
     }
   };
-  if (speakingTime >= 59) {
+  if (speakingTime <= 1) {
     stopRecording();
   }
   const exit = async () => {
