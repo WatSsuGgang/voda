@@ -1,6 +1,9 @@
 import { request } from "./api";
 import { HTTPMethods } from "./api";
 import { HTTPStatusCodes } from "./api";
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
 
 // 회원가입 요청
 export const signUp = (data) => {
@@ -22,15 +25,12 @@ export const tokenRefresh = () => {
     if (response) {
       const newAccessToken = response.data.accessToken;
       localStorage.setItem("accessToken", newAccessToken);
-      return;
     } else {
       // refresh 토큰도 만료됐으면 다시 로그인
-      console.log(response);
-      return alert("RESPONSE NOT 200");
+      navigate("/");
     }
   } catch (error) {
     console.error(error);
-    return alert("ERROR");
   }
 };
 
