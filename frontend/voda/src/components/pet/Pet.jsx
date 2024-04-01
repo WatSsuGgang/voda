@@ -196,16 +196,16 @@ export default function Pet() {
     }
   }
 
-  // pulse 애니메이션을 트리거하는 함수
+  // Pet pulse 애니메이션을 트리거하는 함수
   function handlePetTouchedAnimation() {
     setIsPetTouched(true);
     setPetTouched(true);
     setTimeout(() => {
       setIsPetTouched(false);
       setPetTouched(false);
-    }, 1000); // 2초 후에 pulse 애니메이션 종료
+    }, 1500); // 2초 후에 pulse 애니메이션 종료
   }
-  // pulse 애니메이션을 트리거하는 함수
+  // Effect pulse 애니메이션을 트리거하는 함수
   function handleEffectTouchedAnimation() {
     setIsEffectTouched(true);
     setTimeout(() => {
