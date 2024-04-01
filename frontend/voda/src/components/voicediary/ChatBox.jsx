@@ -22,19 +22,11 @@ const ChatBox = ({ messages, onChildDataChange }) => {
 
   const textareaRef = useRef(null);
 
-  const adjustTextareaHeight = () => {
-    if (textareaRef.current) {
-      const { scrollHeight, clientHeight } = textareaRef.current;
-      textareaRef.current.style.height = `${Math.max(
-        scrollHeight,
-        clientHeight
-      )}px`;
-    }
+  const adjustTextareaHeight = (t) => {
+    const target = t;
+    target.style.height = "auto";
+    target.style.height = textareaRef.current.scrollHeight + "px";
   };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [chatMessages]);
 
   const renderInputs = () => {
     return chatMessages.map((content, index) => {
@@ -49,6 +41,7 @@ const ChatBox = ({ messages, onChildDataChange }) => {
         >
           <textarea
             ref={textareaRef}
+            rows={3}
             style={{
               border: "0",
               backgroundColor: index % 2 === 1 ? "#D8E5FF" : "#F2F2F2",
@@ -63,7 +56,10 @@ const ChatBox = ({ messages, onChildDataChange }) => {
             }}
             placeholder={index % 2 === 1 ? content.answer : content.question}
             value={index % 2 === 1 ? content.answer : content.question}
-            onChange={(e) => handleChange(index, e.target.value)}
+            onChange={(e) => {
+              handleChange(index, e.target.value);
+              adjustTextareaHeight(e.target);
+            }}
             readOnly={index % 2 === 0}
           />
         </div>
