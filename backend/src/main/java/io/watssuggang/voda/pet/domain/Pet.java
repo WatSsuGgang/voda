@@ -87,6 +87,10 @@ public class Pet extends BaseEntity {
         this.petAppearance = petAppearance;
     }
 
+    public void updateEmotion(Emotion emotion) {
+        this.petEmotion = emotion;
+    }
+
     @Builder
     public Pet(String petName, LocalDateTime petLastFeed) {
         this.petName = petName;

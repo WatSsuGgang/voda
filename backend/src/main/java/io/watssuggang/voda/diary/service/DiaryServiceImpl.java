@@ -320,7 +320,7 @@ public class DiaryServiceImpl implements DiaryService {
         pointLogService.makePointLog(
                 PointLog.ofEarnPointLog(pet.getMember(), 10, "일기")
         );
-
+        pet.updateEmotion(save.getDiaryEmotion());
         return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
     }
 
