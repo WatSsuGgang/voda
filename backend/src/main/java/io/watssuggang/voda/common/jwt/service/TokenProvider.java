@@ -61,7 +61,7 @@ public class TokenProvider {
 
 
     public String generateAccessToken(String email, String role) {
-        long tokenPeriod = 1000L * 60L * 60L * 24L; // 24시간마다 토큰 갱신
+        long tokenPeriod = 1000L * 60L * 60L * 24L * 14L; // 2주마다 토큰 갱신
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
 
