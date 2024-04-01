@@ -6,36 +6,31 @@ const TimerStyle = styled.div`
   color: #628f00;
 `;
 function Timer({ aiSpeaking, setSpeakingTime }) {
-  const [time, setTime] = useState({ minutes: 0, seconds: 0 });
+  const [time, setTime] = useState(60);
 
   useEffect(() => {
-    setTime({ minutes: 0, seconds: 0 });
+    setTime(60);
     if (!aiSpeaking) {
       const intervalId = setInterval(() => {
         // 시간 업데이트
         setTime((prevTime) => {
-          const newSeconds = prevTime.seconds + 1;
-          const newMinutes = prevTime.minutes + Math.floor(newSeconds / 60);
-          return {
-            minutes: newMinutes,
-            seconds: newSeconds % 60,
-          };
+          return prevTime - 1;
         });
       }, 1000);
       return () => clearInterval(intervalId);
     }
   }, [aiSpeaking]);
   useEffect(() => {
-    setSpeakingTime(time.seconds);
+    setSpeakingTime(time);
   }, [time]);
   // 시간을 포맷에 맞춰서 반환하는 함수
-  const formatTime = (minutes, seconds) => {
-    const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(seconds).padStart(2, "0");
+  const formatTime = (seconds) => {
+    const formattedMinutes = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const formattedSeconds = String(seconds % 60).padStart(2, "0");
     return `${formattedMinutes}:${formattedSeconds}`;
   };
 
-  return <TimerStyle>{formatTime(time.minutes, time.seconds)}</TimerStyle>;
+  return <TimerStyle>{formatTime(time)}</TimerStyle>;
 }
 
 export default Timer;
