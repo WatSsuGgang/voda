@@ -10,6 +10,7 @@ const Container = styled.div`
 `;
 
 const AnalysisEmotion = ({ report }) => {
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const store = useStore();
   const koreanEmotion = {
     joy: "기쁨",
@@ -58,7 +59,11 @@ const AnalysisEmotion = ({ report }) => {
                 alignItems: "center",
               }}
             >
-              <img src={item.emotion} alt="emotion" style={{ width: "20%" }} />
+              <img
+                src={`${EMOJI_URL}/${item.emotion}`}
+                alt="emotion"
+                style={{ width: "20%" }}
+              />
               <div
                 style={{
                   width: `${percent + 20}%`,
