@@ -53,66 +53,66 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
   return (
     <Container>
       <Search>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-        <DatePicker
-          label="시작 날짜"
-          slotProps={{
-            textField: {
-              size: "small",
-            },
-          }}
-          format="YYYY/MM/DD"
-          onChange={handleStartDateChange}
-        />
-      </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+          <DatePicker
+            label="시작"
+            slotProps={{
+              textField: {
+                size: "small",
+              },
+            }}
+            format="MM/DD"
+            onChange={handleStartDateChange}
+          />
+        </LocalizationProvider>
       </Search>
       <Search>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-        <DatePicker
-          label="종료 날짜"
-          slotProps={{
-            textField: {
-              size: "small",
-            },
-          }}
-          format="YYYY/MM/DD"
-          onChange={handleEndDateChange}
-        />
-      </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+          <DatePicker
+            label="종료"
+            slotProps={{
+              textField: {
+                size: "small",
+              },
+            }}
+            format="MM/DD"
+            onChange={handleEndDateChange}
+          />
+        </LocalizationProvider>
       </Search>
       <Search>
-      <FormControl size="small" style={{ minWidth: "20vw" }}>
-        <InputLabel id="demo-simple-select-filled-label">감정</InputLabel>
-        <Select
-          labelId="demo-simple-select-filled-label"
-          id="demo-simple-select"
-          value={emo}
-          label="Emotion"
-          onChange={handleEmotionChange}
+        <FormControl size="small" style={{ minWidth: "20vw" }}>
+          <InputLabel id="demo-simple-select-filled-label">감정</InputLabel>
+          <Select
+            labelId="demo-simple-select-filled-label"
+            id="demo-simple-select"
+            value={emo}
+            label="Emotion"
+            onChange={handleEmotionChange}
+          >
+            <MenuItem value="">
+              <em></em>
+            </MenuItem>
+            <MenuItem value={"JOY"}>기쁨</MenuItem>
+            <MenuItem value={"ANGER"}>분노</MenuItem>
+            <MenuItem value={"SADNESS"}>슬픔</MenuItem>
+            <MenuItem value={"FEAR"}>무서움</MenuItem>
+            <MenuItem value={"CURIOSITY"}>호기심</MenuItem>
+          </Select>
+        </FormControl>
+      </Search>
+      <Search>
+        <Button
+          onClick={handleButtonClick}
+          style={{
+            borderRadius: "10px",
+            backgroundColor: "#D9D9D9",
+            color: "#000000",
+            height: "100%",
+          }}
         >
-          <MenuItem value="">
-            <em></em>
-          </MenuItem>
-          <MenuItem value={"JOY"}>기쁨</MenuItem>
-          <MenuItem value={"ANGER"}>분노</MenuItem>
-          <MenuItem value={"SADNESS"}>슬픔</MenuItem>
-          <MenuItem value={"FEAR"}>무서움</MenuItem>
-          <MenuItem value={"CURIOSITY"}>호기심</MenuItem>
-        </Select>
-      </FormControl>
-      </Search>
-      <Search>
-      <Button
-        onClick={handleButtonClick}
-        style={{
-          borderRadius: "10px",
-          backgroundColor: "#D9D9D9",
-          color: "#000000",
-          height: "100%",
-        }}
-      >
-        검색
-      </Button>
+          검색
+        </Button>
       </Search>
     </Container>
   );
