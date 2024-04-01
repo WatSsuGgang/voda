@@ -3,8 +3,6 @@ import { HTTPMethods } from "./api";
 import { HTTPStatusCodes } from "./api";
 import { useNavigate } from "react-router-dom";
 
-const navigate = useNavigate();
-
 // 회원가입 요청
 export const signUp = (data) => {
   const url = "/auth/signup";
@@ -19,6 +17,7 @@ export const signUp = (data) => {
 // 토큰을 갱신하려면 만료된 토큰을 headers에 보내줘야 함
 // tokenRefresh의 정상적인 리턴값은 새 accessToken
 export const tokenRefresh = () => {
+  const navigate = useNavigate();
   try {
     const url = "/token/refresh";
     const response = request(HTTPMethods.POST, url);
