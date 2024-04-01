@@ -134,7 +134,7 @@ button:hover {
 
 .modal-date {
   position: absolute;
-  top: 3%;
+  top: 0.5rem;
   left: 50%;
   transform: translateX(-50%); /* 수평 중앙 정렬 */
   border-radius: 2rem;
