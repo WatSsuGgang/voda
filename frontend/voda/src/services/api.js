@@ -55,9 +55,8 @@ export const request = async (method, url, data = {}) => {
       // 응답코드가 200이 아닐 경우 로직
       // 토큰 만료됐을 경우 리프레시
       // 일단 200 아니면 토큰 리프레시
-      const newAccessToken = tokenRefresh();
+      tokenRefresh();
     }
-    console.log(response);
   } catch (error) {
     // 에러 로직
     console.error(error);
