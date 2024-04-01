@@ -7,6 +7,7 @@ import { useUserStore } from "../../store/userStore";
 export default function BottomComponent() {
   const userStore = useUserStore();
   const month = new Date().getMonth() + 1;
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
     <div
       style={{
@@ -28,7 +29,7 @@ export default function BottomComponent() {
         }}
       >
         <img
-          src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png"
+          src={`${EMOJI_URL}/Objects/Chart%20Increasing.png`}
           alt="Chart Increasing"
           width="100rem"
           height="100rem"

@@ -26,7 +26,7 @@ const DiaryDetail = () => {
   const [audioFiles, setAudioFiles] = useState([]);
   const { id } = useParams();
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
-
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   useEffect(() => {
     const fetchDiary = async () => {
       try {
@@ -110,7 +110,7 @@ const DiaryDetail = () => {
           일기
         </Title>
         <img
-          src={emotionImageUrl}
+          src={`${EMOJI_URL}/${emotionImageUrl}`}
           style={{ marginLeft: "1rem", height: "5vh", width: "10vw" }}
         />
       </div>
