@@ -81,7 +81,7 @@ const Record = () => {
     console.log("데시벨:", decibelLevel);
 
     // 데시벨이 임계값 이하인지 확인
-    if (decibelLevel <= -50) {
+    if (decibelLevel <= -30) {
       // 예시로 임계값을 -20으로 설정
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
       if (consecutiveSilenceTimeRef.current >= 2000) {
