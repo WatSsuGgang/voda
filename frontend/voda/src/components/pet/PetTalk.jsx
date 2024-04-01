@@ -16,7 +16,7 @@ const Chatbox = styled.div({
 export default function PetTalk(props) {
   const [talk, setTalk] = useState("");
   const [displayedText, setDisplayedText] = useState("");
-  const { petTouched, setPetTouched } = usePetStore();
+  const { petTouched, setPetTouched, petStatus, petAppearance } = usePetStore();
 
   const fetchData = async () => {
     const data = await getPetTalk();
@@ -43,6 +43,14 @@ export default function PetTalk(props) {
       fetchData();
     }
   }, [petTouched]);
+
+  useEffect(() => {
+    if (petStatus === "evolving") {
+      setDisplayedText(`엇..? ${petAppearance}의 상태가..?`);
+    } else if (petStatus === "evolved") {
+      setDisplayedText(`${petAppearance}가 나왔다!`);
+    }
+  }, [petStatus]);
 
   return (
     <>
