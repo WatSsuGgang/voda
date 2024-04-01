@@ -48,7 +48,7 @@ const NavBar = () => {
       currentPath.includes("/voice/check/")
     ) {
       const confirmed = window.confirm(
-        "Are you sure you want to leave the voice page?"
+        "모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?"
       );
       if (confirmed) {
         // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
