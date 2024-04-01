@@ -44,6 +44,7 @@ const AnalysisDaily = ({ report }) => {
     saturday: "토요일",
     sunday: "일요일",
   };
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
     <Slider {...settings}>
       {days.map((day, index) => (
@@ -68,7 +69,7 @@ const AnalysisDaily = ({ report }) => {
                 {koreanDays[day]}에 작성한 일기가 없습니다
               </div>
               <img
-                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Expressionless%20Face.png"
+                src={`${EMOJI_URL}/Smilies/Expressionless%20Face.png`}
                 alt="Expressionless Face"
                 width="150"
                 height="150"
@@ -96,7 +97,9 @@ const AnalysisDaily = ({ report }) => {
                 가장 많이 느꼈어요
               </div>
               <img
-                src={store.emotions[report.weeklyStatics[day].emotion]}
+                src={`${EMOJI_URL}/${
+                  store.emotions[report.weeklyStatics[day].emotion]
+                }`}
                 style={{
                   marginTop: "15%",
                   width: "150px",
