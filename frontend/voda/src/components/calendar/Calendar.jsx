@@ -27,37 +27,39 @@ const Calendar = () => {
 
   // useEffect를 사용하여 스와이프 동작 감지 함수를 등록
   useEffect(() => {
-    const handleSwipe = (e) => {
-      // 터치 이벤트가 발생한 첫 위치 저장
+    const handleSwipeStart = (e) => {
+      // 터치 이벤트가 발생한 위치 저장
       touchStartX = e.touches[0].clientX;
     };
 
     const handleSwipeEnd = (e) => {
-      // 터치 이벤트가 발생한 마지막 위치 저장
+      // 터치 이벤트가 종료된 위치 저장
       touchEndX = e.changedTouches[0].clientX;
 
+      // 스와이프 거리 계산
+      const swipeDistance = touchEndX - touchStartX;
+
       // 오른쪽으로 스와이프하면 이전 달로 변경
-      if (touchStartX - touchEndX > 50) {
-        handleNextMonth();
+      if (swipeDistance > 50) {
+        handlePrevMonth();
       }
       // 왼쪽으로 스와이프하면 다음 달로 변경
-      else if (touchEndX - touchStartX > 50) {
-        handlePrevMonth();
+      else if (swipeDistance < -50) {
+        handleNextMonth();
       }
     };
 
     // Swipe 이벤트 리스너 등록
     const swipeElement = swipeRef.current;
-    swipeElement.addEventListener("touchstart", handleSwipe);
+    swipeElement.addEventListener("touchstart", handleSwipeStart);
     swipeElement.addEventListener("touchend", handleSwipeEnd);
 
     // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
     return () => {
-      swipeElement.removeEventListener("touchstart", handleSwipe);
+      swipeElement.removeEventListener("touchstart", handleSwipeStart);
       swipeElement.removeEventListener("touchend", handleSwipeEnd);
     };
   }, []); // 의존성 배열이 비어 있으므로 컴포넌트가 마운트될 때 한 번만 실행
-
   useEffect(() => {
     // 백엔드 API에서 해당 월의 일기가 있는 날짜들과 감정을 받아옴
     const fetchDiaryDates = async () => {
