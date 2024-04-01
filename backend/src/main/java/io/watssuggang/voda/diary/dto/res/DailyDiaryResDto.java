@@ -24,7 +24,6 @@ public class DailyDiaryResDto {
                 .emotion(diary.getDiaryEmotion())
                 .title(diary.getDiarySummary())
                 .image(diary.getDiaryFiles().stream()
-                    .peek(diaryFile -> log.info("file id: " + diaryFile.getFileId()))
                     .filter(diaryFile -> diaryFile.getFileType().equals(FileType.WEBP))
                     .map(DiaryFile::getFileUrl)
                     .findFirst()
