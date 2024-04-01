@@ -14,9 +14,6 @@ const Date = styled.div`
   margin-right: 0.5rem;
 `;
 
-const Line = styled.div`
-  border: 0.1px solid #cacaca;
-`;
 
 const FilterdDiaryList = ({ diaries }) => {
   console.log("넘어온 일기: ", diaries);
@@ -58,7 +55,14 @@ const FilterdDiaryList = ({ diaries }) => {
       (file) => file.fileType === "WEBP"
     );
     return (
-      <div key={diary.diaryId}>
+      <div key={diary.diaryId}
+        style={{
+          border: "1px solid",
+          borderColor: "#cacaca",
+          borderRadius: "15px",
+          padding: "0.5rem",
+          margin: "0.5rem",
+        }}>
         <div
           onClick={() => goDetail(diary.diaryId)}
           style={{ display: "flex", alignItems: "center", padding: "0.5rem" }}
@@ -93,7 +97,6 @@ const FilterdDiaryList = ({ diaries }) => {
             <div>{diary.diaryTitle}</div>
           </div>
         </div>
-        <Line />
       </div>
     );
   });
