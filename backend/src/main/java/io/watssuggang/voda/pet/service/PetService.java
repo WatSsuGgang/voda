@@ -109,11 +109,13 @@ public class PetService {
                     Optional<Diary> recentDiary = latestDiariesByEmotion.get(emotion);
                     // 감정 개수와 최신 일기의 modifiedAt 값을 합쳐서 비교
                     // 최신 일기가 없는 경우에는 감정 개수만으로 비교
-                    return recentDiary.map(diary -> count +
-                                    diary.getModifiedAt()
-                                            .toInstant(ZoneOffset.UTC)
-                                            .toEpochMilli())
-                            .orElse(count);
+                    return Comparator.comparingLong((Diary diary) ->
+                                    recentDiary.map(d -> d.getModifiedAt()
+                                                    .toInstant(ZoneOffset.UTC)
+                                                    .toEpochMilli())
+                                            .orElse(Long.MIN_VALUE)) // 최신 일기가 없는 경우 최소값으로 설정
+                            .thenComparingLong(diary -> count)
+                            .compare(recentDiary.orElse(null), null); // null이면 count로 비교
                 }));
 
         // 일기를 안쓰고 진화 조건 충족
