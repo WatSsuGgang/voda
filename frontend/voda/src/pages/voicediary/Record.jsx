@@ -35,6 +35,7 @@ const Record = () => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const requestIdRef = useRef(null);
+  const [speakingTime, setSpeakingTime] = useState(0);
   let chatCount = 0;
   // 처음 화면을 렌더링 할 때, init api 요청 받아옴
   useEffect(() => {
@@ -61,25 +62,34 @@ const Record = () => {
   // 음성 데시벨을 측정해서, 20 데시벨 이하로 6초 이상 유지되면 음성 녹음 종료
   const consecutiveSilenceTimeRef = useRef(null);
   const monitorDecibelLevel = () => {
-    // 분석기에서 데시벨 수준 가져오기
-    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+    // 분석기에서 시간 도메인 데이터를 가져옴
+    const dataArray = new Uint8Array(analyserRef.current.fftSize);
     analyserRef.current.getByteTimeDomainData(dataArray);
 
-    // 데시벨 수준 계산
-    let totalDecibel = 0;
+    // 진폭 데이터를 이용하여 데시벨 수준 계산
+    let totalAmplitude = 0;
     for (let i = 0; i < dataArray.length; i++) {
-      const amplitude = dataArray[i] - 128;
-      totalDecibel += Math.abs(amplitude);
+      // 진폭 데이터는 0에서 255까지의 값이므로 이를 -1에서 1 범위로 정규화
+      const amplitude = (dataArray[i] - 128) / 128;
+      totalAmplitude += Math.abs(amplitude);
     }
-    const averageDecibel = totalDecibel / dataArray.length;
-    console.log("데시벨:", averageDecibel);
+    const averageAmplitude = totalAmplitude / dataArray.length;
+
+    // 정규화된 진폭 데이터를 바탕으로 데시벨 수준 계산
+    const decibelLevel = 20 * Math.log10(averageAmplitude);
+
+    console.log("데시벨:", decibelLevel);
+
     // 데시벨이 임계값 이하인지 확인
-    if (averageDecibel <= 45) {
+    if (decibelLevel <= -50) {
+      // 예시로 임계값을 -20으로 설정
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
       if (consecutiveSilenceTimeRef.current >= 2000) {
-        setVoiceRecognized(false); // 음성 인식이 20 데시벨 이상으로 잘 되고 있는지 구분. 이모티콘 변경
+        // 6초 이상
+        setVoiceRecognized(false); // 음성 인식이 2초 이상으로 잘 되고 있는지 구분
       }
       if (consecutiveSilenceTimeRef.current >= 4000) {
+        // 4초 이상
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
       }
@@ -280,14 +290,16 @@ const Record = () => {
   };
 
   const stopRecording = () => {
-    if (recorderRef.current.state == "recording") {
+    if (recorderRef.current?.state == "recording") {
       setAiSpeaking(true);
       recorderRef.current.stop();
     } else {
       console.log("녹음 중이 아닙니다.");
     }
   };
-
+  if (speakingTime >= 59) {
+    stopRecording();
+  }
   const exit = async () => {
     if (window.confirm("모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?")) {
       stopRecording();
@@ -295,10 +307,11 @@ const Record = () => {
       navigate("/voice");
     }
   };
+
   return (
     <div>
       <div style={{ marginTop: "15%", display: "flex", justifyContent: "end" }}>
-        <LogoutIcon onClick={() => exit} />
+        <LogoutIcon onClick={exit} />
       </div>
       <Title>AI와 대화하며 일기를 작성해요</Title>
       <div style={{ textAlign: "center" }}>
@@ -311,7 +324,7 @@ const Record = () => {
           alignItems: "center",
         }}
       >
-        <Timer />
+        <Timer aiSpeaking={aiSpeaking} setSpeakingTime={setSpeakingTime} />
         <StopCircleIcon
           onClick={() => fetchCreate(store.diaryId)}
           style={{ marginLeft: "3%" }}
