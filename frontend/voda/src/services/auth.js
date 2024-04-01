@@ -1,6 +1,7 @@
 import { request } from "./api";
 import { HTTPMethods } from "./api";
 import { HTTPStatusCodes } from "./api";
+import { useNavigate } from "react-router-dom";
 
 // 회원가입 요청
 export const signUp = (data) => {
@@ -16,21 +17,19 @@ export const signUp = (data) => {
 // 토큰을 갱신하려면 만료된 토큰을 headers에 보내줘야 함
 // tokenRefresh의 정상적인 리턴값은 새 accessToken
 export const tokenRefresh = () => {
+  const navigate = useNavigate();
   try {
     const url = "/token/refresh";
     const response = request(HTTPMethods.POST, url);
     if (response) {
       const newAccessToken = response.data.accessToken;
       localStorage.setItem("accessToken", newAccessToken);
-      return;
     } else {
       // refresh 토큰도 만료됐으면 다시 로그인
-      console.log(response);
-      return alert("RESPONSE NOT 200");
+      navigate("/");
     }
   } catch (error) {
     console.error(error);
-    return alert("ERROR");
   }
 };
 
