@@ -7,16 +7,19 @@ import { useUserStore } from "../../store/userStore";
 export default function BottomComponent() {
   const userStore = useUserStore();
   const month = new Date().getMonth() + 1;
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      gap: "0.5rem",
-    }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "0.5rem",
+      }}
+    >
       <h3>
-        {userStore.nickname}님의 {month}월은 어떠셨나요?
+        {userStore.nickname}님의 {month}월은 어땠을까요?
       </h3>
       <Box
         style={{
@@ -26,7 +29,7 @@ export default function BottomComponent() {
         }}
       >
         <img
-          src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png"
+          src={`${EMOJI_URL}/Objects/Chart%20Increasing.png`}
           alt="Chart Increasing"
           width="100rem"
           height="100rem"
@@ -48,11 +51,13 @@ export default function BottomComponent() {
               marginLeft: "1rem",
             }}
           >
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-            }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
               <div>VODA감정 통계</div>
               <div>확인 하러가기</div>
             </div>

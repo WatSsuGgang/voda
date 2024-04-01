@@ -10,9 +10,9 @@ const Title = styled.h3`
   text-align: center;
 `;
 const Container = styled.div`
-  max-height: 70vh;
+  max-height: 67vh;
   overflow-y: scroll;
-  margin-top: 10%;
+  margin-top: 5%;
 `;
 const DiaryList = () => {
   const store = useStore();
@@ -38,14 +38,17 @@ const DiaryList = () => {
         <LodaingSpinner />
       ) : (
         <div>
-          <Title style={{
-            backgroundColor: "#FFFAE1",
-            height: "3rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-            {userStore.nickname}님의 일기를 확인해보세요</Title>
+          <Title
+            style={{
+              backgroundColor: "#FFFAE1",
+              height: "3rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {userStore.nickname}님의 일기를 확인해보세요
+          </Title>
           <div>
             <div style={{ marginTop: "5%" }}>
               <FilteringBox

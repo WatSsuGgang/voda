@@ -26,6 +26,7 @@ const Record = () => {
   const [aiSpeaking, setAiSpeaking] = useState(true); // ai가 말하는 중인지 구분
   const [voiceRecognized, setVoiceRecognized] = useState(true); // 음성 인식이 30데시벨 이상으로잘 되고 있는지 구분
   const [aiAudioURL, setAiAudioURL] = useState(null); // aiAudioUrl, 서버에 요청을 보내서 응답이 올 때 설정
+  const [getResponse, setGetResponse] = useState(false); // 서버에서 응답을 받아올 때마다 변경
   const aiAudioElementRef = useRef(null); // ai의 음성 데이터를 연결시키는 audio tag ref
   const effectAudioElementRef = useRef(null); // 녹음 시작 시 효과음 audio tag ref
   const recorderRef = useRef(null);
@@ -35,7 +36,6 @@ const Record = () => {
   const containerRef = useRef(null);
   const requestIdRef = useRef(null);
   let chatCount = 0;
-
   // 처음 화면을 렌더링 할 때, init api 요청 받아옴
   useEffect(() => {
     // 일기에 대한 Id값 저장, 첫 질문 오디오 파일 받아오기
@@ -50,6 +50,7 @@ const Record = () => {
           setAiAudioURL(res.data.ttsUrl);
           store.setDiaryId(res.data.diaryId);
         }
+        setGetResponse(true);
       } catch (err) {
         console.error(err);
       }
@@ -75,10 +76,10 @@ const Record = () => {
     // 데시벨이 임계값 이하인지 확인
     if (averageDecibel <= 45) {
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
-      if (consecutiveSilenceTimeRef.current >= 3000) {
+      if (consecutiveSilenceTimeRef.current >= 2000) {
         setVoiceRecognized(false); // 음성 인식이 20 데시벨 이상으로 잘 되고 있는지 구분. 이모티콘 변경
       }
-      if (consecutiveSilenceTimeRef.current >= 5000) {
+      if (consecutiveSilenceTimeRef.current >= 4000) {
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
       }
@@ -99,19 +100,26 @@ const Record = () => {
 
   // aiAudioUrl 값이 변경될 때마다 실행
   useEffect(() => {
-    // AI의 음성 출력이 끝나면 다시 사용자가 얘기할 수 있도록 로직 구현
-    const handleAudioEnded = () => {
-      startRecording();
-    };
-    // AI의 음성 데이터를 가져오고, 0.5초 있다가 실행
-    const timeout = setTimeout(() => {
-      aiAudioElementRef.current.play();
-    }, 500);
-    aiAudioElementRef.current.addEventListener("ended", handleAudioEnded);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [aiAudioURL]);
+    if (getResponse === true) {
+      // AI의 음성 출력이 끝나면 다시 사용자가 얘기할 수 있도록 로직 구현
+
+      const handleAudioEnded = () => {
+        startRecording();
+      };
+      // AI의 음성 데이터를 가져오고, 0.1초 있다가 실행
+      const timeout = setTimeout(() => {
+        aiAudioElementRef.current.play();
+      }, 100);
+      aiAudioElementRef.current.addEventListener("ended", handleAudioEnded);
+      return () => {
+        clearTimeout(timeout);
+        aiAudioElementRef?.current?.removeEventListener(
+          "ended",
+          handleAudioEnded
+        );
+      };
+    }
+  }, [getResponse]);
 
   // 대화 내용 받아오는 함수
   const fetchTalkList = async (diaryId) => {
@@ -128,8 +136,8 @@ const Record = () => {
   const fetchCreate = async (diaryId) => {
     try {
       stopRecording();
-      window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
       navigate("/pet");
+      window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
       const talkRes = await fetchTalkList(diaryId);
       const res = await createDiary(diaryId, talkRes.data.talk_list);
       console.log("일기 생성:", res);
@@ -143,11 +151,12 @@ const Record = () => {
       chatCount += 1;
       const res = await recordDiary(data);
       console.log("응답옴:", res.data);
+      setGetResponse(true);
       // 만약 terminate가 true이면 일기를 종료해야 된다.
       if (res.data.terminate) {
         // 10회 이상으로 terminate가 된 경우
         if (chatCount === 10) {
-          window.alert("최대 10번까지만 대화를 주고 받을 수 있습니다.");
+          alert("최대 10번까지만 대화를 주고 받을 수 있습니다.");
         }
         // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
         if (store.editAllow) {
@@ -166,6 +175,7 @@ const Record = () => {
   const startRecording = () => {
     // 이모티콘 변경
     setAiSpeaking(false);
+    setGetResponse(false);
     audioContextRef.current = new (window.AudioContext ||
       window.webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
@@ -175,6 +185,12 @@ const Record = () => {
     analyserRef.current.fftsize = 512;
     // getUserMedia 연결
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      const supportedConstraints =
+        navigator.mediaDevices.getSupportedConstraints();
+      const constraints = { audio: true };
+      if (supportedConstraints.noiseSuppression) {
+        constraints.audio = { ...constraints.audio, noiseSuppression: true };
+      }
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then((stream) => {
@@ -279,11 +295,10 @@ const Record = () => {
       navigate("/voice");
     }
   };
-
   return (
     <div>
       <div style={{ marginTop: "15%", display: "flex", justifyContent: "end" }}>
-        <LogoutIcon onClick={exit} />
+        <LogoutIcon onClick={() => exit} />
       </div>
       <Title>AI와 대화하며 일기를 작성해요</Title>
       <div style={{ textAlign: "center" }}>
@@ -329,5 +344,4 @@ const Record = () => {
     </div>
   );
 };
-
 export default Record;

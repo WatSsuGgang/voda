@@ -2,7 +2,11 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export const usePetStore = create((set) => ({
+  petStatus: "normal",
+  setPetStatus: (state) => set({ petStatus: state }),
+
   petTouched: true,
+
   setPetTouched: (state) => set({ petTouched: state }),
 
   petMap: {

@@ -19,6 +19,8 @@ const Calendar = () => {
   const { emotions } = useStore();
   const navigate = useNavigate();
 
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
+
   // Ref를 사용하여 터치 이벤트 처리를 위한 DOM 요소 참조
   const swipeRef = useRef(null);
   // 터치 이벤트 처리를 위한 변수 선언
@@ -181,18 +183,25 @@ const Calendar = () => {
           key={i}
           className={`calendar-day ${
             isCurrentMonth ? "current-month" : "non-current-month"
-          } ${isSelected ? "selected" : ""} ${hasDiary ? "has-diary" : ""}`} // 일기가 있는 날짜에는 'has-diary' 클래스 추가
+          }`}
           onClick={() => isCurrentMonth && handleDateClick(date)}
         >
           {/* 각 날짜에 대한 감정 이미지를 표시합니다. */}
           {hasDiary && (
             <img
-              src={getEmotionImage(day)}
+              src={`${EMOJI_URL}/${getEmotionImage(day)}`}
               alt="emotion"
               className="diary-emotion"
             />
           )}
-          {i}
+          {/* 일기가 있는 날짜에는 'has-diary' 클래스 추가 */}
+          <p
+            className={`${isSelected ? "selected" : ""} ${
+              hasDiary ? "has-diary" : ""
+            }`}
+          >
+            {i}
+          </p>
         </div>
       );
     }
@@ -262,7 +271,7 @@ const Calendar = () => {
                       />
                       <div className="diary-item-title">{item.title}</div>
                       <img
-                        src={emotions[item.emotion]}
+                        src={`${EMOJI_URL}/${emotions[item.emotion]}`}
                         alt=""
                         className="diary-item-emotion"
                       />

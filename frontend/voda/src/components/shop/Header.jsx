@@ -12,6 +12,7 @@ const HeaderComponent = styled.div({
 
 export default function Header() {
   const { coins } = useUserStore();
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
     <HeaderComponent style={{ zIndex: 99 }}>
       <h3>상점</h3>
@@ -24,7 +25,7 @@ export default function Header() {
         }}
       >
         <img
-          src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Coin.png"
+          src={`${EMOJI_URL}/Objects/Coin.png`}
           alt="Coin"
           width="40rem"
           height="40rem"
