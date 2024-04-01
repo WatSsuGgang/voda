@@ -68,7 +68,7 @@ const PetPage = () => {
     userInfo();
   }, []);
   return (
-    <>
+    <div>
       <div
         style={{
           width: "85%",
@@ -103,7 +103,7 @@ const PetPage = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
