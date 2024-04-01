@@ -13,6 +13,7 @@ const NotFound = () => {
     setIsHovered(false);
   };
 
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
     <div
       style={{
@@ -24,7 +25,7 @@ const NotFound = () => {
       }}
     >
       <img
-        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People%20with%20activities/Person%20Pouting%20Light%20Skin%20Tone.png"
+        src={`${EMOJI_URL}/People%20with%20activities/Person%20Pouting%20Light%20Skin%20Tone.png`}
         alt="Person Pouting Light Skin Tone"
         width="300"
         height="300"

@@ -14,9 +14,9 @@ const Date = styled.div`
   margin-right: 0.5rem;
 `;
 
-
 const FilterdDiaryList = ({ diaries }) => {
   console.log("넘어온 일기: ", diaries);
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const store = useStore();
   const navigate = useNavigate();
   const goDetail = (id) => {
@@ -32,7 +32,7 @@ const FilterdDiaryList = ({ diaries }) => {
           }}
         >
           <img
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Expressionless%20Face.png"
+            src={`${EMOJI_URL}/Smilies/Expressionless%20Face.png`}
             alt="Expressionless Face"
             width="200"
             height="200"
@@ -55,14 +55,16 @@ const FilterdDiaryList = ({ diaries }) => {
       (file) => file.fileType === "WEBP"
     );
     return (
-      <div key={diary.diaryId}
+      <div
+        key={diary.diaryId}
         style={{
           border: "1px solid",
           borderColor: "#cacaca",
           borderRadius: "15px",
           padding: "0.5rem",
           margin: "0.5rem",
-        }}>
+        }}
+      >
         <div
           onClick={() => goDetail(diary.diaryId)}
           style={{ display: "flex", alignItems: "center", padding: "0.5rem" }}
@@ -90,7 +92,7 @@ const FilterdDiaryList = ({ diaries }) => {
                 {parseInt(diary.createdAt.slice(8, 10))}일
               </Date>
               <img
-                src={emotionImageUrl}
+                src={`${EMOJI_URL}/${emotionImageUrl}`}
                 style={{ height: "4vh", width: "8vw" }}
               />
             </div>
