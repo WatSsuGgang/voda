@@ -246,6 +246,12 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId,
             Integer memberId) {
 
+        // 대화가 하나만 있고, 질문만 있는 경우 해당 일기를 삭제하고, 예외처리
+        if(talkList.size() == 1 && talkList.get(0).getAnswer() == null){
+            diaryRepository.deleteById(diaryId);
+            throw new DiaryException(ErrorCode.DIARY_NOT_CREATED);
+        }
+
         Member writer = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
