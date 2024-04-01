@@ -18,6 +18,21 @@ export default function PetTalk(props) {
   const [displayedText, setDisplayedText] = useState("");
   const { petTouched, setPetTouched, petStatus, petAppearance } = usePetStore();
 
+  function checkWord(name = "") {
+    //name의 마지막 음절의 유니코드(UTF-16)
+    const charCode = name.charCodeAt(name.length - 1);
+
+    //유니코드의 한글 범위 내에서 해당 코드의 받침 확인
+    const consonantCode = (charCode - 44032) % 28;
+
+    if (consonantCode === 0) {
+      //0이면 받침 없음 -> 를
+      return "가";
+    }
+    //1이상이면 받침 있음 -> 을
+    return "이";
+  }
+
   const fetchData = async () => {
     const data = await getPetTalk();
     const petTalk = data.petTalk;
@@ -48,7 +63,7 @@ export default function PetTalk(props) {
     if (petStatus === "evolving") {
       setDisplayedText(`엇..? ${petAppearance}의 상태가..?`);
     } else if (petStatus === "evolved") {
-      setDisplayedText(`${petAppearance}가 나왔다!`);
+      setDisplayedText(`${petAppearance}${checkWord(petAppearance)} 나왔다!`);
     }
   }, [petStatus]);
 
