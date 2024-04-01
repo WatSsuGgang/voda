@@ -149,11 +149,12 @@ const DiaryDetail = () => {
         </div>
         {/* 일기 이미지 */}
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <img
+        <img
             src={
               diary.diaryFiles.find((file) => file.fileType === "WEBP")?.fileUrl
             }
-            style={{ width: "80%", height: "50%", borderRadius: "10%" }}
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ width: "80%", height: "50%", borderRadius: "10%", WebkitTouchCallout: 'none' }}
           />
         </div>
         {/* 일기 내용 */}
