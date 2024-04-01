@@ -93,11 +93,13 @@ export const usePetPersistStore = create(
       usingId: {
         food: { itemId: 0, ownId: 0 }, // 기본값으로 설정할 수 있는 값으로 초기화
         effect: { itemId: 0, ownId: 0 }, // 기본값으로 설정할 수 있는 값으로 초기화
+        name: "",
+        petImageUrl: "",
       },
       setUsingId: (state) => set({ usingId: state }),
     }),
     {
-      name: "using-id-storage",
+      name: "using-storage",
       storage: createJSONStorage(() => sessionStorage),
     }
   )
