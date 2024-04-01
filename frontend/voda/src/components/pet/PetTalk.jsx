@@ -35,7 +35,7 @@ export default function PetTalk(props) {
     setPetTouched(true);
     setTimeout(() => {
       setPetTouched(false);
-    }, 1000);
+    }, 1500);
   }, []);
 
   useEffect(() => {
