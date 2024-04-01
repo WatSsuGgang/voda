@@ -146,7 +146,6 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
             throws IOException {
         Integer value = (Integer) redisTemplate.opsForValue().get(answerPrefix + userId);
-        System.out.println("value : "+value);
         if (value != null && value > 10) {
             return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
         }
