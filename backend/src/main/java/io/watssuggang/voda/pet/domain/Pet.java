@@ -58,17 +58,18 @@ public class Pet extends BaseEntity {
     }
 
     /**
-     * @apiNote
-     * <p>
-     * 펫의 경험치가 최대치를 넘으면 레벨업하고 만약 경험치가 넘치는 경우 차이만 남는다.
-     * </p>
-     * <p>
-     * 펫의 단계는 1,2,3단계가 있고 레벨이 충족하면 진화한다.
-     * 1단계는 1 ~ 5, 2단계는 6 ~ 10, 3단계는 11 ~
-     * </p>
      * @return 현재 단계값이 Optional 형태로 제공된다. 진화하지 못하는 경우 Optional.empty()
+     * @apiNote <p> 펫의 경험치가 최대치를 넘으면 레벨업하고 만약 경험치가 넘치는 경우 차이만 남는다.
+     * </p>
+     * <p>
+     * 펫의 단계는 1,2,3단계가 있고 레벨이 충족하면 진화한다. 1단계는 1 ~ 5, 2단계는 6 ~ 10, 3단계는 11 ~
+     * </p>
      */
     public Optional<Byte> levelUp() {
+        if (this.petLevel == Byte.MAX_VALUE) {
+            return Optional.empty();
+        }
+
         if (this.petExp >= MAX_EXP) {
             this.petExp = (byte) (this.petExp - MAX_EXP);
             this.petLevel++;

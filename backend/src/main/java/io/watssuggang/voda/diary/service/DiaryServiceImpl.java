@@ -247,7 +247,7 @@ public class DiaryServiceImpl implements DiaryService {
             Integer memberId) {
 
         // 대화가 하나만 있고, 질문만 있는 경우 해당 일기를 삭제하고, 예외처리
-        if(talkList.size() == 1 && talkList.get(0).getAnswer() == null){
+        if (talkList.size() == 1 && talkList.get(0).getAnswer() == null) {
             diaryRepository.deleteById(diaryId);
             throw new DiaryException(ErrorCode.DIARY_NOT_CREATED);
         }
@@ -264,6 +264,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         String allAnswers = talkList.stream()
                 .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
+                .filter(answer -> answer != null && !answer.isEmpty())
                 .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
 
         log.info("합친 답변: " + allAnswers);
