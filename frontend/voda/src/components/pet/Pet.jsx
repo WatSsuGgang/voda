@@ -106,6 +106,7 @@ export default function Pet() {
     exp,
     stage,
     petAppearance,
+    setPetStatus,
     setEmotion,
     setExp,
     setIsEvolution,
@@ -129,7 +130,7 @@ export default function Pet() {
 
   async function evolvePet(updatedStage, updatedPetAppearance) {
     setIsEvolving(true); // 진화 애니메이션 시작
-
+    setPetStatus("evolving");
     // 여기서 setTimeout을 사용하여 진화 애니메이션을 2초간 실행합니다.
     // 애니메이션이 완료되는 시점에 setIsEvolving(false)를 호출합니다.
     setTimeout(() => {
@@ -138,6 +139,7 @@ export default function Pet() {
       setPetAppearance(updatedPetAppearance);
       setIsEvolving(false); // 진화 애니메이션 종료
       setIsEvolved(true);
+      setPetStatus("evolved");
     }, 3000); // 진화 애니메이션의 지속 시간에 맞추어 설정
   }
 
@@ -160,10 +162,12 @@ export default function Pet() {
         // 진화 애니메이션이 끝난 후에 진화된 petAppearance로 업데이트
         setIsEvolving(false); // 진화 애니메이션 종료
         setIsEvolved(true);
+        setPetStatus("evolved");
       }, 3000); // 진화 애니메이션의 시간에 맞추어 설정
       setTimeout(() => {
         setIsEvolved(false);
         setIsEvolution(false);
+        setPetStatus("normal");
       }, 6000);
     } else {
       setStage(updatedPet.stage);
