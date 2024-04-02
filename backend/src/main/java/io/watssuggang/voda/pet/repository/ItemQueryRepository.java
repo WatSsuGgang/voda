@@ -28,14 +28,12 @@ public class ItemQueryRepository {
                 )).fetch();
     }
 
-    public List<? extends Item> findAllItemInOwn(Integer memberId, String category) {
+    public List<Own> findOwnItem(Integer memberId) {
         return queryFactory
-                .selectFrom(getCategory(category))
-                .where(item.itemId.in(
-                        queryFactory.select(own.item.itemId)
-                                .from(own)
-                                .where(eqOwnMemberId(memberId))
-                )).fetch();
+                .selectFrom(own)
+                .innerJoin(own.item, item).fetchJoin()
+                .where(own.member.memberId.eq(memberId))
+                .fetch();
     }
 
     private static BooleanExpression eqOwnMemberId(Integer memberId) {

@@ -1,5 +1,7 @@
 package io.watssuggang.voda.diary.dto.req;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.List;
 import lombok.*;
 
@@ -13,6 +15,7 @@ public class TalkListRequest {
 
     @Getter
     @ToString
+    @JsonInclude(Include.NON_ABSENT)
     public static class TalkRequest {
 
         private final String question;
