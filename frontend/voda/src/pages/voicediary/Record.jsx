@@ -183,6 +183,11 @@ const Record = () => {
       } else {
         fetchCreate(store.diaryId);
       }
+    } else {
+      Swal.fire({
+        icon: "warning",
+        text: "질문 중에는 종료할 수 없습니다",
+      });
     }
   };
 
