@@ -153,10 +153,10 @@ button:hover {
 
 /* 일기가 있는 날짜에 대한 스타일 */
 .has-diary {
-  /* background-color: #b2d793; */
   border-radius: 100%; /* 텍스트를 동그랗게 만듭니다 */
   background-color: #ffd8ab; /* 원하는 색깔을 설정합니다 */
   padding: 20%;
+  color: black;
 }
 
 .diary-items {

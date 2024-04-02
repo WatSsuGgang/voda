@@ -23,23 +23,10 @@ const TopComponents = styled.div`
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background-color: white;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-`;
-
-const SpinnerWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255);
 `;
 
 export default function PetShopPage() {
