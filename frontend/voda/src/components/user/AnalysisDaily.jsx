@@ -4,7 +4,6 @@ import { useStore, usePersistStore } from "../../store/store";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { usePersistStore } from "../../store/store";
 
 const Container = styled.div`
   display: flex;
@@ -36,7 +35,6 @@ const settings = {
 const AnalysisDaily = ({ report }) => {
   const { darkmode } = usePersistStore();
   const store = useStore();
-  const persistStore = usePersistStore();
   const days = Object.keys(report.weeklyStatics);
   const koreanEmotion = {
     joy: "기쁨",
