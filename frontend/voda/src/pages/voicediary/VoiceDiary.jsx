@@ -2,6 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import EditAllow from "../../components/voicediary/EditAllow";
 import StartRecord from "../../components/voicediary/StartRecord";
+
+const TitleContainer = styled.div`
+  margin-top: 10%;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+`;
+
 const Title = styled.h1`
   margin-top: 10%;
   text-align: center;
@@ -11,7 +24,6 @@ const Title = styled.h1`
 
 const ContentBox = styled.div`
   margin-left: 5%;
-  margin-top: 20%;
 `;
 
 const Contents = styled.div`
@@ -34,9 +46,19 @@ const Finish = styled.div`
 `;
 
 const VoiceDiary = () => {
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
     <div>
-      <Title>오늘의 일기를 작성해보세요</Title>
+      <TitleContainer>
+        <img
+          src={`${EMOJI_URL}/Objects/Microphone.png`}
+          style={{
+            width: "1.5rem",
+            height: "1.5rem",
+          }}
+        />
+        <Title style={{ margin: 0 }}>오늘의 일기를 작성해보세요</Title>
+      </TitleContainer>{" "}
       <ContentBox>
         <Contents>
           <img src="/images/voicediary/InnerPeace.png" alt="" />
@@ -59,10 +81,7 @@ const VoiceDiary = () => {
           <Text>내가 쓴 일기를 음성으로 녹음할 수 있어요</Text>
         </Contents>
         <Contents>
-          <img
-            src="/images/voicediary/3NoIcon.png"
-            style={{ width: "9vw" }}
-          />
+          <img src="/images/voicediary/3NoIcon.png" style={{ width: "9vw" }} />
           <Text>
             일기는 하루에 <strong style={{ fontSize: "1.1rem" }}>3회</strong>
             까지만 작성할 수 있어요
