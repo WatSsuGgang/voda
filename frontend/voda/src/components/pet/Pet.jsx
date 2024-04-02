@@ -167,6 +167,9 @@ export default function Pet() {
         setIsEvolved(false);
         setIsEvolution(false);
         setPetStatus("normal");
+        setExp(updatedPet.exp);
+        setStage(updatedPet.stage);
+        setPetAppearance(updatedPet.petAppearance);
       }, 6000);
     } else {
       setTimeout(() => {
