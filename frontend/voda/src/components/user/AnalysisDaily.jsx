@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useStore } from "../../store/store";
+import { useStore, usePersistStore } from "../../store/store";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -27,6 +27,7 @@ const settings = {
 };
 const AnalysisDaily = ({ report }) => {
   const store = useStore();
+  const persistStore = usePersistStore();
   const days = Object.keys(report.weeklyStatics);
   const koreanEmotion = {
     joy: "기쁨",
@@ -46,7 +47,10 @@ const AnalysisDaily = ({ report }) => {
   };
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
-    <Slider {...settings}>
+    <Slider
+      {...settings}
+      // style={persistStore.darkmode ? { filter: "invert(100%)" } : {}}
+    >
       {days.map((day, index) => (
         <Container key={index}>
           {report.weeklyStatics[day].emotion === "NONE" ? (

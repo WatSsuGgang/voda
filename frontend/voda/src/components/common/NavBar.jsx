@@ -21,20 +21,23 @@ const Nav = styled.nav`
   // background-color: #fffae1;6C8F8C
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-radius: 20px 20px 0 0;
+  justify-content: space-around;
+  padding: 0.75rem 0.25rem;
+  border-radius: 1rem 1rem 0 0;
 `;
 
 const Icons = styled.div`
-  margin: 0 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
 `;
 
 const Menus = styled.div`
-  font-size: 12px;
+  font-size: 0.75rem;
 `;
 
 const NavBar = () => {
