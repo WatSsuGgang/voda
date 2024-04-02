@@ -4,8 +4,10 @@ import Header from "../../components/shop/Header";
 import CategoryBar from "../../components/shop/CategoryBar";
 import ItemList from "../../components/shop/ItemList";
 import { usePetStore } from "../../store/petStore";
+import { usePersistStore } from "../../store/store";
 import { getItem } from "../../services/item";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { useStore } from "zustand";
 
 const Page = styled.div`
   display: flex;
@@ -27,6 +29,19 @@ const TopComponents = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  background-color: white;
+`;
+
+const TopComponentsDark = styled.div`
+  display: flex;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #212426;
 `;
 
 export default function PetShopPage() {
@@ -34,6 +49,8 @@ export default function PetShopPage() {
   const [loading, setLoading] = useState(false); // 추가: 로딩 상태 관리
 
   const { currentCategory, setBoughtItems, setDisplayItems } = usePetStore();
+  const store = usePersistStore();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,10 +75,17 @@ export default function PetShopPage() {
 
   return (
     <Page>
-      <TopComponents>
-        <Header />
-        <CategoryBar />
-      </TopComponents>
+      {store.darkmode ? (
+        <TopComponentsDark>
+          <Header />
+          <CategoryBar />
+        </TopComponentsDark>
+      ) : (
+        <TopComponents>
+          <Header />
+          <CategoryBar />
+        </TopComponents>
+      )}
       {loading ? (
         <div
           style={{
