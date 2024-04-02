@@ -1,5 +1,4 @@
-import React from "react"; // eslint-disable-line no-unused-vars
-import { Link } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
 import diaryListIcon from "/images/navbar/diaryList.svg";
 import calendarIcon from "/images/navbar/calendar.svg";
@@ -8,7 +7,8 @@ import petIcon from "/images/navbar/pet.svg";
 import voiceDiaryIcon from "/images/navbar/voiceDiary.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { deleteDiary } from "../../services/voicediary";
-import { usePersistStore } from "../../store/store";
+import { usePersistStore, useStore } from "../../store/store";
+import Swal from "sweetalert2";
 const opacity = {
   diary: 0,
   voice: 0,
@@ -40,35 +40,44 @@ const Menus = styled.div`
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const store = usePersistStore();
+  const store = useStore();
+  const { darkmode } = usePersistStore();
   const handleLinkClick = async (destination) => {
     const currentPath = location.pathname;
     if (
       (currentPath === "/voice/record") |
       currentPath.includes("/voice/check/")
     ) {
-      const confirmed = window.confirm(
-        "모든 내용은 삭제됩니다. 일기를 종료하시겠습니까?"
-      );
-      if (confirmed) {
-        // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        //   // 현재 오디오 스트림을 가져옴
-        //   const mediaStream = await navigator.mediaDevices.getUserMedia({
-        //     audio: true,
-        //   });
-        //   // 오디오 스트림이 존재하면 연결된 트랙을 중지
-        //   if (mediaStream) {
-        //     const tracks = mediaStream.getTracks();
-        //     console.log("미디어 스트림", mediaStream);
-        //     console.log("track", tracks);
-        //     tracks.forEach((track) => track.stop());
-        //   }
-        // }
-        // 다이어리 삭제
-        await deleteDiary(store.diaryId);
-        // 목적지로 이동
-        navigate(destination);
-      }
+      Swal.fire({
+        title: "일기 작성을 종료하시겠습니까?",
+        text: "지금까지의 기록은 모두 삭제됩니다.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // 현재 오디오 스트림을 가져옴
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+              audio: true,
+            });
+            // 오디오 스트림이 존재하면 연결된 트랙을 중지
+            if (mediaStream) {
+              const tracks = mediaStream.getTracks();
+              console.log("미디어 스트림", mediaStream);
+              console.log("track", tracks);
+              tracks.forEach((track) => track.stop());
+            }
+          }
+          // 다이어리 삭제
+          await deleteDiary(store.diaryId);
+          // 목적지로 이동
+          navigate(destination);
+        }
+      });
     } else {
       navigate(destination);
     }
@@ -87,7 +96,7 @@ const NavBar = () => {
     <div>
       <Nav
         style={
-          store.darkmode
+          darkmode
             ? { backgroundColor: "#6C8F8C" }
             : { backgroundColor: "#fffae1" }
         }
@@ -97,7 +106,7 @@ const NavBar = () => {
             <div>
               <img
                 src={petIcon}
-                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+                style={darkmode ? { filter: "invert(100%)" } : {}}
               />
             </div>
             <Menus>펫 키우기</Menus>
@@ -108,7 +117,7 @@ const NavBar = () => {
             <div>
               <img
                 src={diaryListIcon}
-                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+                style={darkmode ? { filter: "invert(100%)" } : {}}
               />
             </div>
             <Menus>일기 목록</Menus>
@@ -119,7 +128,7 @@ const NavBar = () => {
             <div>
               <img
                 src={voiceDiaryIcon}
-                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+                style={darkmode ? { filter: "invert(100%)" } : {}}
               />
             </div>
             <Menus>일기 쓰기</Menus>
@@ -130,7 +139,7 @@ const NavBar = () => {
             <div>
               <img
                 src={calendarIcon}
-                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+                style={darkmode ? { filter: "invert(100%)" } : {}}
               />
             </div>
             <Menus>캘린더</Menus>
@@ -141,7 +150,7 @@ const NavBar = () => {
             <div>
               <img
                 src={userIcon}
-                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+                style={darkmode ? { filter: "invert(100%)" } : {}}
               />
             </div>
             <Menus>마이페이지</Menus>
