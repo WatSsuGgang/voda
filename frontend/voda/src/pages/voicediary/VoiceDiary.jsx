@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import EditAllow from "../../components/voicediary/EditAllow";
 import StartRecord from "../../components/voicediary/StartRecord";
 
@@ -21,7 +21,16 @@ const Title = styled.h1`
   font-size: 1.2rem;
   font-weight: bold;
 `;
-
+const blink = keyframes`
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+`;
+const Container = styled.div`
+  animation: ${() =>
+    css`
+      ${blink} 0.5s ease-in-out
+    `};
+`;
 const ContentBox = styled.div`
   margin-left: 5%;
 `;
@@ -43,6 +52,10 @@ const Finish = styled.div`
   font-weight: bold;
   font-size: 0.8rem;
   color: #0057ff;
+  animation: ${() =>
+    css`
+      ${blink} 3s ease-in-out
+    `};
 `;
 
 const VoiceDiary = () => {

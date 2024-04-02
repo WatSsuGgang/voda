@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useUserStore } from "../../store/userStore";
+import { usePersistStore } from "../../store/store";
 export default function BottomComponent() {
   const userStore = useUserStore();
+  const store = usePersistStore();
   const month = new Date().getMonth() + 1;
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
@@ -38,9 +40,9 @@ export default function BottomComponent() {
           to={"/user/report"}
           style={{
             textDecoration: "none",
-            color: "black",
             fontSize: "1rem",
             fontWeight: "bold",
+            color: "inherit",
           }}
         >
           <div
@@ -63,7 +65,9 @@ export default function BottomComponent() {
             </div>
 
             <IconButton>
-              <ArrowForwardIcon />
+              <ArrowForwardIcon
+                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+              />
             </IconButton>
           </div>
         </Link>

@@ -5,7 +5,7 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDate, getMonth } from "../../services/calendar";
-import useStore from "../../store/store";
+import { useStore } from "../../store/store";
 import "./styles.css"; // styles.css 파일 import
 
 const Calendar = () => {

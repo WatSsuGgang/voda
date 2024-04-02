@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { usePetStore } from "../../store/petStore";
-import useStore from "../../store/store";
+import { useStore } from "../../store/store";
 import Tooltip from "@mui/material/Tooltip";
 
 export default function Emotion() {
