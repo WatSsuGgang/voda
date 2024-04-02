@@ -53,7 +53,7 @@ export const createDiary = async (id, data) => {
     text: "일기가 작성되었습니다.",
     showCancelButton: false,
     confirmButtonText: "확인",
-    footer: '<a href="/diary">일기 확인하러 가기?</a>',
+    footer: '<a href="/diary">일기 확인하러 가기</a>',
   });
   return response;
 };

@@ -90,14 +90,14 @@ const Record = () => {
     console.log("데시벨:", decibelLevel);
 
     // 데시벨이 임계값 이하인지 확인
-    if (decibelLevel <= -30) {
+    if (decibelLevel <= -20) {
       // 예시로 임계값을 -20으로 설정
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
-      if (consecutiveSilenceTimeRef.current >= 2000) {
+      if (consecutiveSilenceTimeRef.current >= 3000) {
         // 6초 이상
         setVoiceRecognized(false); // 음성 인식이 2초 이상으로 잘 되고 있는지 구분
       }
-      if (consecutiveSilenceTimeRef.current >= 6000) {
+      if (consecutiveSilenceTimeRef.current >= 5000) {
         // 4초 이상
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
@@ -174,6 +174,18 @@ const Record = () => {
       console.error(err);
     }
   };
+  // 강제 종료
+  const terminateRecord = () => {
+    if (!aiSpeaking) {
+      stopRecording();
+      if (store.editAllow) {
+        navigate(`/voice/check/${store.diaryId}`);
+      } else {
+        fetchCreate(store.diaryId);
+      }
+    }
+  };
+
   // 사용자 녹음이 종료되면 서버에 음성 파일 보내는 함수
   const fetchRecord = async (data) => {
     try {
@@ -376,7 +388,7 @@ const Record = () => {
       >
         <Timer aiSpeaking={aiSpeaking} setSpeakingTime={setSpeakingTime} />
         <StopCircleIcon
-          onClick={() => fetchCreate(store.diaryId)}
+          onClick={terminateRecord}
           style={{ marginLeft: "3%" }}
         />
       </div>
