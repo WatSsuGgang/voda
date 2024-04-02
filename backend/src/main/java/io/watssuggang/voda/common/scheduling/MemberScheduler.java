@@ -16,7 +16,7 @@ public class MemberScheduler {
     /**
      * 사용자가 일기를 연속으로 쓴 일수를 매일 자정에 업데이트
      */
-    @Scheduled(cron = "0 0 0/1 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateMemberCountSchedule() {
         memberService.updateMemberCount();
         log.info("update member count");
