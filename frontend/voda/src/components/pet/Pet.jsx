@@ -7,7 +7,7 @@ import styled, { keyframes } from "styled-components";
 import { editPetName, levelUpPet } from "../../services/pet";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
+import { usePersistStore } from "../../store/store";
 const ModalForm = styled.div`
   display: flex;
   flex-direction: column;
@@ -97,6 +97,7 @@ const EffectTouchedAnimation = styled.img`
 `;
 
 export default function Pet() {
+  const { darkmode } = usePersistStore();
   const {
     setPetTouched,
     petMap,
@@ -295,7 +296,7 @@ export default function Pet() {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2>{name}</h2>
         <IconButton onClick={handleOpenModal}>
-          <EditIcon />
+          <EditIcon sx={darkmode ? { filter: "invert(100%)" } : {}} />
         </IconButton>
         <Modal open={openModal} onClose={handleCloseModal}>
           <ModalForm>
