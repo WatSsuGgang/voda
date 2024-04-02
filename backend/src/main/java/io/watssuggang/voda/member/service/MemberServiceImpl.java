@@ -2,7 +2,6 @@ package io.watssuggang.voda.member.service;
 
 import io.watssuggang.voda.common.enums.ItemCategory;
 import io.watssuggang.voda.common.exception.ErrorCode;
-import io.watssuggang.voda.diary.domain.Diary;
 import io.watssuggang.voda.diary.repository.DiaryRepository;
 import io.watssuggang.voda.member.domain.Member;
 import io.watssuggang.voda.member.dto.req.SignUpRequest;
@@ -38,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
     public Member findByEmail(String uid) {
 
         return memberRepository.findByMemberEmail(uid)
-                .orElseThrow(MemberNotFoundException::new);
+            .orElseThrow(MemberNotFoundException::new);
     }
 
     @Override
@@ -46,18 +45,18 @@ public class MemberServiceImpl implements MemberService {
         validExistMember(signUpRequest);
 
         Member addMember = Member.builder()
-                .memberName(signUpRequest.getNickname())
-                .provider(signUpRequest.getProvider())
-                .memberEmail(signUpRequest.getEmail())
-                .userRole("USER")
-                .memberDiaryCount(0)
-                .memberPoint(10)
-                .build();
+            .memberName(signUpRequest.getNickname())
+            .provider(signUpRequest.getProvider())
+            .memberEmail(signUpRequest.getEmail())
+            .userRole("USER")
+            .memberDiaryCount(0)
+            .memberPoint(10)
+            .build();
 
         Pet pet = Pet.builder()
-                .petLastFeed(LocalDateTime.now().minusHours(24))
-                .petName("기본펫")
-                .build();
+            .petLastFeed(LocalDateTime.now().minusHours(24))
+            .petName("기본펫")
+            .build();
 
         addMember.addPet(pet);
         Member member = memberRepository.save(addMember);
@@ -66,8 +65,8 @@ public class MemberServiceImpl implements MemberService {
         Arrays.stream(ItemCategory.values()).forEach(itemCategory -> {
             Own item = Own.of();
             item.purchase(addMember, itemRepository.findByItemCategoryAndItemPrice(itemCategory, 0)
-                    .stream().findFirst()
-                    .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND)));
+                .stream().findFirst()
+                .orElseThrow(() -> new ItemException(ErrorCode.ITEM_NOT_FOUND)));
             item.use();
             ownRepository.save(item);
         });
@@ -77,8 +76,8 @@ public class MemberServiceImpl implements MemberService {
 
     private void validExistMember(SignUpRequest signUpRequest) {
         if (memberRepository.existsByMemberEmailAndProvider(
-                signUpRequest.getEmail(),
-                signUpRequest.getProvider()
+            signUpRequest.getEmail(),
+            signUpRequest.getProvider()
         )) {
             throw new MemberException(ErrorCode.DUPLICATE_MEMBER);
         }
@@ -94,13 +93,14 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = memberRepository.findAll();
 
         members.forEach(member -> {
-            Diary diary = diaryRepository.findByMemberAndCreatedAtLast(member.getMemberId());
-            if (diary == null) {
+            LocalDate date = diaryRepository.findByMemberAndCreatedAtLast(member.getMemberId());
+            if (date == null) {
                 return;
             }
-            LocalDate lastDiaryDate = diary.getCreatedAt().toLocalDate();
 
-            if (now.minusDays(1).equals(lastDiaryDate)) {
+            log.info(date.toString());
+            if (now.minusDays(1).equals(date)) {
+                log.info("called");
                 member.increaseMemberDiaryCount();
             } else {
                 member.setMemberDiaryCount(0);
