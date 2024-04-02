@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware"; // 디버깅 용도
+import { persist, createJSONStorage, devtools } from "zustand/middleware"; // 디버깅 용도
 
-const store = (set, get) => ({
+export const useStore = create((set, get) => ({
   emotions: {
     ANGER: "Smilies/Enraged%20Face.png",
     JOY: "Smilies/Grinning%20Face%20with%20Smiling%20Eyes.png",
@@ -17,10 +17,19 @@ const store = (set, get) => ({
   setDiaryId: (value) => {
     set({ diaryId: value });
   },
-});
+}));
 
-const useStore = create(
-  process.env.NODE_ENV !== "production" ? devtools(store) : store
+export const usePersistStore = create(
+  persist(
+    (set, get) => ({
+      darkmode: false,
+      setDarkmode: () => {
+        set((state) => ({ darkmode: !state.darkmode }));
+      },
+    }),
+    {
+      name: "darkmode",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
 );
-
-export default useStore;

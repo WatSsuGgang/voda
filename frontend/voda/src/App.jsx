@@ -19,8 +19,10 @@ import Introduction from "./pages/login/Introduction";
 import Login from "./pages/login/Login";
 import Nickname from "./pages/login/Nickname";
 import LoginSuccess from "./pages/login/LoginSuccess";
-import styled from "styled-components";
-
+import styled, { ThemeProvider } from "styled-components";
+import { GlobalStyle } from "./theme/global";
+import { darkTheme, lightTheme } from "./theme/theme";
+import { usePersistStore } from "./store/store";
 const Wrapper = styled.div`
   left: 0;
   right: 0;
@@ -29,43 +31,51 @@ const Wrapper = styled.div`
 `;
 
 function App() {
+  const store = usePersistStore();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     setIsLoggedIn(localStorage.getItem("accessToken") !== null);
   }, [isLoggedIn]);
+
   if (isLoggedIn) {
     return (
-      <div>
-        <Routes>
-          <Route path="/" element={<Start />}></Route>
-          <Route path="/pet" element={<PetPage />}></Route>
-          <Route path="/pet/shop" element={<PetShopPage />}></Route>
-          <Route path="/diary" element={<DiaryList />}></Route>
-          <Route path="/diary/:id" element={<DiaryDetail />}></Route>
-          <Route path="/calendar" element={<CalendarPage />}></Route>
-          <Route path="/user" element={<User />}></Route>
-          <Route path="/user/report" element={<UserReport />}></Route>
-          <Route path="/voice" element={<VoiceDiary />}></Route>
-          <Route path="/voice/record" element={<Record />}></Route>
-          <Route path="/voice/check/:id" element={<CheckChat />}></Route>
-          <Route path="/login-success/" element={<LoginSuccess />}></Route>
-        </Routes>
-        <Wrapper>
-          <NavBar />
-        </Wrapper>
-      </div>
+      <ThemeProvider theme={store.darkmode ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <div>
+          <Routes>
+            <Route path="/" element={<Start />}></Route>
+            <Route path="/pet" element={<PetPage />}></Route>
+            <Route path="/pet/shop" element={<PetShopPage />}></Route>
+            <Route path="/diary" element={<DiaryList />}></Route>
+            <Route path="/diary/:id" element={<DiaryDetail />}></Route>
+            <Route path="/calendar" element={<CalendarPage />}></Route>
+            <Route path="/user" element={<User />}></Route>
+            <Route path="/user/report" element={<UserReport />}></Route>
+            <Route path="/voice" element={<VoiceDiary />}></Route>
+            <Route path="/voice/record" element={<Record />}></Route>
+            <Route path="/voice/check/:id" element={<CheckChat />}></Route>
+            <Route path="/login-success/" element={<LoginSuccess />}></Route>
+          </Routes>
+          <Wrapper>
+            <NavBar />
+          </Wrapper>
+        </div>
+      </ThemeProvider>
     );
   } else {
     return (
-      <div>
-        <Routes>
-          <Route path="/" element={<Start />}></Route>
-          <Route path="/intro" element={<Introduction />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/login/nickname" element={<Nickname />}></Route>
-          <Route path="/login-success" element={<LoginSuccess />}></Route>
-        </Routes>
-      </div>
+      <ThemeProvider theme={store.darkmode ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <div>
+          <Routes>
+            <Route path="/" element={<Start />}></Route>
+            <Route path="/intro" element={<Introduction />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/login/nickname" element={<Nickname />}></Route>
+            <Route path="/login-success" element={<LoginSuccess />}></Route>
+          </Routes>
+        </div>
+      </ThemeProvider>
     );
   }
 }

@@ -1,7 +1,5 @@
-import React from "react"; // eslint-disable-line no-unused-vars
+import React from "react";
 import styled from "styled-components";
-// import useStore from "../../store/store";
-// import Button from '@mui/material';
 
 const Button = styled.button({
   display: "flex",

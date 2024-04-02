@@ -1,6 +1,7 @@
 import { formPostData, request } from "./api";
 import { HTTPMethods } from "./api";
 import { HTTPStatusCodes } from "./api";
+import Swal from "sweetalert2";
 
 // User
 // 일기 작성
@@ -46,7 +47,14 @@ export const createDiary = async (id, data) => {
   const diaryData = { diaryId: id, talk_list: transformedData };
   const url = "/diary/create";
   const response = await request(HTTPMethods.POST, url, diaryData);
-  alert("일기 생성이 완료되었습니다");
+
+  Swal.fire({
+    title: "생성 완료",
+    text: "일기가 작성되었습니다.",
+    showCancelButton: false,
+    confirmButtonText: "확인",
+    footer: '<a href="/diary">일기 확인하러 가기?</a>',
+  });
   return response;
 };
 

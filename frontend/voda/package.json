@@ -35,6 +35,7 @@
     "react-spinners": "^0.13.8",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.8",
+    "sweetalert2": "^11.10.7",
     "workbox-precaching": "^7.0.0",
     "zustand": "^4.5.2"
   },

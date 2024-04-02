@@ -7,6 +7,10 @@ import { Modal } from "@mui/material";
 import { editUserInfo } from "../../services/mypage";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { usePersistStore } from "../../store/store";
+import Switch from "@mui/material/Switch";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 const ModalForm = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,7 +26,14 @@ const ModalForm = styled.div`
   background-color: white;
   padding: 1rem;
 `;
+const Box = styled.div`
+  margin: 0 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 export default function TopComponent() {
+  const store = usePersistStore();
   const userStore = useUserStore();
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -56,13 +67,23 @@ export default function TopComponent() {
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "end",
+          justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
         }}
       >
+        <Box>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography>Off</Typography>
+            <Switch checked={store.darkmode} onChange={store.setDarkmode} />
+            <Typography>On</Typography>
+          </Stack>
+        </Box>
+
         <IconButton onClick={handleLogout}>
-          <LogoutIcon />
+          <LogoutIcon
+            style={store.darkmode ? { filter: "invert(100%)" } : {}}
+          />
         </IconButton>
       </div>
       <div>

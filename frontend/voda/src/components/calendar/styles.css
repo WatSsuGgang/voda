@@ -11,7 +11,7 @@
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 7일을 나타내는 그리드 */
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -31,7 +31,6 @@
 .weekday {
   text-align: center;
   font-weight: bold;
-  color: #333;
   flex-grow: 1; /* 요일 칸이 그리드에 균일하게 들어가도록 설정 */
 }
 
@@ -48,7 +47,7 @@
 }
 
 .calendar-day {
-  background-color: #fff;
+  /* background-color: #fff; */
   position: relative;
   text-align: center;
   cursor: pointer;

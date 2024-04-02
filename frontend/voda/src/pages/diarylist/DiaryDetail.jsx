@@ -1,17 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router";
-import useStore from "../../store/store";
+import { useStore, usePersistStore } from "../../store/store";
 import styled from "styled-components";
 import save from "/images/diarylist/save.svg";
 import playbutton from "/images/diarylist/playbutton.svg";
 import { getDiaryDetail } from "../../services/diarylist";
 import LodaingSpinner from "../../components/common/LoadingSpinner";
-const Title = styled.h3`
-  color: #486b73;
-`;
 
 const Container = styled.div`
-  background-color: #f1f1f1;
   min-width: 90vw;
   min-height: 30vh;
   margin: 0 10px;
@@ -52,6 +48,7 @@ const DiaryDetail = () => {
   }, [id]); // id가 변경될 때마다 다이어리를 다시 가져옴
 
   const store = useStore();
+  const { darkmode } = usePersistStore();
   const emotionImageUrl = store.emotions[diary?.diaryEmotion];
   const audioContextRef = useRef(null);
   const playNextAudio = () => {
@@ -104,17 +101,23 @@ const DiaryDetail = () => {
           justifyContent: "center",
         }}
       >
-        <Title>
+        <h3>
           {diary.writerName}님의 {parseInt(diary.createdAt.slice(5, 7))}/
           {parseInt(diary.createdAt.slice(8, 10))}
           일기
-        </Title>
+        </h3>
         <img
           src={`${EMOJI_URL}/${emotionImageUrl}`}
           style={{ marginLeft: "1rem", height: "5vh", width: "10vw" }}
         />
       </div>
-      <Container>
+      <Container
+        style={
+          darkmode
+            ? { backgroundColor: "#545454" }
+            : { backgroundColor: "#f1f1f1" }
+        }
+      >
         <div
           style={{
             padding: "1rem",
@@ -143,18 +146,24 @@ const DiaryDetail = () => {
                     ?.fileUrl
                 )
               }
+              style={darkmode ? { filter: "invert(100%)" } : {}}
             />
           </div>
           <div>{diary.createdAt.slice(0, 10)}</div>
         </div>
         {/* 일기 이미지 */}
         <div style={{ display: "flex", justifyContent: "center" }}>
-        <img
+          <img
             src={
               diary.diaryFiles.find((file) => file.fileType === "WEBP")?.fileUrl
             }
             onContextMenu={(e) => e.preventDefault()}
-            style={{ width: "80%", height: "50%", borderRadius: "10%", WebkitTouchCallout: 'none' }}
+            style={{
+              width: "80%",
+              height: "50%",
+              borderRadius: "10%",
+              WebkitTouchCallout: "none",
+            }}
           />
         </div>
         {/* 일기 내용 */}
