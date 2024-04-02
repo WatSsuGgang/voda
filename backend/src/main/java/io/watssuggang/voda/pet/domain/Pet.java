@@ -40,7 +40,7 @@ public class Pet extends BaseEntity {
 
     private LocalDateTime petLastFeed = LocalDateTime.now();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id")
     private Member member;
 

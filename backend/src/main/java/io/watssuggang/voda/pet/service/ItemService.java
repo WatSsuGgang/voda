@@ -53,9 +53,7 @@ public class ItemService {
     public StoreResponse getAllItemByCategory(SecurityUserDto userDto, String category) {
         List<? extends Item> itemNotInOwn = itemQueryRepository.findAllItemNotInOwn(
                 userDto.getMemberId(), category);
-        List<Own> ownItems = ownRepository.findAllByMember_MemberId(
-                userDto.getMemberId());
-
+        List<Own> ownItems = itemQueryRepository.findOwnItem(userDto.getMemberId());
         return StoreResponse.of(
                 ownItems.stream().map(OwnResponse::of).toList(),
                 itemNotInOwn.stream().map(ItemResponse::of).toList()
