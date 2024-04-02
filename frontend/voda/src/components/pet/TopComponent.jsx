@@ -11,7 +11,7 @@ export default function TopComponent() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "end",
-        gap: "1rem",
+        gap: "0.25rem",
       }}
     >
       <h4 style={{ margin: 0 }}>{nickname}님</h4>
