@@ -101,7 +101,7 @@ const Login = () => {
             width: "3rem",
           }}
         />
-        <img
+        {/* <img
           src={btn_naver}
           alt=""
           id="naver"
@@ -110,7 +110,7 @@ const Login = () => {
             width: "3rem",
             borderRadius: "100%",
           }}
-        />
+        /> */}
       </ButtonContainer>
     </div>
   );

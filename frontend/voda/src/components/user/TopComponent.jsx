@@ -44,6 +44,8 @@ export default function TopComponent() {
   const [isNewNameEmpty, setIsNewNameEmpty] = useState(false);
   const handleLogout = async () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("darkmode");
+    sessionStorage.clear();
     window.location.replace("/");
   };
   function newNameChangeHandler(e) {
