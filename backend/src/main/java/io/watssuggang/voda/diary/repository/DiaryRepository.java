@@ -11,8 +11,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer>, DiaryCus
     @Query("SELECT COUNT(d) FROM Diary d WHERE d.member.pet.petId = :petId AND d.createdAt >= :createdAt")
     Integer countDiaryByPetIdAndAfterToday(Integer petId, LocalDateTime createdAt);
 
-    @Query("SELECT d FROM Diary d WHERE d.member.pet.petId=:petId")
-    List<Diary> findAllByPetId(Integer petId);
+    List<Diary> findAllByMember_MemberId(Integer memberId);
 
     @Query("SELECT d FROM Diary d WHERE d.member.memberId = :memberId AND MONTH(d.createdAt) = MONTH (CURRENT_DATE()) AND YEAR(d.createdAt) = YEAR(CURRENT_DATE())")
     List<Diary> findAllByMemberAndCreatedAtAfterCurrentMonth(Integer memberId);
