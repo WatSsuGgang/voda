@@ -14,7 +14,7 @@ import {
   getTalkList,
   deleteDiary,
 } from "../../services/voicediary"; // api 함수 불러오기
-import { useStore } from "../../store/store";
+import { useStore, usePersistStore } from "../../store/store";
 const Title = styled.h1`
   text-align: center;
   font-size: 1.2rem;
@@ -22,6 +22,7 @@ const Title = styled.h1`
 `;
 
 const Record = () => {
+  const { darkmode } = usePersistStore();
   const navigate = useNavigate();
   const store = useStore();
   const [aiSpeaking, setAiSpeaking] = useState(true); // ai가 말하는 중인지 구분
@@ -267,7 +268,7 @@ const Record = () => {
               requestIdRef.current = requestAnimationFrame(draw);
               analyserRef.current.getFloatFrequencyData(dataArray);
               // console.log("데시벨", dataArray);
-              canvasCtx.fillStyle = "rgb(255, 255, 255)";
+              canvasCtx.fillStyle = darkmode ? "#212426" : "rgb(255, 255, 255)";
               canvasCtx.fillRect(0, 0, width, height);
 
               // 주파수 데이터가 부족한 경우 캔버스가 비어 보이지 않도록 barWidth를 크게 표현하기위해 2.5를 곱해줍니다.
