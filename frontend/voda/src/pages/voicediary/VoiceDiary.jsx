@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import EditAllow from "../../components/voicediary/EditAllow";
 import StartRecord from "../../components/voicediary/StartRecord";
 const Title = styled.h1`
@@ -8,7 +8,16 @@ const Title = styled.h1`
   font-size: 1.2rem;
   font-weight: bold;
 `;
-
+const blink = keyframes`
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+`;
+const Container = styled.div`
+  animation: ${() =>
+    css`
+      ${blink} 0.5s ease-in-out
+    `};
+`;
 const ContentBox = styled.div`
   margin-left: 5%;
   margin-top: 20%;
@@ -31,11 +40,15 @@ const Finish = styled.div`
   font-weight: bold;
   font-size: 0.8rem;
   color: #0057ff;
+  animation: ${() =>
+    css`
+      ${blink} 3s ease-in-out
+    `};
 `;
 
 const VoiceDiary = () => {
   return (
-    <div>
+    <Container>
       <Title>오늘의 일기를 작성해보세요</Title>
       <ContentBox>
         <Contents>
@@ -59,10 +72,7 @@ const VoiceDiary = () => {
           <Text>내가 쓴 일기를 음성으로 녹음할 수 있어요</Text>
         </Contents>
         <Contents>
-          <img
-            src="/images/voicediary/3NoIcon.png"
-            style={{ width: "9vw" }}
-          />
+          <img src="/images/voicediary/3NoIcon.png" style={{ width: "9vw" }} />
           <Text>
             일기는 하루에 <strong style={{ fontSize: "1.1rem" }}>3회</strong>
             까지만 작성할 수 있어요
@@ -82,7 +92,7 @@ const VoiceDiary = () => {
       <div style={{ margin: "5%", textAlign: "center" }}>
         <StartRecord />
       </div>
-    </div>
+    </Container>
   );
 };
 
