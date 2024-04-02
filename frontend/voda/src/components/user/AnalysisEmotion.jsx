@@ -19,6 +19,13 @@ const AnalysisEmotion = ({ report }) => {
     fear: "두려움",
     curiosity: "호기심",
   };
+  const emotionColor = {
+    joy: "rgb(238, 238, 142)", // 파스텔 노랑
+    anger: "rgb(232, 130, 130)", // 파스텔 분홍
+    sadness: "rgb(147, 179, 241)", // 파스텔 파랑
+    fear: "rgb(163, 163, 163)", // 파스텔 회색
+    curiosity: "rgb(146, 228, 201)", // 파스텔 청록
+  };
   let frequentEmotion = "";
   let total = 0;
   let maxValue = 0;
@@ -30,7 +37,8 @@ const AnalysisEmotion = ({ report }) => {
     }
     total += report.emotionStatics[key];
     emotionUrl.push({
-      emotion: store.emotions[key.toUpperCase()],
+      url: store.emotions[key.toUpperCase()],
+      emotion: key,
       value: report.emotionStatics[key],
     });
   }
@@ -60,14 +68,14 @@ const AnalysisEmotion = ({ report }) => {
               }}
             >
               <img
-                src={`${EMOJI_URL}/${item.emotion}`}
+                src={`${EMOJI_URL}/${item.url}`}
                 alt="emotion"
                 style={{ width: "20%" }}
               />
               <div
                 style={{
                   width: `${percent + 20}%`,
-                  backgroundColor: "#FFE68E",
+                  backgroundColor: `${emotionColor[item.emotion]}`,
                   textAlign: "center",
                   borderRadius: "10px",
                   margin: "0 8%",

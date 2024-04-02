@@ -6,13 +6,14 @@ import Pet from "../../components/pet/Pet";
 import PetTalk from "../../components/pet/PetTalk";
 import { getPet } from "../../services/pet";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
-import { CircularProgress } from "@mui/material";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { getUserInfo } from "../../services/mypage";
 import { useUserStore } from "../../store/userStore";
 
 const PetPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {
+    petMap,
     setUsing,
     setPetTouched,
     setEmotion,
@@ -45,6 +46,8 @@ const PetPage = () => {
           itemId: data.using.effect.item.itemId,
           ownId: data.using.effect.ownId,
         },
+        name: `${data.pet.name}`,
+        petImageUrl: `${petMap[data.pet.stage][data.pet.petAppearance]}`,
       });
       setEmotion(data.pet.emotion);
       setExp(data.pet.exp);
@@ -81,7 +84,7 @@ const PetPage = () => {
         }}
       >
         {isLoading ? (
-          <CircularProgress />
+          <LoadingSpinner />
         ) : (
           <>
             <div

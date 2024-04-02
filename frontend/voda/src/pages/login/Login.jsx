@@ -14,6 +14,8 @@ const blink = keyframes`
 const ImageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 65%;
+  width: 65%;
   justify-content: center;
   align-items: center;
   animation: ${() =>
@@ -53,15 +55,22 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <ImageContainer>
         <img
           src={vodaLogo}
           alt="logo"
           style={{
             marginTop: "5rem",
-            height: "65%",
-            width: "65%",
+            height: "100%",
+            width: "100%",
           }}
         />
         <img
@@ -103,7 +112,7 @@ const Login = () => {
           }}
         />
       </ButtonContainer>
-    </>
+    </div>
   );
 };
 
