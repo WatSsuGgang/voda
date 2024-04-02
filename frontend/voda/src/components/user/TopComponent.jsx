@@ -12,6 +12,8 @@ import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+
 const ModalForm = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,7 +30,6 @@ const ModalForm = styled.div`
   padding: 1rem;
 `;
 const Box = styled.div`
-  margin: 0 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -75,9 +76,8 @@ export default function TopComponent() {
       >
         <Box>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Typography>Off</Typography>
+            {store.darkmode ? <DarkModeIcon /> : <LightModeIcon />}
             <Switch checked={store.darkmode} onChange={store.setDarkmode} />
-            <Typography>On</Typography>
           </Stack>
         </Box>
 
