@@ -5,7 +5,6 @@ import AnalysisPet from "./AnalysisPet";
 import AnalysisCount from "./AnalysisCount";
 import NotFound from "./NotFound";
 import { SectionsContainer, Section } from "react-fullpage";
-
 const Analysis = ({ report }) => {
   let options = {
     activeClass: "active", // the class that is appended to the sections links
