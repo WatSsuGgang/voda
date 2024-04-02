@@ -6,6 +6,7 @@ import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
 import PlingSound from "/Pling.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
+import Swal from "sweetalert2";
 import {
   initDiary,
   recordDiary,
@@ -45,7 +46,14 @@ const Record = () => {
         const res = await initDiary();
         console.log("최초 응답:", res.data);
         if (res.data.terminate) {
-          window.alert("일기는 하루 3회까지만 작성할 수 있습니다.");
+          Swal.fire({
+            title: "일기 횟수 제한",
+            html: `
+            일기는 하루에 3회까지만 작성할 수 있습니다.
+            `,
+            showCancelButton: false,
+            confirmButtonText: "확인",
+          });
           navigate("/diarylist");
         } else {
           setAiAudioURL(res.data.ttsUrl);
@@ -81,7 +89,7 @@ const Record = () => {
     console.log("데시벨:", decibelLevel);
 
     // 데시벨이 임계값 이하인지 확인
-    if (decibelLevel <= -30) {
+    if (decibelLevel <= -10) {
       // 예시로 임계값을 -20으로 설정
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
       if (consecutiveSilenceTimeRef.current >= 2000) {
@@ -147,7 +155,17 @@ const Record = () => {
     try {
       stopRecording();
       navigate("/pet");
-      window.alert("일기를 생성 중입니다. 생성이 완료되면 알려드릴게요");
+      Swal.fire({
+        position: top,
+        icon: "success",
+        title: "일기 생성",
+        html: `
+        생성이 완료되면 알려드릴게요.
+        `,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
       const talkRes = await fetchTalkList(diaryId);
       const res = await createDiary(diaryId, talkRes.data.talk_list);
       console.log("일기 생성:", res);
@@ -166,7 +184,14 @@ const Record = () => {
       if (res.data.terminate) {
         // 10회 이상으로 terminate가 된 경우
         if (chatCount === 10) {
-          alert("최대 10번까지만 대화를 주고 받을 수 있습니다.");
+          Swal.fire({
+            title: "대화 횟수 초과",
+            html: `
+            일기 생성이 완료되면 알려드릴게요.
+            `,
+            showConfirmButton: false,
+            timer: 2000,
+          });
         }
         // 대화 내용 편집 허용이면 대화 수정 페이지로 렌더링 시켜야 한다.
         if (store.editAllow) {
