@@ -15,7 +15,7 @@ const LoadingReport = () => {
         {month}월 일기 분석중 ...
       </div>
       <img
-        src={`${EMOJI_URL}/People%20with%20professions/Woman%20Technologist%20Light%20Skin%20Tone.png`}
+        src={`${EMOJI_URL}/People/Man%20Technologist.png`}
         alt="Technologist"
         width="300"
         height="300"
