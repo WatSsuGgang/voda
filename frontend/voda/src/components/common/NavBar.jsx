@@ -8,7 +8,7 @@ import petIcon from "/images/navbar/pet.svg";
 import voiceDiaryIcon from "/images/navbar/voiceDiary.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { deleteDiary } from "../../services/voicediary";
-import useStore from "../../store/store";
+import { usePersistStore } from "../../store/store";
 const opacity = {
   diary: 0,
   voice: 0,
@@ -18,7 +18,7 @@ const opacity = {
 };
 
 const Nav = styled.nav`
-  background-color: #fffae1;
+  // background-color: #fffae1;6C8F8C
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,7 +40,7 @@ const Menus = styled.div`
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const store = useStore();
+  const store = usePersistStore();
   const handleLinkClick = async (destination) => {
     const currentPath = location.pathname;
     if (
@@ -85,11 +85,20 @@ const NavBar = () => {
 
   return (
     <div>
-      <Nav>
+      <Nav
+        style={
+          store.darkmode
+            ? { backgroundColor: "#6C8F8C" }
+            : { backgroundColor: "#fffae1" }
+        }
+      >
         <div onClick={() => handleLinkClick("/pet")}>
           <Icons style={{ opacity: opacity.pet }}>
             <div>
-              <img src={petIcon} alt="" />
+              <img
+                src={petIcon}
+                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+              />
             </div>
             <Menus>펫 키우기</Menus>
           </Icons>
@@ -97,7 +106,10 @@ const NavBar = () => {
         <div onClick={() => handleLinkClick("/diary")}>
           <Icons style={{ opacity: opacity.diary }}>
             <div>
-              <img src={diaryListIcon} alt="" />
+              <img
+                src={diaryListIcon}
+                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+              />
             </div>
             <Menus>일기 목록</Menus>
           </Icons>
@@ -105,7 +117,10 @@ const NavBar = () => {
         <div onClick={() => handleLinkClick("/voice")}>
           <Icons style={{ opacity: opacity.voice }}>
             <div>
-              <img src={voiceDiaryIcon} alt="" />
+              <img
+                src={voiceDiaryIcon}
+                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+              />
             </div>
             <Menus>일기 쓰기</Menus>
           </Icons>
@@ -113,7 +128,10 @@ const NavBar = () => {
         <div onClick={() => handleLinkClick("/calendar")}>
           <Icons style={{ opacity: opacity.calendar }}>
             <div>
-              <img src={calendarIcon} alt="" />
+              <img
+                src={calendarIcon}
+                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+              />
             </div>
             <Menus>캘린더</Menus>
           </Icons>
@@ -121,7 +139,10 @@ const NavBar = () => {
         <div onClick={() => handleLinkClick("/user")}>
           <Icons style={{ opacity: opacity.user }}>
             <div>
-              <img src={userIcon} alt="" />
+              <img
+                src={userIcon}
+                style={store.darkmode ? { filter: "invert(100%)" } : {}}
+              />
             </div>
             <Menus>마이페이지</Menus>
           </Icons>

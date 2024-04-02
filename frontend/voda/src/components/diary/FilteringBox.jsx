@@ -9,7 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import "dayjs/locale/ko";
-
+import { usePersistStore } from "../../store/store";
 const Container = styled.div`
   display: flex;
   justify-content: end;
@@ -50,6 +50,7 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
     setEndDate(end);
     setEmotion(emo);
   };
+  const store = usePersistStore();
   return (
     <Container>
       <Search>
