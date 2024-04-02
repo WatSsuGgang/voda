@@ -73,7 +73,7 @@ public class PetService {
 
             if (beforePetStage != status) {
                 if (status == 3) {
-                    PetAppearance evolution = evolution(pet.getPetId());
+                    PetAppearance evolution = evolution(userDto.getMemberId());
                     pet.updateAppearance(evolution);
                 } else if (status == 2) {
                     pet.updateAppearance(PetAppearance.CHICK);
@@ -89,8 +89,8 @@ public class PetService {
      * 전체 일기에서 가장 많은, 가장 최신의 감정 하나를 가져온다. 해당 감정에 따라 진화의 조건이 바뀐다.
      * </p>
      */
-    public PetAppearance evolution(Integer petId) {
-        List<Diary> diaries = diaryRepository.findAllByPetId(petId);
+    public PetAppearance evolution(Integer memberId) {
+        List<Diary> diaries = diaryRepository.findAllByMember_MemberId(memberId);
 
         // 감정별 일기 최신 값
         Map<Emotion, Optional<Diary>> latestDiariesByEmotion = diaries.stream()
