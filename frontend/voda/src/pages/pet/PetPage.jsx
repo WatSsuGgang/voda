@@ -6,7 +6,7 @@ import Pet from "../../components/pet/Pet";
 import PetTalk from "../../components/pet/PetTalk";
 import { getPet } from "../../services/pet";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
-import { CircularProgress } from "@mui/material";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { getUserInfo } from "../../services/mypage";
 import { useUserStore } from "../../store/userStore";
 
@@ -84,7 +84,7 @@ const PetPage = () => {
         }}
       >
         {isLoading ? (
-          <CircularProgress />
+          <LoadingSpinner />
         ) : (
           <>
             <div

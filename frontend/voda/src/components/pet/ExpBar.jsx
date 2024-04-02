@@ -10,12 +10,14 @@ const Bar = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
 `;
 
 const ExpBarFill = styled.div`
-  height: 85%;
+  height: 90%;
   width: ${({ exp }) => `${exp}%`};
-  background-color: #b8eea4;
+  background: linear-gradient(90deg, #80cbba 0%, #b8eea4 100%);
+
   border-radius: 1rem;
   transition: width 0.5s ease-in-out; /* 경험치가 변경될 때 애니메이션 효과 추가 */
 `;
