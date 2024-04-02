@@ -21,6 +21,7 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
+    maven{url 'https://jitpack.io'}
 }
 
 ext {
@@ -70,6 +71,8 @@ dependencies {
     // MongoDB
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
+    // QueryCountInterceptor
+    implementation 'com.github.sogorae:jpa-query-counter:1.0.4'
 }
 
 tasks.named('test') {
