@@ -56,6 +56,13 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
       <Search>
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
           <DatePicker
+            sx={
+              store.darkmode
+                ? {
+                    filter: "invert(100%)",
+                  }
+                : {}
+            }
             label="시작"
             slotProps={{
               textField: {
@@ -70,6 +77,13 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
       <Search>
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
           <DatePicker
+            sx={
+              store.darkmode
+                ? {
+                    filter: "invert(100%)",
+                  }
+                : {}
+            }
             label="종료"
             slotProps={{
               textField: {
@@ -82,7 +96,17 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
         </LocalizationProvider>
       </Search>
       <Search>
-        <FormControl size="small" style={{ minWidth: "20vw" }}>
+        <FormControl
+          sx={
+            store.darkmode
+              ? {
+                  filter: "invert(100%)",
+                }
+              : {}
+          }
+          size="small"
+          style={{ minWidth: "20vw" }}
+        >
           <InputLabel id="demo-simple-select-filled-label">감정</InputLabel>
           <Select
             labelId="demo-simple-select-filled-label"

@@ -11,6 +11,7 @@ import { usePersistStore } from "../../store/store";
 import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 const ModalForm = styled.div`
   display: flex;
   flex-direction: column;
