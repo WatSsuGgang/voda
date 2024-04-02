@@ -90,14 +90,14 @@ const Record = () => {
     console.log("데시벨:", decibelLevel);
 
     // 데시벨이 임계값 이하인지 확인
-    if (decibelLevel <= -10) {
+    if (decibelLevel <= -30) {
       // 예시로 임계값을 -20으로 설정
       consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
       if (consecutiveSilenceTimeRef.current >= 2000) {
         // 6초 이상
         setVoiceRecognized(false); // 음성 인식이 2초 이상으로 잘 되고 있는지 구분
       }
-      if (consecutiveSilenceTimeRef.current >= 4000) {
+      if (consecutiveSilenceTimeRef.current >= 6000) {
         // 4초 이상
         // 일정 시간 동안 데시벨이 임계값 이하로 유지되었을 때 녹음 중지
         stopRecording();
