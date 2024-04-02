@@ -4,12 +4,20 @@ import { useStore, usePersistStore } from "../../store/store";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { usePersistStore } from "../../store/store";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 25% auto;
 `;
+const StyledSlider = styled(Slider)`
+  .slick-dots {
+    ${({ darkMode }) => darkMode && "filter: invert(100%)"};
+  }
+`;
+
 const settings = {
   dots: true,
   lazyLoad: true,
@@ -26,6 +34,7 @@ const settings = {
   cssEase: "linear",
 };
 const AnalysisDaily = ({ report }) => {
+  const { darkmode } = usePersistStore();
   const store = useStore();
   const persistStore = usePersistStore();
   const days = Object.keys(report.weeklyStatics);
@@ -47,10 +56,7 @@ const AnalysisDaily = ({ report }) => {
   };
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
-    <Slider
-      {...settings}
-      // style={persistStore.darkmode ? { filter: "invert(100%)" } : {}}
-    >
+    <StyledSlider {...settings} darkMode={darkmode}>
       {days.map((day, index) => (
         <Container key={index}>
           {report.weeklyStatics[day].emotion === "NONE" ? (
@@ -125,7 +131,7 @@ const AnalysisDaily = ({ report }) => {
           )}
         </Container>
       ))}
-    </Slider>
+    </StyledSlider>
   );
 };
 
