@@ -150,7 +150,6 @@ export default function Pet() {
     setName(updatedPet.name);
     setLevel(updatedPet.level);
     setEmotion(updatedPet.emotion);
-    setExp(updatedPet.exp);
     setIsFeed(updatedPet.isFeed);
     setPetId(updatedPet.petId);
     setIsEvolution(updatedPet.isEvolution);
@@ -170,8 +169,11 @@ export default function Pet() {
         setPetStatus("normal");
       }, 6000);
     } else {
-      setStage(updatedPet.stage);
-      setPetAppearance(updatedPet.petAppearance);
+      setTimeout(() => {
+        setExp(updatedPet.exp);
+        setStage(updatedPet.stage);
+        setPetAppearance(updatedPet.petAppearance);
+      }, 500);
     }
   }
 

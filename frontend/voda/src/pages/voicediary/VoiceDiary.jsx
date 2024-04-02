@@ -2,6 +2,19 @@ import React from "react";
 import styled, { keyframes, css } from "styled-components";
 import EditAllow from "../../components/voicediary/EditAllow";
 import StartRecord from "../../components/voicediary/StartRecord";
+
+const TitleContainer = styled.div`
+  margin-top: 10%;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+`;
+
 const Title = styled.h1`
   margin-top: 10%;
   text-align: center;
@@ -20,7 +33,6 @@ const Container = styled.div`
 `;
 const ContentBox = styled.div`
   margin-left: 5%;
-  margin-top: 20%;
 `;
 
 const Contents = styled.div`
@@ -47,9 +59,19 @@ const Finish = styled.div`
 `;
 
 const VoiceDiary = () => {
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   return (
-    <Container>
-      <Title>오늘의 일기를 작성해보세요</Title>
+    <div>
+      <TitleContainer>
+        <img
+          src={`${EMOJI_URL}/Objects/Microphone.png`}
+          style={{
+            width: "1.5rem",
+            height: "1.5rem",
+          }}
+        />
+        <Title style={{ margin: 0 }}>오늘의 일기를 작성해보세요</Title>
+      </TitleContainer>{" "}
       <ContentBox>
         <Contents>
           <img src="/images/voicediary/InnerPeace.png" alt="" />
@@ -92,7 +114,7 @@ const VoiceDiary = () => {
       <div style={{ margin: "5%", textAlign: "center" }}>
         <StartRecord />
       </div>
-    </Container>
+    </div>
   );
 };
 

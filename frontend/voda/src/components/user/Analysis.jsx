@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import AnalysisDaily from "./AnalysisDaily";
 import AnalysisEmotion from "./AnalysisEmotion";
 import AnalysisPet from "./AnalysisPet";

@@ -4,16 +4,33 @@ import styled from "styled-components";
 import FilteringBox from "../../components/diary/FilteringBox";
 import FilterdDiaryList from "../../components/diary/FilterdDiaryList";
 import { getDiaryList } from "../../services/diarylist";
-import LodaingSpinner from "../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { useUserStore } from "../../store/userStore";
-const Title = styled.h3`
+
+const TitleContainer = styled.div`
+  margin-top: 10%;
   text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 `;
+
+const Title = styled.h1`
+  margin-top: 10%;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
 const Container = styled.div`
   max-height: 67vh;
   overflow-y: scroll;
   margin-top: 5%;
 `;
+
 const DiaryList = () => {
   const store = useStore();
   const userStore = useUserStore();
@@ -22,6 +39,8 @@ const DiaryList = () => {
   const [emotion, setEmotion] = useState("");
   const [diaryList, setDiaryList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
+
   const getDiaries = async (start, end, emo) => {
     const res = await getDiaryList(start, end, emo);
     setDiaryList(res.data);
@@ -35,20 +54,19 @@ const DiaryList = () => {
   return (
     <div>
       {loading ? (
-        <LodaingSpinner />
+        <LoadingSpinner />
       ) : (
         <div>
-          <Title
-            style={{
-              backgroundColor: "#FFFAE1",
-              height: "3rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {userStore.nickname}님의 일기를 확인해보세요
-          </Title>
+          <TitleContainer>
+            <img
+              src={`${EMOJI_URL}/Objects/Notebook.png`}
+              style={{
+                width: "1.5rem",
+                height: "1.5rem",
+              }}
+            />
+            <Title style={{ margin: 0 }}>일기 목록을 확인해보세요</Title>
+          </TitleContainer>
           <div>
             <div style={{ marginTop: "5%" }}>
               <FilteringBox

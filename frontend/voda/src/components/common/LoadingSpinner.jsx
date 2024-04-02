@@ -1,15 +1,14 @@
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader"; //설치한 cliploader을 import한다
 
-const LodaingSpinner = () => {
+const LoadingSpinner = () => {
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "80%",
-        alignItems: "center",
-        flexDirection: "column",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
       }}
     >
       <ClipLoader />
@@ -17,4 +16,4 @@ const LodaingSpinner = () => {
   );
 };
 
-export default LodaingSpinner;
+export default LoadingSpinner;
