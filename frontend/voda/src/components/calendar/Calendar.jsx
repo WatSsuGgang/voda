@@ -1,6 +1,7 @@
 import NavigateBeforeSharpIcon from "@mui/icons-material/NavigateBeforeSharp";
 import NavigateNextSharpIcon from "@mui/icons-material/NavigateNextSharp";
-import { CircularProgress, Modal } from "@mui/material"; // Material-UI에서 Modal import
+import { Modal } from "@mui/material"; // Material-UI에서 Modal import
+import LoadingSpinner from "../common/LoadingSpinner";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDate, getMonth } from "../../services/calendar";
@@ -230,7 +231,7 @@ const Calendar = () => {
         ></NavigateBeforeSharpIcon>
         {/* <button onClick={handlePrevMonth}>&lt;</button> */}
         <h2>
-          {currentYear}년 {currentMonth + 1}월
+          {currentYear}. {currentMonth + 1}
         </h2>
         <NavigateNextSharpIcon
           className="button"
@@ -254,7 +255,7 @@ const Calendar = () => {
 
             {/* 일기 데이터를 표시하는 부분 */}
             {isDiaryDataLoading ? (
-              <CircularProgress></CircularProgress>
+              <LoadingSpinner></LoadingSpinner>
             ) : (
               <div className="diary-items">
                 {diaryData.length > 0 ? (

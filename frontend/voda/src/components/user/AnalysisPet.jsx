@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { usePetStore } from "../../store/petStore";
+import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { getPet } from "../../services/pet";
@@ -14,27 +14,25 @@ const Container = styled.div`
 
 const AnalysisPet = () => {
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
-  const { petMap } = usePetStore();
-  const [stage, setStage] = useState();
-  const [petAppearance, setPetAppearance] = useState();
-  const [name, setName] = useState();
-  const [petImageUrl, setPetImageUrl] = useState();
-  const fetchData = async () => {
-    try {
-      const data = await getPet();
-      setStage(data.pet.stage);
-      setPetAppearance(data.pet.petAppearance);
-      setName(data.pet.name);
-      setPetImageUrl(`${petMap[data.pet.stage][data.pet.petAppearance]}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { usingId } = usePetPersistStore();
 
   const navigate = useNavigate();
+
+  function checkName(name = "") {
+    //name의 마지막 음절의 유니코드(UTF-16)
+    const charCode = name.charCodeAt(name.length - 1);
+
+    //유니코드의 한글 범위 내에서 해당 코드의 받침 확인
+    const consonantCode = (charCode - 44032) % 28;
+
+    if (consonantCode === 0) {
+      //0이면 받침 없음 -> 를
+      return "는";
+    }
+    //1이상이면 받침 있음 -> 을
+    return "이는";
+  }
+
   return (
     <Container>
       <div
@@ -45,11 +43,12 @@ const AnalysisPet = () => {
           marginBottom: "5vh",
         }}
       >
-        {name} 얼마나 컸는지 <br />
+        {usingId.name}
+        {checkName(usingId.name)} 얼마나 컸는지 <br />
         보러 가볼까요?
       </div>
       <img
-        src={`${EMOJI_URL}/${petImageUrl}`}
+        src={`${EMOJI_URL}/${usingId.petImageUrl}`}
         style={{
           width: "15rem",
           height: "15rem",

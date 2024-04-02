@@ -5,7 +5,7 @@ import CategoryBar from "../../components/shop/CategoryBar";
 import ItemList from "../../components/shop/ItemList";
 import { usePetStore } from "../../store/petStore";
 import { getItem } from "../../services/item";
-import { CircularProgress } from "@mui/material";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const Page = styled.div`
   display: flex;
@@ -84,7 +84,7 @@ export default function PetShopPage() {
             transform: "translate(-50%, -50%)",
           }}
         >
-          <CircularProgress />
+          <LoadingSpinner />
         </div>
       ) : (
         <ItemList />
