@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import useStore from "../../store/store";
+import { useStore } from "../../store/store";
 import styled from "styled-components";
 import FilteringBox from "../../components/diary/FilteringBox";
 import FilterdDiaryList from "../../components/diary/FilterdDiaryList";

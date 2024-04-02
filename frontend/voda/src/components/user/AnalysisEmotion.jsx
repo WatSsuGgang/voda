@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useStore from "../../store/store";
+import { useStore } from "../../store/store";
 
 const Container = styled.div`
   display: flex;

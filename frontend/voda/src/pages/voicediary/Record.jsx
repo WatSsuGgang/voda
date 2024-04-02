@@ -14,7 +14,7 @@ import {
   getTalkList,
   deleteDiary,
 } from "../../services/voicediary"; // api 함수 불러오기
-import useStore from "../../store/store";
+import { useStore } from "../../store/store";
 const Title = styled.h1`
   text-align: center;
   font-size: 1.2rem;
