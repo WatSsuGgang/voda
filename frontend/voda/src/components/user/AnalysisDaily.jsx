@@ -75,7 +75,8 @@ const AnalysisDaily = ({ report }) => {
                   fontWeight: "bold",
                 }}
               >
-                {koreanDays[day]}에 작성한 일기가 없습니다
+                {koreanDays[day]}에 작성한 <br />
+                일기가 없습니다
               </div>
               <img
                 src={`${EMOJI_URL}/Smilies/Expressionless%20Face.png`}
@@ -84,6 +85,16 @@ const AnalysisDaily = ({ report }) => {
                 height="150"
                 style={{ marginTop: "15%" }}
               />
+              <div
+                style={{
+                  margin: "18%",
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  minHeight: "6vh",
+                  maxHeight: "6vh",
+                }}
+              ></div>
             </div>
           ) : (
             <div
@@ -119,7 +130,7 @@ const AnalysisDaily = ({ report }) => {
               </div>
               <div
                 style={{
-                  margin: "18%",
+                  margin: "18% 5% 0% 5%",
                   fontSize: "1.2rem",
                   fontWeight: "bold",
                   textAlign: "center",
