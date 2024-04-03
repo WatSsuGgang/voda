@@ -5,7 +5,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 30% auto;
+  margin-top: 30%;
 `;
 const AnalysisCount = ({ report }) => {
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
