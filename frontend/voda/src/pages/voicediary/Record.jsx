@@ -258,7 +258,6 @@ const Record = () => {
     // 이모티콘 변경
     setAiSpeaking(false);
     setGetResponse(false);
-    recognition.start();
     audioContextRef.current = new (window.AudioContext ||
       window.webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
