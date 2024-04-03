@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import LogoutIcon from "@mui/icons-material/Logout";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Timer from "../../components/voicediary/Timer";
 import { useNavigate } from "react-router-dom";
 import PlingSound from "/Pling.mp3";
 import Emoticon from "../../components/voicediary/Emoticon";
 import Swal from "sweetalert2";
+import { Button } from "@mui/material";
 import {
   initDiary,
   recordDiary,
@@ -45,7 +45,6 @@ const Record = () => {
     const fetchAudioUrl = async () => {
       try {
         const res = await initDiary();
-        console.log("최초 응답:", res.data);
         if (res.data.terminate) {
           Swal.fire({
             title: "일기 횟수 제한",
@@ -144,7 +143,6 @@ const Record = () => {
   const fetchTalkList = async (diaryId) => {
     try {
       const res = await getTalkList(diaryId);
-      console.log("지금까지의 대화:", res);
       return res;
     } catch (err) {
       console.error(err);
@@ -169,13 +167,13 @@ const Record = () => {
 
       const talkRes = await fetchTalkList(diaryId);
       const res = await createDiary(diaryId, talkRes.data.talk_list);
-      console.log("일기 생성:", res);
     } catch (err) {
       console.error(err);
     }
   };
   // 강제 종료
-  const terminateRecord = () => {
+  const terminateRecord = (e) => {
+    e.preventDefault();
     if (!aiSpeaking) {
       stopRecording();
       if (store.editAllow) {
@@ -196,7 +194,6 @@ const Record = () => {
     try {
       chatCount += 1;
       const res = await recordDiary(data);
-      console.log("응답옴:", res.data);
       setGetResponse(true);
       // 만약 terminate가 true이면 일기를 종료해야 된다.
       if (res.data.terminate) {
@@ -284,7 +281,6 @@ const Record = () => {
               }
               requestIdRef.current = requestAnimationFrame(draw);
               analyserRef.current.getFloatFrequencyData(dataArray);
-              // console.log("데시벨", dataArray);
               canvasCtx.fillStyle = darkmode ? "#212426" : "rgb(255, 255, 255)";
               canvasCtx.fillRect(0, 0, width, height);
 
@@ -336,8 +332,6 @@ const Record = () => {
     if (recorderRef.current?.state == "recording") {
       setAiSpeaking(true);
       recorderRef.current.stop();
-    } else {
-      console.log("녹음 중이 아닙니다.");
     }
   };
   if (speakingTime <= 1) {
@@ -363,8 +357,6 @@ const Record = () => {
           // 오디오 스트림이 존재하면 연결된 트랙을 중지
           if (mediaStream) {
             const tracks = mediaStream.getTracks();
-            console.log("미디어 스트림", mediaStream);
-            console.log("track", tracks);
             tracks.forEach((track) => track.stop());
           }
         }
@@ -377,7 +369,13 @@ const Record = () => {
 
   return (
     <div>
-      <div style={{ marginTop: "15%", display: "flex", justifyContent: "end" }}>
+      <div
+        style={{
+          margin: "15% 5% 0 0 ",
+          display: "flex",
+          justifyContent: "end",
+        }}
+      >
         <LogoutIcon onClick={exit} />
       </div>
       <Title>AI와 대화하며 일기를 작성해요</Title>
@@ -387,15 +385,35 @@ const Record = () => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Timer aiSpeaking={aiSpeaking} setSpeakingTime={setSpeakingTime} />
-        <StopCircleIcon
-          onClick={terminateRecord}
-          style={{ marginLeft: "3%" }}
-        />
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>
+          <Timer aiSpeaking={aiSpeaking} setSpeakingTime={setSpeakingTime} />
+        </div>
+        <Button
+          sx={{
+            borderRadius: "10px",
+            backgroundColor: "#98b3a4",
+            color: "white",
+            fontWeight: "bold",
+            height: "100%",
+          }}
+          onClick={(e) => terminateRecord(e)}
+        >
+          일기 바로 생성
+        </Button>
+
+        <div></div>
       </div>
 
       {/* 데시벨 시각화 */}
