@@ -20,6 +20,9 @@ const Title = styled.h1`
   font-size: 1.2rem;
   color: #afab99;
 `;
+// const SpeechRecognition =
+//   window.SpeechRecognition || window.webkitSpeechRecognition;
+// const recognition = new SpeechRecognition();
 
 const Record = () => {
   const { darkmode } = usePersistStore();
@@ -91,7 +94,7 @@ const Record = () => {
     // 데시벨이 임계값 이하인지 확인
     if (decibelLevel <= -20) {
       // 예시로 임계값을 -20으로 설정
-      consecutiveSilenceTimeRef.current += 100; // 0.1초마다 측정
+      consecutiveSilenceTimeRef.current += 50; // 0.5초마다 측정
       if (consecutiveSilenceTimeRef.current >= 3000) {
         // 6초 이상
         setVoiceRecognized(false); // 음성 인식이 2초 이상으로 잘 되고 있는지 구분
@@ -111,10 +114,39 @@ const Record = () => {
   useEffect(() => {
     if (aiSpeaking === false) {
       consecutiveSilenceTimeRef.current = 0; // 초기화
-      const intervalId = setInterval(monitorDecibelLevel, 100);
+      const intervalId = setInterval(monitorDecibelLevel, 50);
       return () => clearInterval(intervalId); // cleanup 함수에서 clearInterval 호출
     }
   }, [aiSpeaking]);
+
+  // const [terminateTimeout, setTerminateTimeout] = useState(null);
+  // const [recognizedTimeout, setRecognizedTimeout] = useState(null);
+
+  // useEffect(() => {
+  //   if (aiSpeaking === false) {
+  //     recognition.continuous = true;
+
+  //     recognition.onstart = () => {
+  //       console.log("인식 시작");
+  //       setVoiceRecognized(true);
+  //       setTerminateTimeout(setTimeout(stopRecording, 5000));
+  //     };
+
+  //     recognition.onresult = (event) => {
+  //       clearTimeout(terminateTimeout);
+  //       setVoiceRecognized(true);
+  //       clearTimeout(recognizedTimeout); // 인식이 있을 때마다 이전 타임아웃을 취소합니다.
+  //       setRecognizedTimeout(setTimeout(() => setVoiceRecognized(false), 2000)); // 2초 후에 setVoiceRecognized(false)를 실행합니다.
+  //       setTerminateTimeout(setTimeout(stopRecording, 5000));
+  //       const transcript = event.results[0][0].transcript;
+  //       console.log(transcript);
+  //     };
+
+  //     recognition.onerror = (event) => {
+  //       console.error(event.error);
+  //     };
+  //   }
+  // }, [aiSpeaking, terminateTimeout, recognizedTimeout]); // terminateTimeout과 recognizedTimeout을 의존성 배열에 추가합니다.
 
   // aiAudioUrl 값이 변경될 때마다 실행
   useEffect(() => {
@@ -226,6 +258,7 @@ const Record = () => {
     // 이모티콘 변경
     setAiSpeaking(false);
     setGetResponse(false);
+    recognition.start();
     audioContextRef.current = new (window.AudioContext ||
       window.webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
