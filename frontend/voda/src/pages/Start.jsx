@@ -11,9 +11,7 @@ export default function Start() {
     try {
       const response = await getUserInfo();
       userStore.setUserInfo(response.data);
-      console.log(response);
     } catch (error) {
-      console.log(response);
     }
   };
 

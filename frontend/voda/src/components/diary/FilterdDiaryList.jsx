@@ -15,7 +15,6 @@ const Date = styled.div`
 `;
 
 const FilterdDiaryList = ({ diaries }) => {
-  console.log("넘어온 일기: ", diaries);
   const EMOJI_URL = import.meta.env.VITE_EMOJI_URL;
   const store = useStore();
   const navigate = useNavigate();
