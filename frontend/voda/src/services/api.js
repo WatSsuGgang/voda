@@ -49,7 +49,6 @@ export const request = async (method, url, data = {}) => {
       status === HTTPStatusCodes.NO_CONTENT
     ) {
       // 응답코드가 200일 경우 로직
-      // console.log(response);
       return response;
     } else {
       // 응답코드가 200이 아닐 경우 로직
