@@ -99,10 +99,7 @@ public class MemberServiceImpl implements MemberService {
             }
 
             log.info(date.toString());
-            if (now.minusDays(1).equals(date)) {
-                log.info("called");
-                member.increaseMemberDiaryCount();
-            } else {
+            if (now.minusDays(1).isAfter(date)) {
                 member.setMemberDiaryCount(0);
             }
         });
