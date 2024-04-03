@@ -6,7 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20% auto;
+  margin-top: 30%;
 `;
 
 const AnalysisEmotion = ({ report }) => {
@@ -63,8 +63,8 @@ const AnalysisEmotion = ({ report }) => {
               key={index}
               style={{
                 display: "flex",
-                margin: "10% 0",
                 alignItems: "center",
+                marginBottom: "0.5rem",
               }}
             >
               <img
@@ -78,7 +78,6 @@ const AnalysisEmotion = ({ report }) => {
                   backgroundColor: `${emotionColor[item.emotion]}`,
                   textAlign: "center",
                   borderRadius: "10px",
-                  margin: "0 8%",
                   padding: "1.5% 0",
                 }}
               >
