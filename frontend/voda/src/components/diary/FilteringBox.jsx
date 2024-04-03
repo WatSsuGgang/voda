@@ -130,7 +130,7 @@ const FilteringBox = ({ setStartDate, setEndDate, setEmotion }) => {
         <Button
           onClick={handleButtonClick}
           style={{
-            borderRadius: "10px",
+            borderRadius: "5px",
             backgroundColor: "#D9D9D9",
             color: "#000000",
             height: "100%",
