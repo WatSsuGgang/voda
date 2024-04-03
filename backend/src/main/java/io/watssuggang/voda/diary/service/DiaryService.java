@@ -16,11 +16,11 @@ public interface DiaryService {
 
     DiaryTtsResponseDto init(Integer userId);
 
-    DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
+    DiaryTtsResponseDto answer(MultipartFile file, Integer userId)
         throws IOException;
 
     ResponseEntity<Void> terminate(Integer diaryId, Integer userId);
-    Map<String, Object> getChatList(int id, Integer memberId);
+    Map<String, Object> getChatList(Integer memberId);
 
     DiaryCreateResponse createDiary(List<TalkRequest> talkList, int diaryId, Integer memberId);
 

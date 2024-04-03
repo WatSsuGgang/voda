@@ -3,6 +3,7 @@ package io.watssuggang.voda.diary.service;
 
 import io.watssuggang.voda.common.enums.*;
 import io.watssuggang.voda.common.exception.ErrorCode;
+import io.watssuggang.voda.common.redis.RedisService;
 import io.watssuggang.voda.diary.domain.*;
 import io.watssuggang.voda.diary.dto.req.*;
 import io.watssuggang.voda.diary.dto.req.DiaryChatRequestDto.MessageDTO;
@@ -68,6 +69,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final String initPrefix = "today:";
     private final String answerPrefix = "chatCount:";
     private final PointLogService pointLogService;
+    private final RedisService redisService;
 
     private String getChat(String text, String prompt) {
         List<MessageDTO> message = new ArrayList<>();
@@ -108,8 +110,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
 
-    public void addFileToDiary(int diaryId, FileType fileType, String fileUrl) {
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
+    public void addFileToDiary(Diary diary, FileType fileType, String fileUrl) {
         DiaryFile newFile = DiaryFile.builder()
             .fileType(fileType) // 새 파일의 타입 설정
             .fileUrl(fileUrl) // 새 파일의 URL 설정
@@ -119,68 +120,81 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     public DiaryTtsResponseDto init(Integer userId) {
+
         Integer value = (Integer) redisTemplate.opsForValue().get(initPrefix + userId);
         if (value != null && value >= 100) {
             return new DiaryTtsResponseDto(null, null, true);
         }
+
+        // 일기 레디스 값 있으면 삭제
+        if (Objects.equals(redisTemplate.hasKey("diary" + userId), Boolean.TRUE)) {
+            redisService.deleteData("diary" + userId);
+        }
+
+        // 일기 파일 레디스 값 있으면 삭제
+        if (Objects.equals(redisTemplate.hasKey("diaryFile" + userId), Boolean.TRUE)) {
+            redisService.deleteData("diaryFile" + userId);
+        }
+
+        // 일기 횟수 저장하는거
         redisTemplate.opsForValue().increment(initPrefix + userId, 1);
-        Diary diary = Diary.builder()
-            .diaryContent("init")
-            .diaryEmotion(Emotion.NONE)
-            .build();
-        Diary newDiary = diaryRepository.save(diary);
         String chatRes = getChat("", PromptHolder.DEFAULT_PROPMT); //ai 첫 질문 받아옴
         log.info("init chat : " + chatRes);
         Talk aiTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("AI"))
-            .talkContent(chatRes)
-            .diary(newDiary)
-            .build();
-        talkRepository.save(aiTalk); //ai 발화 db 저장
+                .talkSpeaker(Speaker.valueOf("AI"))
+                .talkContent(chatRes)
+                .build();
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
-        addFileToDiary(newDiary.getDiaryId(), FileType.MP3, ttsUrl); //ttsUrl db 저장
+        redisService.addData("diary" + userId, "chat", aiTalk);
+        redisService.addData("diaryFile" + userId, "file", ttsUrl);
         return new DiaryTtsResponseDto(
-            ttsUrl, newDiary.getDiaryId(), false);
+                ttsUrl,
+                null,
+                false);
     }
 
     //TODO: 자정에 today redis 초기화시키기 작동하는지 확인
-    public DiaryTtsResponseDto answer(MultipartFile file, Integer diaryId, Integer userId)
-        throws IOException {
+    public DiaryTtsResponseDto answer(MultipartFile file, Integer userId)
+            throws IOException {
         Integer value = (Integer) redisTemplate.opsForValue().get(answerPrefix + userId);
         if (value != null && value > 10) {
-            return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
+            return new DiaryTtsResponseDto(terminateDiaryUrl, null, true); //"일기 작성을 종료할게요" 반환
         }
+
         redisTemplate.opsForValue().increment(answerPrefix + userId, 1);
         String sttUrl = fileUpdateService.fileUpload(userId, "audio/mpeg", "voice-user", "mp3",
-            file); //사용자 발화 s3 bucket 저장
-        addFileToDiary(diaryId, FileType.MP3, sttUrl); //sttUrl db 저장
+                file); //사용자 발화 s3 bucket 저장
+
+        redisService.addData("diaryFile" + userId, "file", sttUrl);
         String sttRes = getStt(file); //사용자 발화 텍스트화
         log.info("user chat : " + sttRes);
         String sttResShort = sttRes.trim().replaceAll("\\s+", "");
         if (sttResShort.contains("오늘일기끝") || sttResShort.contains("오늘의일기끝")) {
-            return new DiaryTtsResponseDto(terminateDiaryUrl, diaryId, true); //"일기 작성을 종료할게요" 반환
+            return new DiaryTtsResponseDto(terminateDiaryUrl, null, true); //"일기 작성을 종료할게요" 반환
         }
+
         if (sttResShort.isEmpty()) {
-            return new DiaryTtsResponseDto(nullAnswerUrl, diaryId, false); //"말씀이 잘 안들려요" 반환
+            return new DiaryTtsResponseDto(nullAnswerUrl, null, false); //"말씀이 잘 안들려요" 반환
         }
+
         Talk userTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("USER"))
-            .talkContent(sttRes)
-            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
-            .build();
-        talkRepository.save(userTalk); //사용자 발화 db 저장
+                .talkSpeaker(Speaker.valueOf("USER"))
+                .talkContent(sttRes)
+                .build();
+        redisService.addData("diary" + userId, "chat", userTalk);
+
         String chatRes = getChat(sttRes, PromptHolder.ANSWER_PROMPT); //ai 발화 받아옴
         log.info("ai chat : " + chatRes);
         Talk aiTalk = Talk.builder()
-            .talkSpeaker(Speaker.valueOf("AI"))
-            .talkContent(chatRes)
-            .diary(diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new))
-            .build();
-        talkRepository.save(aiTalk); //ai 발화 db 저장
+                .talkSpeaker(Speaker.valueOf("AI"))
+                .talkContent(chatRes)
+                .build();
         String ttsUrl = getTts(chatRes, userId); //ai 발화 음성화
-        addFileToDiary(diaryId, FileType.MP3, ttsUrl); //ttsUrl db 저장
+
+        redisService.addData("diaryFile" + userId, "file", ttsUrl);
+        redisService.addData("diary" + userId, "chat", aiTalk);
         return new DiaryTtsResponseDto(
-            ttsUrl, diaryId, false);
+                ttsUrl, null, false);
     }
 
     @Override
@@ -199,11 +213,6 @@ public class DiaryServiceImpl implements DiaryService {
         }
     }
 
-//  public DiaryChatResponseDto chatTest(String prompt) {
-//    DiaryChatResponseDto initChat = getChat(prompt);
-//    return initChat;
-//  }
-
     @Override
     public KarloResponse createImage(KarloRequest karloRequest) {
         System.out.println(karloRequest);
@@ -215,14 +224,8 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Map<String, Object> getChatList(int id, Integer memberId) {
-        List<Talk> talks = talkRepository.findAllByDiary_DiaryId(id);
-
-        Optional<Integer> writerId = talks.stream().map(Talk::getWriter).findFirst();
-
-        if (writerId.isPresent() && isUnAuthorized(writerId.get(), memberId)) {
-            throw new DiaryException(ErrorCode.TALK_READ_UNAUTHORIZED);
-        }
+    public Map<String, Object> getChatList(Integer memberId) {
+        List<Talk> talks = redisService.getData("diary" + memberId, "chat", Talk.class);
 
         List<Map<String, String>> talkList = talks.stream()
             .map(talk -> {
@@ -249,28 +252,19 @@ public class DiaryServiceImpl implements DiaryService {
 
         // 대화가 하나만 있고, 질문만 있는 경우 해당 일기를 삭제하고, 예외처리
         if (talkList.size() == 1 && talkList.get(0).getAnswer() == null) {
-            diaryRepository.deleteById(diaryId);
             throw new DiaryException(ErrorCode.DIARY_NOT_CREATED);
         }
-
         Member writer = memberRepository.findById(memberId)
             .orElseThrow(MemberNotFoundException::new);
 
-        Diary existedDiary = diaryRepository.findById(diaryId)
-            .orElseThrow(DiaryNotFoundException::new);
+        String answers = talkList.stream()
+                .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
+                .filter(answer -> answer != null && !answer.isEmpty())
+                .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
 
-        if (isUnAuthorized(existedDiary.getWriter(), memberId)) {
-            throw new DiaryException(ErrorCode.DIARY_CREATE_UNAUTHORIZED);
-        }
+        log.info("합친 답변: " + answers);
 
-        String allAnswers = talkList.stream()
-            .map(TalkListRequest.TalkRequest::getAnswer) // Talk 객체에서 answer만 추출
-            .filter(answer -> answer != null && !answer.isEmpty())
-            .collect(Collectors.joining(". ")); // 공백으로 각 answer를 구분하여 이어 붙임
-
-        log.info("합친 답변: " + allAnswers);
-
-        ContentDTO completedDiary = callClaude(allAnswers);
+        ContentDTO completedDiary = callClaude(answers);
 
         String answerText = completedDiary != null ? completedDiary.getText() : null;
 
@@ -287,28 +281,64 @@ public class DiaryServiceImpl implements DiaryService {
         String emotion = jsonObject.getString("emotion");
         String imagePrompt = jsonObject.getString("prompt") + ", cartoon";
 
-        existedDiary.updateDiary(title, Emotion.valueOf(emotion), content);
+        Diary diary = Diary.builder()
+                .diarySummary(title)
+                .diaryEmotion(Emotion.valueOf(emotion))
+                .diaryContent(content)
+                .member(writer)
+                .build();
 
-        existedDiary.addMember(writer);
+        List<Talk> talks = new ArrayList<>();
+        for (TalkRequest talkRequest : talkList) {
+            if (talkRequest.getQuestion() != null) {
+                talks.add(Talk.builder()
+                        .talkContent(talkRequest.getQuestion())
+                        .talkSpeaker(Speaker.AI)
+                        .build());
+            }
+            if (talkRequest.getAnswer() != null) {
+                talks.add(Talk.builder()
+                        .talkContent(talkRequest.getAnswer())
+                        .talkSpeaker(Speaker.USER)
+                        .build());
+            }
+        }
+
+        talkRepository.saveAll(talks);
+        for (Talk talk : talks) {
+            diary.addDiaryTalks(talk);
+        }
+
+        // 일기 연속 일수 업데이트
+        LocalDate date = diaryRepository.findByMemberAndCreatedAtLast(writer.getMemberId());
+        if (date == null || LocalDate.now().minusDays(1).equals(date)) {
+            writer.increaseMemberDiaryCount();
+        }
+
+        Diary save = diaryRepository.save(diary);
 
         createImage(KarloRequest.of(imagePrompt))
-            .getImages()
-            .forEach(imageResponse -> {
-                String image = fileUpdateService.fileUpload(
-                    existedDiary.getMember().getMemberId(),
-                    MediaType.IMAGE_JPEG_VALUE,
-                    "image",
-                    "jpeg",
-                    getImage(imageResponse));
+                .getImages()
+                .forEach(imageResponse -> {
+                    String image = fileUpdateService.fileUpload(
+                            writer.getMemberId(),
+                            MediaType.IMAGE_JPEG_VALUE,
+                            "image",
+                            "jpeg",
+                            getImage(imageResponse));
 
-                DiaryFile savedImage = diaryFileRepository.save(DiaryFile.builder()
-                    .fileType(FileType.WEBP)
-                    .fileUrl(image)
-                    .build());
-                savedImage.addDiary(existedDiary);
-            });
+                    DiaryFile savedImage = diaryFileRepository.save(DiaryFile.builder()
+                            .fileType(FileType.WEBP)
+                            .fileUrl(image)
+                            .build());
+                    savedImage.addDiary(save);
+                });
 
-        Diary save = diaryRepository.save(existedDiary);
+        List<String> files = redisService.getData("diaryFile" + memberId, "file", String.class);
+        for (String file : files) {
+            addFileToDiary(save, FileType.MP3, file);
+        }
+
         // 펫의 Exp 올려주기
         Pet pet = petRepository.findByMember_MemberId(memberId)
             .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
@@ -322,12 +352,6 @@ public class DiaryServiceImpl implements DiaryService {
             PointLog.ofEarnPointLog(pet.getMember(), 10, "일기")
         );
         pet.updateEmotion(save.getDiaryEmotion());
-
-        // 일기 연속 일수 업데이트
-        LocalDate date = diaryRepository.findByMemberAndCreatedAtLast(writer.getMemberId());
-        if (date == null || LocalDate.now().minusDays(1).equals(date)) {
-            writer.increaseMemberDiaryCount();
-        }
 
         return DiaryCreateResponse.of(save.getDiaryId(), "일기 생성 완료");
     }

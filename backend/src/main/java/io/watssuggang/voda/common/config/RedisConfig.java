@@ -42,8 +42,8 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
 //        value로 key를 가져올 때 필요
-//        redisTemplate.setHashKeySerializer(new Jackson2JsonRedisSerializer());
-//        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
 

@@ -30,16 +30,16 @@ public class DiaryController {
 
     @PostMapping("/answer")
     public ResponseEntity<?> answer(@CurrentUser SecurityUserDto userDto,
-        @RequestParam("file") MultipartFile file,
-        @RequestParam("diaryId") Integer diaryId)
-        throws IOException {
-        return ResponseEntity.ok(diaryService.answer(file, diaryId, userDto.getMemberId()));
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "diaryId", required = false) String diaryId)
+            throws IOException {
+        return ResponseEntity.ok(diaryService.answer(file, userDto.getMemberId()));
     }
 
     @PostMapping("/terminate")
     public ResponseEntity<?> terminate(@CurrentUser SecurityUserDto userDto,
-        @RequestBody DiaryTerminateRequestDto requestDto)
-        throws  IOException {
+            @RequestBody DiaryTerminateRequestDto requestDto)
+            throws IOException {
         return diaryService.terminate(requestDto.getDiaryId(), userDto.getMemberId());
     }
 
@@ -49,8 +49,10 @@ public class DiaryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createDiary(@RequestBody TalkListRequest talkList,
-        @CurrentUser SecurityUserDto userDto) {
+    public ResponseEntity<?> createDiary(
+            @RequestBody TalkListRequest talkList,
+            @CurrentUser SecurityUserDto userDto
+    ) {
 
         System.out.println("일기 생성 컨트롤러 들어옴!!!");
 
@@ -62,35 +64,35 @@ public class DiaryController {
     }
 
     @GetMapping("/talk/{id}")
-    public ResponseEntity<Map<String, Object>> getTalkList(@PathVariable int id,
-        @CurrentUser SecurityUserDto userDto) {
+    public ResponseEntity<Map<String, Object>> getTalkList(@PathVariable(required = false) String id,
+            @CurrentUser SecurityUserDto userDto) {
         System.out.println("채팅 리스트 받기");
 
-        Map<String, Object> chatList = diaryService.getChatList(id, userDto.getMemberId());
+        Map<String, Object> chatList = diaryService.getChatList(userDto.getMemberId());
 
         return ResponseEntity.ok(chatList);
     }
 
     @GetMapping("/detail/{id}")
     public ResponseEntity<DiaryDetailResponse> getDiaryDetail(@CurrentUser SecurityUserDto userDto,
-        @PathVariable int id) {
+            @PathVariable int id) {
         System.out.println("일기 상세 정보 받기");
 
         DiaryDetailResponse diaryDetailResponse = diaryService.getDiaryDetail(userDto.getMemberId(),
-            id);
+                id);
 
         return ResponseEntity.ok(diaryDetailResponse);
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<DiaryDetailResponse>> getList(
-        @RequestParam(defaultValue = "") LocalDateTime start,
-        @RequestParam(defaultValue = "") LocalDateTime end,
-        @RequestParam(defaultValue = "NONE") String emotion,
-        @CurrentUser SecurityUserDto userDto) {
+            @RequestParam(defaultValue = "") LocalDateTime start,
+            @RequestParam(defaultValue = "") LocalDateTime end,
+            @RequestParam(defaultValue = "NONE") String emotion,
+            @CurrentUser SecurityUserDto userDto) {
 
         List<DiaryDetailResponse> diaryList = diaryService.getDiaryList(start, end, emotion,
-            userDto.getMemberId());
+                userDto.getMemberId());
 
         return ResponseEntity.ok(diaryList);
     }
