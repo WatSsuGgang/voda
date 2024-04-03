@@ -53,7 +53,9 @@ public class Pet extends BaseEntity {
         if (plus <= Byte.MAX_VALUE) {
             this.petExp = (byte) plus;
         }
+    }
 
+    public void feed(){
         this.petLastFeed = LocalDateTime.now();
     }
 

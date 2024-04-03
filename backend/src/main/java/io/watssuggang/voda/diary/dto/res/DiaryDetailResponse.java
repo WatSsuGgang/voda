@@ -21,7 +21,7 @@ public class DiaryDetailResponse {
     private DiaryDetailResponse(Diary diary) {
         this.diaryId = diary.getDiaryId();
         this.writerName = diary.getMember().getMemberName();
-        this.createdAt = diary.getModifiedAt();
+        this.createdAt = diary.getCreatedAt();
         this.diaryTitle = diary.getDiarySummary();
         this.diaryContent = diary.getDiaryContent();
         this.diaryEmotion = diary.getDiaryEmotion();

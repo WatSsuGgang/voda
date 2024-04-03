@@ -41,7 +41,7 @@ public class EmotionReportResponse {
             .mondayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.MONDAY)))
             .tuesdayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.TUESDAY)))
             .wednesdayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.WEDNESDAY)))
-            .thursdayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.WEDNESDAY)))
+            .thursdayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.THURSDAY)))
             .fridayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.FRIDAY)))
             .saturdayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.SATURDAY)))
             .sundayOf(convertNullDailyStatic(weeklyStatics.get(DayOfWeek.SUNDAY)));
