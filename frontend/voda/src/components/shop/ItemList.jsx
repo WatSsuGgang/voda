@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { usePetStore, usePetPersistStore } from "../../store/petStore";
 import { useUserStore } from "../../store/userStore";
+import { usePersistStore } from "../../store/store";
 import { Modal } from "@mui/material";
 import { Button } from "@mui/material";
 import ItemContainer from "./ItemContainer";
@@ -36,6 +37,8 @@ const ModalBox = styled.div`
 `;
 
 export default function ItemList() {
+  const persistStore = usePersistStore();
+
   const [modalItem, setModalItem] = useState({});
   const [modalItemOwnId, setModalItemOwnId] = useState();
 
@@ -175,7 +178,13 @@ export default function ItemList() {
           </div>
         ))}
         <Modal open={openModal} onClose={handleCloseModal}>
-          <ModalBox>
+          <ModalBox
+            style={
+              persistStore.darkmode
+                ? { backgroundColor: "black" }
+                : { backgroundColor: "white" }
+            }
+          >
             <div
               style={{
                 display: "flex",
@@ -244,7 +253,13 @@ export default function ItemList() {
         </Modal>
 
         <Modal open={openBoughtModal} onClose={handleCloseBoughtModal}>
-          <ModalBox>
+          <ModalBox
+            style={
+              persistStore.darkmode
+                ? { backgroundColor: "black" }
+                : { backgroundColor: "white" }
+            }
+          >
             <div
               style={{
                 display: "flex",
