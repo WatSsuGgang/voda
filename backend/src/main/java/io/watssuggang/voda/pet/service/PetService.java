@@ -49,6 +49,7 @@ public class PetService {
         }
 
         pet.updateExp((byte) 5);
+        pet.feed();
 
         pet.getMember().increasePoint(10);
 
