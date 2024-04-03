@@ -326,6 +326,7 @@ public class DiaryServiceImpl implements DiaryService {
         // 일기 연속 일수 업데이트
         LocalDate date = diaryRepository.findByMemberAndCreatedAtLast(writer.getMemberId());
         if (date == null || LocalDate.now().minusDays(1).equals(date)) {
+            log.info("LocalDate: " + date + " Now: " + LocalDate.now());
             writer.increaseMemberDiaryCount();
         }
 
