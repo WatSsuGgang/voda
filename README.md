@@ -47,24 +47,26 @@ VODA AI와 대화만 하면 일기가 만들어집니다!
 
 ## 🔨 기술 스택
 
-### Frontend
+- [포팅 매뉴얼](./exec/포팅 매뉴얼.md)
+
+### 💻 Frontend
 
 - Language: JavaScript
 - Core: React 18
 - Styling: Styled-Components, MUI
 - State: Zustand
 
-### Backend
+### 💾 Backend
 
 - Language: Java
 - Core: Spring
 - Database: MySQL, Redis, MongoDB, S3
 
-### AI
+### 🤖 AI
 
 - Model: CLOVA, Claude, Karlo
 
-### CI/CD
+### 🔧 CI/CD
 
 - NginX
 - Jenkins
