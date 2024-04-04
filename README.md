@@ -10,6 +10,7 @@ VODA AI와 대화만 하면 일기가 만들어집니다!
 
 - [🎯 기획 배경](#plans)
 - [🙇 팀원 소개](#members)
+- [📝 설계 내용](#planning)
 - [🔨 기술 스택](#skills)
 - [💡 주요 기능](#features)
 
@@ -70,7 +71,7 @@ VODA AI와 대화만 하면 일기가 만들어집니다!
 
 ---
 
-<a name="features"></a>
+<a name="planning"></a>
 
 ## 📝 설계 내용
 
@@ -85,7 +86,7 @@ VODA AI와 대화만 하면 일기가 만들어집니다!
   ![ERD](./exec/assets/ERD.png)
 
 - 아키텍처
-  ![아키텍처](./exec/assets/project_architecture.png)
+  ![아키텍처](./exec/assets/project_architecture.PNG)
 
 <a name="features"></a>
 
