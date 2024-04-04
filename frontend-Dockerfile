@@ -1,3 +1,5 @@
+# 프론트엔드 빌드 용 도커파일
+
 FROM node:20.10.0-alpine
 WORKDIR voda
 COPY ./frontend/voda .

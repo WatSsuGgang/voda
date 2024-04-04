@@ -1,3 +1,4 @@
+// 프론트엔드 빌드용 젠킨스 파일
 
 pipeline {
     agent any
