@@ -1,3 +1,5 @@
+// 백엔드용 젠킨스 파일
+
 pipeline {
     agent any
     stages {

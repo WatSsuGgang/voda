@@ -1,3 +1,5 @@
+# 백엔드용 도커 파일
+
 FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
 ARG JAR_FILE
