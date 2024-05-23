@@ -96,29 +96,28 @@ VODA AI와 대화만 하면 일기가 만들어집니다!
 
 ### 🔑 소셜 로그인, 회원가입
 
-<img src="./exec/assets/demo/signup.gif" width="30%" height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/ea0ad394-5af3-474c-bbbf-fda7e1296cbd
 
 ### 📕 일기 작성
 
-<img src="./exec/assets/demo/create_diary.gif" width="30%" height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/5fd718ca-8c56-4fe0-ac14-85058bff2794
 
 ### 📚 일기 목록
 
-<img src="./exec/assets/demo/diary_list.gif" width="30%" height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/4808c7e1-368d-461b-aeaa-efc7f2259b66
 
 ### 📆 캘린더
 
-<img src="./exec/assets/demo/calendar.gif" width="30%" height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/5ba40d1c-d9ee-456b-bf99-351beab10692
 
 ### 🐶 펫 키우기
 
-<img src="./exec/assets/demo/pet_interaction.gif" width="30%" 
-height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/1006f942-c10f-4bb8-a6d1-385cdd4ee4f7
 
 ### 🛒 펫 상점
 
-<img src="./exec/assets/demo/item.gif" width="30%" height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/c39dfffd-1a9c-4e00-b10f-2a75b8e81745
 
 ### 📊 감정 통계 리포트
 
-<img src="./exec/assets/demo/emotion_report.gif" width="30%" height="30%">
+https://github.com/WatSsuGgang/voda/assets/32262904/d33ec631-6808-4ae4-b5a7-202adf4fe386
